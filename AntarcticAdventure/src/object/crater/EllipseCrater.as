@@ -63,11 +63,11 @@ package object.crater
 		{			
 			if(y > _stageHeight)
 			{
-				//initSize();
-				x = _stageWidth / 2;
-				y = _stageHeight /2;
-				_position = initRandomPosition();
-				//위 대신 delete 함 (이벤트 디스패치를 하던 자기자신을 지우던)
+				
+				dispose();
+				removeFromParent();
+				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+				
 			}
 			
 			width = (y) - (_stageWidth / 4);

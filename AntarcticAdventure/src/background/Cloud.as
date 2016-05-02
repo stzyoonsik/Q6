@@ -48,9 +48,9 @@ package background
 			var speed:int = MainStage.speed;
 			if(y < 0)
 			{
-				var point:Point = initRandomPosition();
-				x = point.x;
-				y = point.y;
+				dispose();
+				removeFromParent();
+				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			}			
 			
 			width = (_stageWidth / 10) - (y / 2)
@@ -73,7 +73,6 @@ package background
 			var randomNum:Number = Math.random();
 						
 			_isLeft = (randomNum < 0.5) ? true : false;
-			trace("구름 생성 왼쪽 ? : " + _isLeft);
 			
 			
 			var point:Point = new Point(0,0);
