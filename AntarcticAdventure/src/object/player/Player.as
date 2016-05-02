@@ -52,6 +52,7 @@ package object.player
 		private var _image:Image;
 		private var _animator:Animator;
 		private var _grimjaCollider:Collider;
+		private var _penguinCollider:Collider;
 		
 		private var _state:String; 
 		
@@ -95,7 +96,7 @@ package object.player
 			_grimja.width = _stageWidth / 5;
 			_grimja.height = _grimja.width
 			_grimja.x = _stageWidth / 2;		
-			_grimja.y = _stageHeight / 10 * 9;
+			_grimja.y = _stageHeight / 10 * 8.75;
 			//_grimja.y = y + stageHeight / 15;
 			_grimja.addComponent(_image);	
 			_grimja.pivot = PivotType.CENTER;
@@ -128,7 +129,7 @@ package object.player
 			
 			
 			_animator = new Animator(); 
-			var state:State = _animator.addState(PlayerState.RUN);
+			var state:State = new State(PlayerState.RUN);
 			//_bitmap.width = stageWidth / 5;
 			//_bitmap.height = _bitmap.width;
 			_bitmap = new penguinRun0() as Bitmap;
@@ -139,22 +140,35 @@ package object.player
 			state.addFrame(_bitmap);
 			_bitmap = new penguinRun3() as Bitmap;
 			state.addFrame(_bitmap);
+			_animator.addState(state);
+			state.animationSpeed = 5;
 			
-			state = _animator.addState(PlayerState.JUMP);
+			state = new State(PlayerState.JUMP);
 			_bitmap = new penguinJump0() as Bitmap;
 			state.addFrame(_bitmap);
 			_bitmap = new penguinJump1() as Bitmap;
 			state.addFrame(_bitmap);
+			_animator.addState(state);
+			
+			state.animationSpeed = 3;
 			
 			
-			state.playSpeed = 3;
 			state.play();
 			
 			
 			
 			
 			_penguin.addComponent(_animator);
-			_penguin.addEventListener(TrollingEvent.COLLIDE, onCollideWithPenguin);
+			
+			
+//			_penguinCollider = new Collider();
+//			var rect:Rectangle = new Rectangle();
+//			rect.width = _grimja.width / 3;
+//			rect.height = rect.width;
+//			
+//			_grimjaCollider.rect.width = _penguin.width / 3;
+//			_grimja.addComponent(_grimjaCollider);
+//			_penguin.addEventListener(TrollingEvent.COLLIDE, onCollideWithPenguin);
 			
 			
 			addChild(_grimja);
@@ -187,7 +201,11 @@ package object.player
 				trace("몬스터");
 			}
 			
-			
+			if(event.data is Flag)
+			{
+				trace("깃발");				
+				event.data.dispatchEvent(new Event("collideFlag"));
+			}
 			
 //			switch(event.data)
 //			{
@@ -226,7 +244,7 @@ package object.player
 				trace("점프 시작");
 				_state = PlayerState.JUMPING;
 				_grimjaCollider.isActive = false;
-				transition(PlayerState.JUMP);
+				_penguin.transition(PlayerState.JUMP);
 			}
 			
 			if(_state == PlayerState.JUMPING)
@@ -270,7 +288,7 @@ package object.player
 				_state = PlayerState.RUN;
 				_grimjaCollider.isActive = true;
 				_theta = 0;
-				transition(PlayerState.RUN);
+				_penguin.transition(PlayerState.RUN);
 			}
 		}
 

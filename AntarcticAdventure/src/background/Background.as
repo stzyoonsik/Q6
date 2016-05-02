@@ -48,14 +48,15 @@ package background
 //			addChild(_bottomBackground);
 			
 			_animator = new Animator(); 
-			var state:State = _animator.addState("background");
+			var state:State = new State("background"); 
+			_animator.addState(state);
 			
 			_bitmap = new bottomBackground0() as Bitmap;
 			state.addFrame(_bitmap);
 			_bitmap = new bottomBackground1() as Bitmap;
 			state.addFrame(_bitmap);
 			
-			state.playSpeed = 5;
+			state.animationSpeed = 5;
 			state.play();
 			
 			_bottomBackground.width = stageWidth;
