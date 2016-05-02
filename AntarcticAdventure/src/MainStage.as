@@ -9,15 +9,19 @@ package
 	import background.Cloud;
 	
 	import object.crater.EllipseCrater;
+	import object.crater.RectangleCrater;
 	import object.enemy.Enemy;
+	import object.item.Flag;
 	import object.player.Player;
 	
+	import trolling.Scene;
 	import trolling.core.Trolling;
 	import trolling.event.TouchPhase;
 	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
 	import trolling.utils.EventWith;
+	import trolling.utils.TouchPhase;
 	
 	import util.PlayerState;
 
@@ -25,10 +29,11 @@ package
 	{
 		private var _player:Player;
 		private var _enemy:Enemy;
-		private var _ellipseCrater:EllipseCrater;
+		//private var _ellipseCrater:EllipseCrater;
+		//private var _flag:Flag;
 		
 		private var _background:Background;
-		private var _cloud:Cloud;
+		//private var _cloud:Cloud;
 		
 		//private var _leftFace:GameObject = new GameObject();
 		//private var _rightFace:GameObject = new GameObject();
@@ -42,12 +47,20 @@ package
 		private var _yForJump:Number;
 		private var _xForMoveAtLeast:Number;
 		
+		private var _frame:int;
+		private const MAX_FRAME:int = 240;
+		
+		private var _cloudVector:Vector.<Cloud> = new Vector.<Cloud>();
+		private var _ellipseCraterVector:Vector.<EllipseCrater> = new Vector.<EllipseCrater>();
+		private var _rectangleCraterVector:Vector.<RectangleCrater> = new Vector.<RectangleCrater>();
+		private var _flagVector:Vector.<Flag> = new Vector.<Flag>();
+		
 		public function MainStage()
 		{
 			_stageWidth = Screen.mainScreen.bounds.width;
 			_stageHeight = Screen.mainScreen.bounds.height;
 			
-			_yForJump = _stageHeight / 3;
+			_yForJump = _stageHeight;
 			_xForMoveAtLeast = _stageWidth / 50;
 			
 			_speed = _stageHeight / 100; 
@@ -56,14 +69,13 @@ package
 			_background = new Background(_stageWidth, _stageHeight);
 			addChild(_background);
 			
-			_cloud = new Cloud(_stageWidth, _stageHeight);
-			addChild(_cloud);
+			//_cloud = new Cloud(_stageWidth, _stageHeight);
+			//addChild(_cloud);
 			
 			_enemy = new Enemy(_stageWidth, _stageHeight);			
 			//addChild(_enemy);
 			
-			_ellipseCrater = new EllipseCrater(_stageWidth, _stageHeight);
-			addChild(_ellipseCrater);
+			
 			
 			_player = new Player(_stageWidth, _stageHeight);			
 			addChild(_player); 			
@@ -105,7 +117,7 @@ package
 					}
 					
 				}
-				trace(currentTouchY - prevTouchY);
+				//trace(currentTouchY - prevTouchY);
 				if(prevTouchY - currentTouchY > _yForJump)
 				{
 					trace("JUMPJUMPJUMP");
@@ -135,72 +147,62 @@ package
 		
 		private function onEnterFrame(event:Event):void
 		{
-			//checkCollision();
+			if(_frame > MAX_FRAME)
+				_frame = 0;
 			
+			_frame++;
 			
-			//checkPlayerPosition();
-			//move();
-		}
-		
-		private function move():void
-		{
-			
-			
-			_enemy.y += _speed;
-			
-			
-		}
-		
-		private function checkCollision():void
-		{
-			//trace("플레이어 좌표 = " + _player.getBound() + " 몬스터 좌표 = " + _enemy.getBound());
-			//몬스터와 충돌
-			if(isCollideEnemyOrCrater())
+			if(_frame % 20 == 0)
 			{
-				_enemy.y = _stageHeight / 2;
-				_ellipseCrater.x = _stageWidth / 2;
-				_ellipseCrater.y = _stageHeight /2;
+				var cloud:Cloud = new Cloud(_stageWidth, _stageHeight);
+				addChild(cloud);
+			}
+			
+			if(_frame % 20 == 0)
+			{
+				makeRandomObject();
+			}
+			
+		}
+		
+		private function makeRandomObject():void
+		{
+			var randomNum:Number = int(Math.random() * 5);
+			
+			switch(randomNum)
+			{
+				case 0:
+					var ellipseCrater:EllipseCrater = new EllipseCrater(_stageWidth, _stageHeight);
+					addChildAt(ellipseCrater, 1);
+					break;
+				case 1:
+					var flag:Flag = new Flag(_stageWidth, _stageHeight);
+					addChildAt(flag, 1);
+					break;
+				case 2:
+					var rectangleCrater:RectangleCrater = new RectangleCrater(_stageWidth, _stageHeight);
+					addChildAt(rectangleCrater, 1);
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+//				case 5:
+//					break;
+//				case 0:
+//					break;
+//				case 1:
+//					break;
+//				case 0:
+//					break;
+//				case 1:
+//					break;
+				default:
+					break;
 				
-				_ellipseCrater.position = _ellipseCrater.initRandomPosition();
 			}
-			
-			//아이템과 충돌
-			if(isCollideItem())
-			{
-				
-			}
-			
 		}
 		
-		private function isCollideEnemyOrCrater():Boolean
-		{
-			if(_player.grimja.getBound().intersects(_enemy.getBound()) || _player.grimja.getBound().intersects(_ellipseCrater.getBound()))
-			{
-				trace("몬스터 또는 크레이터와 충돌");
-				//플레이어 상태 -> 부딪힘
-				return true;
-			}
-			
-			return false;
-		}
-		
-		private function isCollideItem():Boolean
-		{
-//			if(_player.getRectangle().intersects(_flag.getRectangle()))
-//			{
-//				return true;
-//			}
-			
-			return false;
-		}
-		
-//		private function checkPlayerPosition():void
-//		{
-//			_leftFace.width = _player.x;
-//			
-//			_rightFace.width = _stageWidth - _leftFace.width;
-//			_rightFace.x = _player.x;
-//		}
 		
 		private function onTouchLeftFace(event:Event):void
 		{
