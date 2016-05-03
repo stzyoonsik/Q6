@@ -61,8 +61,8 @@ package object.player
 		private var _penguinCollider:Collider;
 		
 		private var _playerState:String;
-		private const MAX_MUJUK_FRAME:int = 10;
-		private var _mujukFrame:int;
+		//private const MAX_MUJUK_FRAME:int = 10;
+		//private var _mujukFrame:int;
 		
 		private var _jumpSpeed:int;
 		private var _jumpHeight:int;
@@ -198,6 +198,11 @@ package object.player
 		
 		
 
+		/**
+		 * 
+		 * @param event
+		 * 그림자의 콜라이더에 다른 콜라이더가 충돌했을때 그 콜라이더에 대한 정보를
+		 */
 		private function onCollideWithGrimja(event:TrollingEvent):void
 		{
 			 
@@ -207,23 +212,23 @@ package object.player
 			
 			if(event.data is EllipseCrater)
 			{
-				//trace("타원크레이터");
-				//trace(event.data.x);
-				MainStage.speed = 0;
+				
 				//왼쪽을 부딪힘
-				if(_penguin.x < event.data.x)
+				if(_playerState == PlayerState.RUN)
 				{
-					if(_playerState != PlayerState.JUMP || _playerState != PlayerState.JUMPING) 
-					_playerState = PlayerState.CRASHED_LEFT;
+					MainStage.speed = 0;
+					if(_penguin.x < event.data.x)
+					{
+						
+						_playerState = PlayerState.CRASHED_LEFT;
+					}
+						
+					else
+					{
+						_playerState = PlayerState.CRASHED_RIGHT;
+					}
 				}
 				
-				else
-				{
-					if(_playerState != PlayerState.JUMP || _playerState != PlayerState.JUMPING) 
-					_playerState = PlayerState.CRASHED_RIGHT;
-				}
-//				checkDirection();
-				//dispatchEvent(new Event("checkDirection"));
 			}
 			
 			if(event.data is RectangleCrater)
