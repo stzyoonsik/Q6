@@ -1,6 +1,7 @@
 package background
 {
 	import flash.display.Bitmap;
+	import flash.events.Event;
 	
 	import trolling.component.animation.Animator;
 	import trolling.component.animation.State;
@@ -26,6 +27,8 @@ package background
 		private var _image:Image;
 		private var _animator:Animator;
 		
+		private var _state:State;
+		
 		public function Background(stageWidth:int, stageHeight:int)
 		{
 			
@@ -39,25 +42,17 @@ package background
 			
 			
 			
-//			_bitmap = new bottomBackground0() as Bitmap;
-//			_image = new Image(_bitmap);			
-//			
-				
-			
-//			_bottomBackground.addComponent(_image);	
-//			addChild(_bottomBackground);
-			
 			_animator = new Animator(); 
-			var state:State = new State("background"); 
-			_animator.addState(state);
+			_state = new State("background"); 
+			_animator.addState(_state);
 			
 			_bitmap = new bottomBackground0() as Bitmap;
-			state.addFrame(_bitmap);
+			_state.addFrame(_bitmap);
 			_bitmap = new bottomBackground1() as Bitmap;
-			state.addFrame(_bitmap);
+			_state.addFrame(_bitmap);
 			
-			state.animationSpeed = 5;
-			state.play();
+			_state.animationSpeed = MainStage.speed / 3;
+			_state.play();
 			
 			_bottomBackground.width = stageWidth;
 			_bottomBackground.height = stageHeight / 10 * 6.66;	
@@ -65,6 +60,14 @@ package background
 			_bottomBackground.addComponent(_animator);
 			addChild(_bottomBackground);
 			
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			
+			
+		}
+		
+		private function onEnterFrame(event:Event):void
+		{
+			_state.animationSpeed = MainStage.speed / 3;
 		}
 	}
 }
