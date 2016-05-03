@@ -67,34 +67,15 @@ package object.item
 		private function initRandomColor(bitmap:Bitmap):Bitmap
 		{
 			var randomNum:Number = Math.random();
-			var color:int;
-			if(randomNum < 0.25)
-				color = 0;
-			else if(randomNum < 0.5)
-				color = 1;
-			else if(randomNum < 0.75)
-				color = 2;
-			else
-				color = 3;	
 			
-			switch(color)
-			{
-				case 0:
-					bitmap = new blueFlag() as Bitmap;
-					break;
-				case 1:
-					bitmap = new greenFlag() as Bitmap;
-					break;
-				case 3:
-					bitmap = new redFlag() as Bitmap;
-					break;
-				case 4:
-					bitmap = new yellowFlag() as Bitmap;
-					break;
-				default:
-					break;
-				
-			}
+			if(randomNum < 0.25)
+				bitmap = new blueFlag() as Bitmap;
+			else if(randomNum < 0.5)
+				bitmap = new greenFlag() as Bitmap;
+			else if(randomNum < 0.75)
+				bitmap = new redFlag() as Bitmap;
+			else
+				bitmap = new yellowFlag() as Bitmap;
 			
 			return bitmap;
 		}
