@@ -47,15 +47,17 @@ package object.item
 			_position = initRandomPosition();
 			
 			x = _stageWidth / 2;
-			y = _stageHeight / 2;
+			y = _stageHeight * 0.4;
 			
-			width = y / 2;
+			width = _stageWidth / 20;
 			height = width;
 			
 			_collider = new Collider();
 			var rect:Rectangle = new Rectangle();
-			rect.width = width;
-			rect.height = height;
+			rect.width = width / 4;
+			rect.height = height / 3;
+			rect.x = (width / 2) - (rect.width / 2);
+			rect.y = (height / 2) - (rect.y / 2);
 			_collider.rect = rect;
 			addComponent(_collider);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -95,9 +97,10 @@ package object.item
 				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 				removeEventListener("collideFlag", onCollidePlayer);
 			}
+					
 			
-			width = y / 2;
-			height = width;
+			scaleY = (y - (_stageHeight / 3)) / 100;
+			scaleX = scaleY;
 			
 			y += MainStage.speed;
 			

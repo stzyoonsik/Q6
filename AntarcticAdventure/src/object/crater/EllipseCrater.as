@@ -34,16 +34,19 @@ package object.crater
 			_position = initRandomPosition();
 			
 			x = _stageWidth / 2;
-			y = _stageHeight / 2;
+			y = _stageHeight * 0.4;
 			
 			//this.width = _stageWidth / 200 + (y / 10) ;
-			width = (y) - (_stageWidth / 4);
+			width = _stageWidth / 20;
 			height = width;
 			
 			_collider = new Collider();
 			var rect:Rectangle = new Rectangle();
-			rect.width = width;
-			rect.height = height;
+			rect.width = width * 0.75;
+			rect.height = height / 8;
+			rect.x = (width / 2) - (rect.width / 2);
+			rect.y = (height / 2) - (rect.y / 2);
+			
 			_collider.rect = rect;
 			addComponent(_collider);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -70,9 +73,10 @@ package object.crater
 				
 			}
 			
-			width = (y) - (_stageWidth / 4);
-			height = width;
-			
+			//width = (y) - (_stageWidth / 4);
+			//height = width;
+			scaleY = (y - (_stageHeight / 3)) / 100;
+			scaleX = scaleY;
 			y += MainStage.speed;
 			
 			switch(_position)
