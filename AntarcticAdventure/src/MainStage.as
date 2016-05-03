@@ -29,18 +29,13 @@ package
 	{
 		private var _player:Player;
 		private var _enemy:Enemy;
-		//private var _ellipseCrater:EllipseCrater;
-		//private var _flag:Flag;
 		
 		private var _background:Background;
-		//private var _cloud:Cloud;
-		
-		//private var _leftFace:GameObject = new GameObject();
-		//private var _rightFace:GameObject = new GameObject();
 		private var _coverFace:GameObject = new GameObject();
 		private var _stageWidth:int;
 		private var _stageHeight:int;
 		
+		private var _maxSpeed:Number;
 		private static var _speed:Number;						//세로 
 		private var _playerSpeed:Number;				//가로
 		
@@ -63,6 +58,7 @@ package
 			_yForJump = _stageHeight;
 			_xForMoveAtLeast = _stageWidth / 50;
 			
+			_maxSpeed = _stageHeight / 100; 
 			_speed = _stageHeight / 100; 
 			_playerSpeed = _stageWidth / 100;
 			
@@ -89,7 +85,13 @@ package
 			//제일 밑에 있어야함
 			//initTouchFace();
 	
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);		
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);	
+			_player.addEventListener("checkDirection", onCheckDirection);
+		}
+
+		public static function set speed(value:Number):void
+		{
+			_speed = value;
 		}
 
 		public static function get speed():Number
@@ -147,21 +149,26 @@ package
 		
 		private function onEnterFrame(event:Event):void
 		{
+			if(_speed < _maxSpeed)
+			{
+				_speed += _maxSpeed / 50;
+			}
+			
 			if(_frame > MAX_FRAME)
 				_frame = 0;
 			
 			_frame++;
-			
-			if(_frame % 20 == 0)
+		
+			if(_player.state == PlayerState.RUN)
 			{
-				var cloud:Cloud = new Cloud(_stageWidth, _stageHeight);
-				addChild(cloud);
+				if(_frame % 20 == 0)
+				{
+					var cloud:Cloud = new Cloud(_stageWidth, _stageHeight);
+					addChild(cloud);
+					makeRandomObject();
+				}
 			}
 			
-			if(_frame % 20 == 0)
-			{
-				makeRandomObject();
-			}
 			
 		}
 		
@@ -203,20 +210,12 @@ package
 			}
 		}
 		
-		
-		private function onTouchLeftFace(event:Event):void
+		private function onCheckDirection(event:Event):void
 		{
-			trace("왼쪽");
-			
-			//trace(event.
-			_player.x -= _playerSpeed;
-			
+			trace("부딪힘");
+			//event.
+			trace(_player.penguin.x);
 		}
-		
-		private function onTouchRightFace(event:Event):void
-		{
-			trace("오른쪽");
-			_player.x += _playerSpeed;
-		}
+	
 	}
 }

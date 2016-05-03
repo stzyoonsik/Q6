@@ -42,6 +42,12 @@ package object.player
 		[Embed(source="penguinJump1.png")]
 		public static const penguinJump1:Class;
 		
+		[Embed(source="penguinCrashedLeft.png")]
+		public static const penguinCrashedLeft:Class;
+		
+		[Embed(source="penguinCrashedRight.png")]
+		public static const penguinCrashedRight:Class;
+		
 		[Embed(source="shadow.png")]
 		public static const shadow:Class;
 		
@@ -54,17 +60,21 @@ package object.player
 		private var _grimjaCollider:Collider;
 		private var _penguinCollider:Collider;
 		
-		private var _state:String; 
+		private var _playerState:String; 
 		
 		private var _jumpSpeed:int;
 		private var _jumpHeight:int;
-		private var _theta:Number = 0;
+		private var _jumpTheta:Number = 0;
+		
+		private var _crashSpeed:int;
+		private var _crashHeight:int;
+		private var _crashTheta:Number = 0;
 		
 		private var _stageWidth:int;
 		private var _stageHeight:int;
 		
-		public function get state():String{ return _state; }
-		public function set state(value:String):void{ _state = value; }
+		public function get state():String{ return _playerState; }
+		public function set state(value:String):void{ _playerState = value; }
 		
 		public function get grimja():GameObject{ return _grimja; }		
 		public function set grimja(value:GameObject):void {	_grimja = value;}
@@ -79,16 +89,17 @@ package object.player
 			
 			pivot = PivotType.CENTER;
 			
-			//x = stageWidth / 2;
-			//y = stageHeight / 10 * 8;
 			x = 0;
 			y = 0;
-			//this.width = stageWidth / 5;
-			//this.height = this.width;
 			
-			_state = PlayerState.RUN;
-			_jumpSpeed = 5;
+			_playerState = PlayerState.RUN;
+			
+			_jumpSpeed = 7.5;
 			_jumpHeight = _stageHeight / 10;
+			
+			_crashSpeed = 7.5;
+			_crashHeight = _stageHeight / 20;
+			
 			
 			_bitmap = new shadow() as Bitmap;
 			_image = new Image(_bitmap);			
@@ -97,7 +108,6 @@ package object.player
 			_grimja.height = _grimja.width
 			_grimja.x = _stageWidth / 2;		
 			_grimja.y = _stageHeight / 10 * 8.75;
-			//_grimja.y = y + stageHeight / 15;
 			_grimja.addComponent(_image);	
 			_grimja.pivot = PivotType.CENTER;
 			
@@ -112,26 +122,19 @@ package object.player
 			_grimja.addEventListener(TrollingEvent.COLLIDE, onCollideWithGrimja);
 			
 			
-			
-			
-			
-			//_image = new Image(_bitmap);			
+				
 			
 			_penguin.width = _stageWidth / 5;
 			_penguin.height = _penguin.width;
 			_penguin.x = _stageWidth / 2;		
 			_penguin.y = _stageHeight / 10 * 8;
-			//_penguin.x = (stageWidth / 2) - (_penguin.width / 2); 
-			//_penguin.y = stageHeight / 10 * 8; 			
-			//_penguin.addComponent(_image);
 			
 			_penguin.pivot = PivotType.CENTER;
 			
 			
 			_animator = new Animator(); 
+			
 			var state:State = new State(PlayerState.RUN);
-			//_bitmap.width = stageWidth / 5;
-			//_bitmap.height = _bitmap.width;
 			_bitmap = new penguinRun0() as Bitmap;
 			state.addFrame(_bitmap);
 			_bitmap = new penguinRun1() as Bitmap;
@@ -148,9 +151,18 @@ package object.player
 			state.addFrame(_bitmap);
 			_bitmap = new penguinJump1() as Bitmap;
 			state.addFrame(_bitmap);
-			_animator.addState(state);
-			
+			_animator.addState(state);			
 			state.animationSpeed = 3;
+			
+			state = new State(PlayerState.CRASHED_LEFT);
+			_bitmap = new penguinCrashedLeft() as Bitmap;
+			state.addFrame(_bitmap);	
+			state.animationSpeed = 24;
+			
+			state = new State(PlayerState.CRASHED_RIGHT);
+			_bitmap = new penguinCrashedRight() as Bitmap;
+			state.addFrame(_bitmap);	
+			state.animationSpeed = 24;
 			
 			
 			state.play();
@@ -188,7 +200,21 @@ package object.player
 			
 			if(event.data is EllipseCrater)
 			{
-				trace("타원크레이터");
+				//trace("타원크레이터");
+				//trace(event.data.x);
+				MainStage.speed = 0;
+				//왼쪽을 부딪힘
+				if(_penguin.x < event.data.x)
+				{
+					_playerState = PlayerState.CRASHED_LEFT;
+				}
+				
+				else
+				{
+					_playerState = PlayerState.CRASHED_RIGHT;
+				}
+//				checkDirection();
+				//dispatchEvent(new Event("checkDirection"));
 			}
 			
 			if(event.data is RectangleCrater)
@@ -199,6 +225,7 @@ package object.player
 			if(event.data is Enemy)
 			{
 				trace("몬스터");
+				dispatchEvent(new Event("checkDirection"));
 			}
 			
 			if(event.data is Flag)
@@ -239,18 +266,43 @@ package object.player
 			
 			collideWall();
 			
-			if(_state == PlayerState.JUMP)
+			if(_playerState == PlayerState.JUMP)
 			{				
 				trace("점프 시작");
-				_state = PlayerState.JUMPING;
+				_playerState = PlayerState.JUMPING;
 				_grimjaCollider.isActive = false;
 				_penguin.transition(PlayerState.JUMP);
 			}
 			
-			if(_state == PlayerState.JUMPING)
-			{
-				
+			if(_playerState == PlayerState.JUMPING)
+			{				
 				jump();
+			}
+			
+			if(_playerState == PlayerState.CRASHED_LEFT)
+			{
+				//trace("왼쪽 부딪힘");
+				_playerState = PlayerState.CRASHING_LEFT;
+				_grimjaCollider.isActive = false;
+				_penguin.transition(PlayerState.CRASHED_LEFT);
+			}
+			
+			if(_playerState == PlayerState.CRASHING_LEFT)
+			{
+				crashed(0);
+			}
+			
+			if(_playerState == PlayerState.CRASHED_RIGHT)
+			{
+				//trace("오른쪽 부딪힘");
+				_playerState = PlayerState.CRASHING_RIGHT;
+				_grimjaCollider.isActive = false;
+				_penguin.transition(PlayerState.CRASHED_RIGHT);
+			}
+			
+			if(_playerState == PlayerState.CRASHING_RIGHT)
+			{
+				crashed(1);
 			}
 		}
 		
@@ -272,27 +324,50 @@ package object.player
 		
 		private function jump():void
 		{
-			
-			//trace("점프중");	
-			//_jumpFrame++;
-			var degree:Number = _theta * Math.PI / 180;
+			var degree:Number = _jumpTheta * Math.PI / 180;
 			_penguin.y = (_stageHeight / 10 * 8) - (Math.sin(degree) * _jumpHeight);
 			
-			//trace(Math.sin(_theta * Math.PI / 180));
-			_theta += _jumpSpeed;
-			//trace("theta = " + _theta);
-			//if(_penguin.y > _stageHeight / 10 * 8)
-			if(_theta >= 180)
+			_jumpTheta += _jumpSpeed;
+			
+			//점프 시 그림자의 크기가 작아졌다가 커짐
+			_grimja.width = _stageWidth / 5 - (_grimja.y - _penguin.y);
+			_grimja.height = _grimja.width;
+			
+			if(_jumpTheta >= 180)
 			{
 				_penguin.y = _stageHeight / 10 * 8;
-				_state = PlayerState.RUN;
+				_playerState = PlayerState.RUN;
 				_grimjaCollider.isActive = true;
-				_theta = 0;
+				_jumpTheta = 0;
+				_penguin.transition(PlayerState.RUN);
+			}
+		}
+		
+		
+		private function crashed(direction:int):void
+		{
+			var degree:Number = _crashTheta * Math.PI / 180;
+			
+			if(direction == 0)
+				_penguin.x -= _stageWidth / 100;
+			else
+				_penguin.x += _stageWidth / 100;
+			
+			_penguin.y = (_stageHeight / 10 * 8) - (Math.sin(degree) * _crashHeight);
+			
+			_crashTheta += _crashSpeed;
+			
+			if(_crashTheta >= 180)
+			{
+				_penguin.y = _stageHeight / 10 * 8;
+				_playerState = PlayerState.RUN;
+				_grimjaCollider.isActive = true;
+				_crashTheta = 0;
 				_penguin.transition(PlayerState.RUN);
 			}
 		}
 
-		
+	
 
 	}
 }
