@@ -12,8 +12,17 @@ package util
 		/** 점프 중*/
 		public static const JUMPING:String = "jumping";
 		
-		/** 부딪힘 */
-		public static const BUMPED:String = "bumped"; 
+		/** 왼쪽 부딪힘 */
+		public static const CRASHED_LEFT:String = "crashed_left"; 
+		
+		/** 왼쪽 튕김 */
+		public static const CRASHING_LEFT:String = "crashing_left"; 
+		
+		/** 오른쪽 부딪힘 */
+		public static const CRASHED_RIGHT:String = "crashed_right"; 
+		
+		/** 오른쪽 튕김 */
+		public static const CRASHING_RIGHT:String = "crashing_right"; 
 		
 		/** 빠짐 */
 		public static const FALL:String = "fall"; 
