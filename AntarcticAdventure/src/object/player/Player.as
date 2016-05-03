@@ -60,7 +60,9 @@ package object.player
 		private var _grimjaCollider:Collider;
 		private var _penguinCollider:Collider;
 		
-		private var _playerState:String; 
+		private var _playerState:String;
+		private const MAX_MUJUK_FRAME:int = 10;
+		private var _mujukFrame:int;
 		
 		private var _jumpSpeed:int;
 		private var _jumpHeight:int;
@@ -69,6 +71,7 @@ package object.player
 		private var _crashSpeed:int;
 		private var _crashHeight:int;
 		private var _crashTheta:Number = 0;
+		private var _hoppingCount:int;
 		
 		private var _stageWidth:int;
 		private var _stageHeight:int;
@@ -97,7 +100,7 @@ package object.player
 			_jumpSpeed = 7.5;
 			_jumpHeight = _stageHeight / 10;
 			
-			_crashSpeed = 7.5;
+			_crashSpeed = 10;
 			_crashHeight = _stageHeight / 20;
 			
 			
@@ -114,7 +117,9 @@ package object.player
 			_grimjaCollider = new Collider();
 			var rect:Rectangle = new Rectangle();
 			rect.width = _grimja.width / 3;
-			rect.height = rect.width;
+			rect.height = _grimja.height / 16;
+			rect.x = (_grimja.width / 2) - (rect.width / 2);
+			rect.y = (_grimja.height / 2) - (rect.y / 2);
 			
 			_grimjaCollider.rect = rect;
 			_grimja.addComponent(_grimjaCollider);
@@ -157,12 +162,14 @@ package object.player
 			state = new State(PlayerState.CRASHED_LEFT);
 			_bitmap = new penguinCrashedLeft() as Bitmap;
 			state.addFrame(_bitmap);	
-			state.animationSpeed = 24;
+			state.animationSpeed = 60;
+			_animator.addState(state);	
 			
 			state = new State(PlayerState.CRASHED_RIGHT);
 			_bitmap = new penguinCrashedRight() as Bitmap;
 			state.addFrame(_bitmap);	
-			state.animationSpeed = 24;
+			state.animationSpeed = 60;
+			_animator.addState(state);	
 			
 			
 			state.play();
@@ -206,11 +213,13 @@ package object.player
 				//왼쪽을 부딪힘
 				if(_penguin.x < event.data.x)
 				{
+					if(_playerState != PlayerState.JUMP || _playerState != PlayerState.JUMPING) 
 					_playerState = PlayerState.CRASHED_LEFT;
 				}
 				
 				else
 				{
+					if(_playerState != PlayerState.JUMP || _playerState != PlayerState.JUMPING) 
 					_playerState = PlayerState.CRASHED_RIGHT;
 				}
 //				checkDirection();
@@ -262,6 +271,7 @@ package object.player
 		
 		private function onEnterFrame(event:Event):void
 		{
+			//trace(_playerState);
 			_grimja.x = _penguin.x;
 			
 			collideWall();
@@ -270,7 +280,7 @@ package object.player
 			{				
 				trace("점프 시작");
 				_playerState = PlayerState.JUMPING;
-				_grimjaCollider.isActive = false;
+				//_grimjaCollider.isActive = false;
 				_penguin.transition(PlayerState.JUMP);
 			}
 			
@@ -337,7 +347,7 @@ package object.player
 			{
 				_penguin.y = _stageHeight / 10 * 8;
 				_playerState = PlayerState.RUN;
-				_grimjaCollider.isActive = true;
+				//_grimjaCollider.isActive = true;
 				_jumpTheta = 0;
 				_penguin.transition(PlayerState.RUN);
 			}
@@ -349,20 +359,35 @@ package object.player
 			var degree:Number = _crashTheta * Math.PI / 180;
 			
 			if(direction == 0)
-				_penguin.x -= _stageWidth / 100;
+				_penguin.x -= _stageWidth / 500;
 			else
-				_penguin.x += _stageWidth / 100;
+				_penguin.x += _stageWidth / 500;
 			
 			_penguin.y = (_stageHeight / 10 * 8) - (Math.sin(degree) * _crashHeight);
 			
 			_crashTheta += _crashSpeed;
 			
+			trace(_playerState);
+			trace(_animator.currentState);
+			
 			if(_crashTheta >= 180)
 			{
+				_crashTheta = 0;
+				_crashHeight *= 0.75;			
+				_crashSpeed *= 1.25;
+				_hoppingCount++;				
+			}
+			
+			if(_hoppingCount >= 3)
+			{
+				_crashSpeed = 10;
+				_crashHeight = _stageHeight / 20;
+				
+				_hoppingCount = 0;
 				_penguin.y = _stageHeight / 10 * 8;
 				_playerState = PlayerState.RUN;
 				_grimjaCollider.isActive = true;
-				_crashTheta = 0;
+				_crashTheta = 0;				
 				_penguin.transition(PlayerState.RUN);
 			}
 		}
