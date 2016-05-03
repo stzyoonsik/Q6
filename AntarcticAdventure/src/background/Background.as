@@ -27,36 +27,40 @@ package background
 		private var _image:Image;
 		private var _animator:Animator;
 		
-		private var _state:State;
+		private var _stageWidth:int;
+		private var _stageHeight:int;
+		//private var _state:State;
 		
 		public function Background(stageWidth:int, stageHeight:int)
 		{
+			_stageWidth = stageWidth;
+			_stageHeight = stageHeight;
 			
 			_bitmap = new topBackground0() as Bitmap;
 			_image = new Image(_bitmap);			
 			
-			_topBackground.width = stageWidth;
-			_topBackground.height = stageHeight / 10 * 3.33;
+			_topBackground.width = _stageWidth;
+			_topBackground.height = _stageHeight / 10 * 3.33;
 			_topBackground.addComponent(_image);	
 			addChild(_topBackground);
 			
 			
 			
 			_animator = new Animator(); 
-			_state = new State("background"); 
-			_animator.addState(_state);
+			var state:State = new State("background"); 
+			_animator.addState(state);
 			
 			_bitmap = new bottomBackground0() as Bitmap;
-			_state.addFrame(_bitmap);
+			state.addFrame(_bitmap);
 			_bitmap = new bottomBackground1() as Bitmap;
-			_state.addFrame(_bitmap);
+			state.addFrame(_bitmap);
 			
-			_state.animationSpeed = MainStage.speed / 3;
-			_state.play();
+			state.animationSpeed = MainStage.speed / 3;
+			state.play();
 			
-			_bottomBackground.width = stageWidth;
-			_bottomBackground.height = stageHeight / 10 * 6.66;	
-			_bottomBackground.y = stageHeight / 10 * 3.33;
+			_bottomBackground.width = _stageWidth;
+			_bottomBackground.height = _stageHeight / 10 * 6.66;	
+			_bottomBackground.y = _stageHeight / 10 * 3.33;
 			_bottomBackground.addComponent(_animator);
 			addChild(_bottomBackground);
 			
@@ -67,7 +71,11 @@ package background
 		
 		private function onEnterFrame(event:Event):void
 		{
-			_state.animationSpeed = MainStage.speed / 3;
+			_animator.getState("background").animationSpeed = (_stageHeight / 100) - (MainStage.speed / 3 * 2);
+			
+			//trace(_animator.getState("background").animationSpeed);
+			
+			
 		}
 	}
 }
