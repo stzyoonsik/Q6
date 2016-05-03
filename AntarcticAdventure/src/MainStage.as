@@ -45,10 +45,10 @@ package
 		private var _frame:int;
 		private const MAX_FRAME:int = 240;
 		
-		private var _cloudVector:Vector.<Cloud> = new Vector.<Cloud>();
-		private var _ellipseCraterVector:Vector.<EllipseCrater> = new Vector.<EllipseCrater>();
-		private var _rectangleCraterVector:Vector.<RectangleCrater> = new Vector.<RectangleCrater>();
-		private var _flagVector:Vector.<Flag> = new Vector.<Flag>();
+//		private var _cloudVector:Vector.<Cloud> = new Vector.<Cloud>();
+//		private var _ellipseCraterVector:Vector.<EllipseCrater> = new Vector.<EllipseCrater>();
+//		private var _rectangleCraterVector:Vector.<RectangleCrater> = new Vector.<RectangleCrater>();
+//		private var _flagVector:Vector.<Flag> = new Vector.<Flag>();
 		
 		public function MainStage()
 		{
@@ -86,7 +86,6 @@ package
 			//initTouchFace();
 	
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);	
-			_player.addEventListener("checkDirection", onCheckDirection);
 		}
 
 		public static function set speed(value:Number):void
@@ -101,6 +100,15 @@ package
 
 		private function onTouchCoverFace(event:TrollingEvent):void
 		{
+			if(_player.state == PlayerState.ARRIVED ||
+				_player.state == PlayerState.CRASHED_LEFT ||
+				_player.state == PlayerState.CRASHING_LEFT ||
+				_player.state == PlayerState.CRASHED_RIGHT ||
+				_player.state == PlayerState.CRASHING_RIGHT)
+			{
+				return;
+			}
+				
 			var point:Point = event.data[0];
 			if(event.data.length >= 10)
 			{
@@ -208,13 +216,6 @@ package
 					break;
 				
 			}
-		}
-		
-		private function onCheckDirection(event:Event):void
-		{
-			trace("부딪힘");
-			//event.
-			trace(_player.penguin.x);
 		}
 	
 	}
