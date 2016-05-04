@@ -66,10 +66,10 @@ package gameScene.object.enemy
 			_bitmap = new enemy2() as Bitmap;
 			_bitmapVector.push(_bitmap);
 			
-			_image = new Image(_bitmapVector[0]);		
+			//_image = new Image(_bitmapVector[0]);		
 			
 			pivot = PivotType.CENTER;
-			addComponent(_image);
+			//addComponent(_image);
 			
 			
 			this.x = _stageWidth / 2;

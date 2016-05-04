@@ -23,7 +23,7 @@ package titleScene
 		private var _loadCount:uint = 0;
 		private var _backGround:GameObject;
 		private var _backGroundAnimator:Animator;
-		private var filePath:File = File.applicationDirectory;
+		private var _filePath:File = File.applicationDirectory;
 		
 		public function TitleScene()
 		{
@@ -35,7 +35,7 @@ package titleScene
 			for(var i:int = 0; i < _resourceURLs.length; i++)
 			{
 				loader = new Loader();
-				urlRequest = new URLRequest(filePath.resolvePath(_resourceURLs[i]).url);
+				urlRequest = new URLRequest(_filePath.resolvePath(_resourceURLs[i]).url);
 				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompleteLoad);
 				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
 				loader.load(urlRequest);
@@ -53,7 +53,7 @@ package titleScene
 		private function onCompleteLoad(event:Event):void
 		{
 			trace("ddd = " + LoaderInfo(event.currentTarget).url);
-			_resources[LoaderInfo(event.currentTarget).url.replace(filePath.url.toString(), "")] = LoaderInfo(event.currentTarget).loader.content;
+			_resources[LoaderInfo(event.currentTarget).url.replace(_filePath.url.toString(), "")] = LoaderInfo(event.currentTarget).loader.content;
 			
 			LoaderInfo(event.currentTarget).removeEventListener(Event.COMPLETE, onCompleteLoad);
 			LoaderInfo(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);

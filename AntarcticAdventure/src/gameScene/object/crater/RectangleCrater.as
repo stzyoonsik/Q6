@@ -2,14 +2,15 @@ package gameScene.object.crater
 {
 	import flash.display.Bitmap;
 	import flash.events.Event;
-	import flash.geom.Rectangle;
+	
+	import gameScene.MainStage;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.object.GameObject;
+	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
-	import gameScene.MainStage;
-
+	
 	public class RectangleCrater extends GameObject
 	{
 		[Embed(source="crater_rect_0.png")]
@@ -35,7 +36,7 @@ package gameScene.object.crater
 			_stageHeight = stageHeight;
 			
 			var bitmap:Bitmap = new rectangleCrater() as Bitmap;
-			var image:Image = new Image(bitmap);
+			var image:Image = new Image(new Texture(bitmap));
 			
 			pivot = PivotType.CENTER;
 			addComponent(image);
@@ -44,8 +45,8 @@ package gameScene.object.crater
 			
 			
 			_left.pivot = PivotType.CENTER;
-//			_right.pivot = PivotType.CENTER;
-//			_middle.pivot = PivotType.CENTER;
+			_right.pivot = PivotType.CENTER;
+			_middle.pivot = PivotType.CENTER;
 			
 			x = _stageWidth / 2;
 			y = _stageHeight * 0.4;
@@ -56,41 +57,34 @@ package gameScene.object.crater
 			
 			_left.width = width / 4;
 			_left.height = height / 8;
-			_left.x = -width / 2 + _left.width;
-			_left.y = -height;
-			
-			//_left.x = (x - width / 2) + (_left.width / 2);
-			//_left.y = y;
-			//_left.x = 0;
-			//_left.y = 0;
+			_left.x = _left.width*scaleX/2;
+			_left.y = height*scaleY/2;
 			_leftCollider.setRect(1, 1);
 			
+			_middle.width = width / 2;
+			_middle.height = height / 9;
+			_middle.x = (_left.width*scaleX)+(_middle.width*scaleX/2);
+			_middle.y = height*scaleY/2;			
+			_middleCollider.setRect(1,1);
 			
-//			_right.width = width / 4;
-//			_right.height = height;
-//			_right.x = (x + width / 2) - (_right.width / 2);
-//			_right.y = y;			
-//			_rightCollider.setRect(1,1);
-//			
-//			
-//			_middle.width = width / 2;
-//			_middle.height = height;
-//			_middle.x = x;
-//			_middle.y = y;			
-//			_middleCollider.setRect(1,1);
+			_right.width = width / 4;
+			_right.height = height / 8;
+			_right.x = (_left.width*scaleX)+(_middle.width*scaleX)+(_right.width*scaleX/2);
+			_right.y = height*scaleY/2;			
+			_rightCollider.setRect(1,1);
 			
 			_left.colliderRender = true; 
-//			_right.colliderRender = true;
-//			_middle.colliderRender = true;
+			_middle.colliderRender = true;
+			_right.colliderRender = true;
 			
 			_left.addComponent(_leftCollider);
-//			_right.addComponent(_rightCollider);
-//			_middle.addComponent(_middleCollider);
+			_middle.addComponent(_middleCollider);
+			_right.addComponent(_rightCollider);
 			
 			colliderRender = true;
 			addChild(_left);
-//			addChild(_right);
-//			addChild(_middle);
+			addChild(_middle);
+			addChild(_right);
 			
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
@@ -101,17 +95,17 @@ package gameScene.object.crater
 		{
 			return _middle;
 		}
-
+		
 		public function get right():GameObject
 		{
 			return _right;
 		}
-
+		
 		public function get left():GameObject
 		{
 			return _left;
 		}
-
+		
 		private function onEnterFrame(event:Event):void
 		{			
 			if(y > _stageHeight)
@@ -128,21 +122,31 @@ package gameScene.object.crater
 			scaleY = (y - (_stageHeight / 3)) / 100;
 			scaleX = scaleY;
 			
-			_left.x = -width / 2 + _left.width;
-			_left.y = -height;
 			_left.scaleY = scaleY;
 			_left.scaleX = scaleX;
+			_left.x = _left.width*_left.scaleX/2;
+			_left.y = height*scaleY/2;
+			
+			_middle.scaleY = scaleY;
+			_middle.scaleX = scaleX;
+			_middle.x = (_left.width*_left.scaleX)+(_middle.width*_middle.scaleX/2);
+			_middle.y = height*scaleY/2;
+			
+			_right.scaleY = scaleY;
+			_right.scaleX = scaleX;
+			_right.x = (_left.width*left.scaleX)+(_middle.width*_middle.scaleX)+(_right.width*_right.scaleX/2);
+			_right.y = height*scaleY/2;
 			
 			y += MainStage.speed;
 			
-//			_left.y = y;
-//			_right.y = y;
-//			_middle.y = y;
-//			trace(_left.y);
-//			trace(_left.x);
+			//			_left.y = y;
+			//			_right.y = y;
+			//			_middle.y = y;
+			//			trace(_left.y);
+			//			trace(_left.x);
 			
-//			trace("parent.y = " + y);
-//			trace("parent.x = " + x);
+			//			trace("parent.y = " + y);
+			//			trace("parent.x = " + x);
 			
 			switch(_position)
 			{

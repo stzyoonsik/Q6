@@ -2,13 +2,15 @@ package gameScene.object.crater
 {
 	import flash.display.Bitmap;
 	import flash.events.Event;
+	import flash.geom.Rectangle;
+	
+	import gameScene.MainStage;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.object.GameObject;
+	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
-	import flash.geom.Rectangle;
-	import gameScene.MainStage;
 
 	public class EllipseCrater extends GameObject
 	{
@@ -27,7 +29,7 @@ package gameScene.object.crater
 			_stageHeight = stageHeight;
 			
 			var bitmap:Bitmap = new crater() as Bitmap;
-			var image:Image = new Image(bitmap);		
+			var image:Image = new Image(new Texture(bitmap));		
 			
 			pivot = PivotType.CENTER;
 			addComponent(image);

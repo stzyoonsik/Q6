@@ -4,10 +4,12 @@ package gameScene.background
 	import flash.events.Event;
 	import flash.geom.Point;
 	
+	import gameScene.MainStage;
+	
 	import trolling.component.graphic.Image;
 	import trolling.object.GameObject;
+	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
-	import gameScene.MainStage;
 
 	public class Cloud extends GameObject
 	{
@@ -27,7 +29,7 @@ package gameScene.background
 			_stageHeight = stageHeight;
 			pivot = PivotType.CENTER;
 			var bitmap:Bitmap = new cloud() as Bitmap;
-			var image:Image = new Image(bitmap);		
+			var image:Image = new Image(new Texture(bitmap));		
 			
 			
 			addComponent(image);

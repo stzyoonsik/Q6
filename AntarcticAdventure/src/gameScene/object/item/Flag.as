@@ -4,12 +4,14 @@ package gameScene.object.item
 	import flash.events.Event;
 	import flash.geom.Rectangle;
 	
+	import gameScene.MainStage;
+	
 	import trolling.component.ComponentType;
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.object.GameObject;
+	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
-	import gameScene.MainStage;
 
 	public class Flag extends GameObject
 	{
@@ -40,7 +42,7 @@ package gameScene.object.item
 			var bitmap:Bitmap = initRandomColor(bitmap);
 			
 			
-			var image:Image = new Image(bitmap);
+			var image:Image = new Image(new Texture(bitmap));	
 			
 			pivot = PivotType.CENTER;
 			addComponent(image);

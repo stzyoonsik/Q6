@@ -3,12 +3,14 @@ package gameScene.background
 	import flash.display.Bitmap;
 	import flash.events.Event;
 	
+	import gameScene.MainStage;
+	
 	import trolling.component.animation.Animator;
 	import trolling.component.animation.State;
 	import trolling.component.graphic.Image;
 	import trolling.object.GameObject;
+	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
-	import gameScene.MainStage;
 
 	public class Background extends GameObject
 	{
@@ -38,7 +40,7 @@ package gameScene.background
 			_stageHeight = stageHeight;
 			
 			_bitmap = new topBackground0() as Bitmap;
-			_image = new Image(_bitmap);			
+			_image = new Image(new Texture(_bitmap));			
 			
 			_topBackground.width = _stageWidth;
 			_topBackground.height = _stageHeight / 10 * 3.33;

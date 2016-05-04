@@ -1,9 +1,15 @@
 package gameScene
 {
+	import flash.display.Loader;
+	import flash.display.LoaderInfo;
 	import flash.display.Screen;
 	import flash.events.Event;
+	import flash.events.IOErrorEvent;
+	import flash.filesystem.File;
 	import flash.geom.Point;
+	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.utils.Dictionary;
 	
 	import gameScene.background.Background;
 	import gameScene.background.Cloud;
@@ -16,6 +22,7 @@ package gameScene
 	
 	import trolling.event.TrollingEvent;
 	import trolling.media.Sound;
+	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
 
@@ -39,12 +46,22 @@ package gameScene
 		private var _frame:int;
 		private const MAX_FRAME:int = 240;
 		
+		private var _soundDic:Dictionary = new Dictionary();
+		private var _soundURL:Vector.<String> = new Vector.<String>();
+		private var _soundLoadCount:uint = 0;
+		private var _filePath:File = File.applicationDirectory;
+		
 //		private var _cloudVector:Vector.<Cloud> = new Vector.<Cloud>();
 //		private var _ellipseCraterVector:Vector.<EllipseCrater> = new Vector.<EllipseCrater>();
 //		private var _rectangleCraterVector:Vector.<RectangleCrater> = new Vector.<RectangleCrater>();
 //		private var _flagVector:Vector.<Flag> = new Vector.<Flag>();
 		
 		public function MainStage()
+		{
+			addEventListener(Event.ACTIVATE, oninit);
+		}
+		
+		private function oninit(event:Event):void
 		{
 			_stageWidth = Screen.mainScreen.bounds.width;
 			_stageHeight = Screen.mainScreen.bounds.height;
@@ -60,7 +77,7 @@ package gameScene
 			addChild(_background);
 			
 			
-			_enemy = new Enemy(_stageWidth, _stageHeight);						
+			//_enemy = new Enemy(_stageWidth, _stageHeight);						
 			
 			
 			_player = new Player(_stageWidth, _stageHeight);			
@@ -71,11 +88,33 @@ package gameScene
 			_coverFace.height = _stageHeight;
 			_coverFace.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchCoverFace);			
 			addChild(_coverFace);
-	
+			
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);	
 			
-			//var sound:Sound = new Sound(new URLRequest(
-			//SoundManager
+			
+			
+			_soundURL.push("MainBgm.mp3");
+			_soundURL.push("jump.mp3");
+			_soundURL.push("crashed0.mp3");
+			_soundURL.push("crashed1.mp3");
+			
+			
+			
+			
+			for(var i:int = 0; i<_soundURL.length; ++i)
+			{
+				//var loader: = new Loader();
+				var url:URLRequest = new URLRequest(_filePath.resolvePath(_soundURL[i]).url);
+				trace(url.url);
+				var sound:Sound = new Sound();
+				sound.load(url);
+				sound.addEventListener(Event.COMPLETE, onSoundLoaded);
+				sound.addEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFaild);			
+				
+			}
+			
+			 
+			//SoundManager.addSound();
 		}
 
 		public static function set speed(value:Number):void
@@ -86,6 +125,39 @@ package gameScene
 		public static function get speed():Number
 		{
 			return _speed;
+		}
+		
+		private function onSoundLoaded(event:Event):void
+		{
+			
+			//_soundDic
+			_soundLoadCount++;
+			trace("*******************************");
+			trace(event.currentTarget.url);
+			_soundDic[event.currentTarget.url.replace(_filePath.url.toString(), "")] = event.currentTarget as Sound;
+			
+			if(_soundLoadCount >= _soundURL.length)
+			{
+				_soundURL.splice(0, _soundURL.length);
+				loadComplete();
+			}
+		}
+		
+		private function loadComplete():void
+		{
+			trace("로딩끝");
+			SoundManager.addSound("MainBgm", _soundDic["MainBgm.mp3"]);
+			SoundManager.addSound("jump", _soundDic["jump.mp3"]);
+			SoundManager.addSound("crashed0", _soundDic["crashed0.mp3"]);
+			SoundManager.addSound("crashed1", _soundDic["crashed1.mp3"]);
+			SoundManager.setVolume(SoundManager.SELECT, 0.5, "MainBgm");
+		
+			SoundManager.play("MainBgm");
+		}
+		
+		private function onSoundLoadFaild(event:IOErrorEvent):void
+		{
+			trace(event.text);
 		}
 
 		/**
@@ -163,7 +235,7 @@ package gameScene
 			
 			_frame++;
 		
-			if(_player.state == PlayerState.RUN)
+			if(_player.state == PlayerState.RUN || _player.state == PlayerState.JUMPING)
 			{
 				if(_frame % 20 == 0)
 				{

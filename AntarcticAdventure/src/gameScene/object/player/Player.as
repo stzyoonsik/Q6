@@ -5,23 +5,24 @@ package gameScene.object.player
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
+	import gameScene.MainStage;
 	import gameScene.object.crater.EllipseCrater;
 	import gameScene.object.crater.RectangleCrater;
 	import gameScene.object.enemy.Enemy;
 	import gameScene.object.item.Fish;
 	import gameScene.object.item.Flag;
+	import gameScene.util.PlayerState;
 	
 	import trolling.component.animation.Animator;
 	import trolling.component.animation.State;
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
+	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
+	import trolling.rendering.Texture;
 	import trolling.utils.EventWith;
 	import trolling.utils.PivotType;
-	
-	import gameScene.util.PlayerState;
-	import gameScene.MainStage;
 
 	public class Player extends GameObject
 	{
@@ -106,7 +107,7 @@ package gameScene.object.player
 			
 			
 			_bitmap = new shadow() as Bitmap;
-			_image = new Image(_bitmap);			
+			_image = new Image(new Texture(_bitmap));				
 			
 			_grimja.width = _stageWidth / 5;
 			_grimja.height = _grimja.width
@@ -234,6 +235,7 @@ package gameScene.object.player
 			
 			if(event.data.parent is RectangleCrater)
 			{
+				trace(event.data);
 				trace("네모크레이터");
 				
 			}
@@ -285,10 +287,12 @@ package gameScene.object.player
 			
 			if(_playerState == PlayerState.JUMP)
 			{				
+				
 				trace("점프 시작");
 				_playerState = PlayerState.JUMPING;
 				//_grimjaCollider.isActive = false;
 				_penguin.transition(PlayerState.JUMP);
+				SoundManager.play("jump");
 			}
 			
 			if(_playerState == PlayerState.JUMPING)
@@ -403,8 +407,15 @@ package gameScene.object.player
 				_crashTheta = 0;
 				_crashHeight *= 0.75;			
 				_crashSpeed *= 1.25;
-				_hoppingCount++;				
+				_hoppingCount++;
+				
+				if(_hoppingCount == 0)
+					SoundManager.play("crashed0");
+				else
+					SoundManager.play("crashed1");
 			}
+			
+			
 			
 			if(_hoppingCount >= 3)
 			{
