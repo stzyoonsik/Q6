@@ -4,6 +4,10 @@ package
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	
+	import gameScene.MainStage;
+	
+	import titleScene.TitleScene;
+	
 	import trolling.core.SceneManager;
 	import trolling.core.Trolling;
 	
@@ -18,7 +22,8 @@ package
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
 			var trolling:Trolling = new Trolling(stage);
-			SceneManager.addScene(MainStage, "Main");
+			SceneManager.addScene(TitleScene, "Title");
+			SceneManager.addScene(MainStage, "Game");
 			
 			trolling.start();
 		}
