@@ -27,6 +27,9 @@ package util
 		/** 빠짐 */
 		public static const FALL:String = "fall"; 
 		
+		/** 허우적 */
+		public static const STRUGGLE:String = "struggle";
+		
 		/** 도착 */
 		public static const ARRIVED:String = "arrived";
 		

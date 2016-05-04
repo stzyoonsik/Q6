@@ -14,11 +14,19 @@ package object.crater
 		[Embed(source="crater_rect_0.png")]
 		public static const rectangleCrater:Class;
 		
+		private var _left:GameObject = new GameObject();
+		private var _right:GameObject = new GameObject();
+		private var _middle:GameObject = new GameObject();
+		
+		private var _leftCollider:Collider = new Collider();
+		private var _rightCollider:Collider = new Collider();
+		private var _middleCollider:Collider = new Collider();
+		
 		private var _stageWidth:int;
 		private var _stageHeight:int;
 		
 		private var _position:int;
-		private var _collider:Collider;
+		//private var _collider:Collider;
 		
 		public function RectangleCrater(stageWidth:int, stageHeight:int)
 		{
@@ -33,25 +41,73 @@ package object.crater
 			
 			_position = initRandomPosition();
 			
+			
+//			_left.pivot = PivotType.CENTER;
+//			_right.pivot = PivotType.CENTER;
+//			_middle.pivot = PivotType.CENTER;
+			
 			x = _stageWidth / 2;
 			y = _stageHeight * 0.4;
+			
 			
 			width = _stageWidth / 10;
 			height = width;
 			
-			_collider = new Collider();
-			var rect:Rectangle = new Rectangle();
-			rect.width = width * 0.75;
-			rect.height = height / 16;
-			rect.x = (width / 2) - (rect.width / 2);
-			rect.y = (height / 2) - (rect.y / 2);
-			trace(rect);
-			_collider.rect = rect;
-			addComponent(_collider);
+			_left.width = width / 4;
+			_left.height = height;
+//			_left.x = (x - width / 2) + (_left.width / 2);
+//			_left.y = y;
+			_left.x = 0;
+			_left.y = 0;
+			_leftCollider.setRect(1, 1);
+			
+			
+//			_right.width = width / 4;
+//			_right.height = height;
+//			_right.x = (x + width / 2) - (_right.width / 2);
+//			_right.y = y;			
+//			_rightCollider.setRect(1,1);
+//			
+//			
+//			_middle.width = width / 2;
+//			_middle.height = height;
+//			_middle.x = x;
+//			_middle.y = y;			
+//			_middleCollider.setRect(1,1);
+			
+			_left.colliderRender = true;
+//			_right.colliderRender = true;
+//			_middle.colliderRender = true;
+			
+			_left.addComponent(_leftCollider);
+//			_right.addComponent(_rightCollider);
+//			_middle.addComponent(_middleCollider);
+			
+			colliderRender = true;
+			addChild(_left);
+//			addChild(_right);
+//			addChild(_middle);
+			
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
+			trace(_left.getGlobalPoint());
 		}
 		
+		public function get middle():GameObject
+		{
+			return _middle;
+		}
+
+		public function get right():GameObject
+		{
+			return _right;
+		}
+
+		public function get left():GameObject
+		{
+			return _left;
+		}
+
 		private function onEnterFrame(event:Event):void
 		{			
 			if(y > _stageHeight)
@@ -59,15 +115,25 @@ package object.crater
 				dispose();
 				removeFromParent();
 				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+				trace(_left.getGlobalPoint());
 			}
 			
 			//width = (y) - (_stageWidth / 10);
 			//height = width;
 			
-			scaleY = (y - (_stageHeight / 3)) / 100;
-			scaleX = scaleY;
+			//scaleY = (y - (_stageHeight / 3)) / 100;
+			//scaleX = scaleY;
 			
 			y += MainStage.speed;
+			
+//			_left.y = y;
+//			_right.y = y;
+//			_middle.y = y;
+//			trace(_left.y);
+//			trace(_left.x);
+			
+//			trace("parent.y = " + y);
+//			trace("parent.x = " + x);
 			
 			switch(_position)
 			{

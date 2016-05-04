@@ -115,13 +115,13 @@ package object.player
 			_grimja.pivot = PivotType.CENTER;
 			
 			_grimjaCollider = new Collider();
-			var rect:Rectangle = new Rectangle();
-			rect.width = _grimja.width / 3;
-			rect.height = _grimja.height / 16;
-			rect.x = (_grimja.width / 2) - (rect.width / 2);
-			rect.y = (_grimja.height / 2) - (rect.y / 2);
+//			var rect:Rectangle = new Rectangle();
+//			rect.width = _grimja.width / 3;
+//			rect.height = _grimja.height / 16;
+//			rect.x = (_grimja.width / 2) - (rect.width / 2);
+//			rect.y = (_grimja.height / 2) - (rect.y / 2);
 			
-			_grimjaCollider.rect = rect;
+			_grimjaCollider.setRect(0.33, 0.0625);
 			_grimja.addComponent(_grimjaCollider);
 			
 			_grimja.addEventListener(TrollingEvent.COLLIDE, onCollideWithGrimja);
@@ -149,7 +149,7 @@ package object.player
 			_bitmap = new penguinRun3() as Bitmap;
 			state.addFrame(_bitmap);
 			_animator.addState(state);
-			state.animationSpeed = 5;
+			state.interval = 5;
 			
 			state = new State(PlayerState.JUMP);
 			_bitmap = new penguinJump0() as Bitmap;
@@ -157,18 +157,18 @@ package object.player
 			_bitmap = new penguinJump1() as Bitmap;
 			state.addFrame(_bitmap);
 			_animator.addState(state);			
-			state.animationSpeed = 3;
+			state.interval = 3;
 			
 			state = new State(PlayerState.CRASHED_LEFT);
 			_bitmap = new penguinCrashedLeft() as Bitmap;
 			state.addFrame(_bitmap);	
-			state.animationSpeed = 60;
+			state.interval = 60;
 			_animator.addState(state);	
 			
 			state = new State(PlayerState.CRASHED_RIGHT);
 			_bitmap = new penguinCrashedRight() as Bitmap;
 			state.addFrame(_bitmap);	
-			state.animationSpeed = 60;
+			state.interval = 60;
 			_animator.addState(state);	
 			
 			
@@ -231,9 +231,10 @@ package object.player
 				
 			}
 			
-			if(event.data is RectangleCrater)
+			if(event.data.parent is RectangleCrater)
 			{
 				trace("네모크레이터");
+				
 			}
 			
 			if(event.data is Enemy)
@@ -319,8 +320,18 @@ package object.player
 			{
 				crashed(1);
 			}
+			
+			if(_playerState == PlayerState.FALL)
+			{
+				_grimjaCollider.isActive = false;
+				_penguin.transition(PlayerState.FALL);
+			}
 		}
 		
+		/**
+		 * 화면의 좌,우를 벗어나지 않도록 함
+		 * 
+		 */
 		private function collideWall():void
 		{
 			//왼쪽 벽에 부딪힘
@@ -337,6 +348,10 @@ package object.player
 			}
 		}
 		
+		/**
+		 * ---점프--- 
+		 * 일정 시간(_jumpTheta) 동안 일정 높이(_jumpHeight)만큼 일정 속도(_jumpSpeed)로 sin 그래프 모양으로 y가 올라갔다가 내려옴		 * 
+		 */
 		private function jump():void
 		{
 			var degree:Number = _jumpTheta * Math.PI / 180;
@@ -359,6 +374,12 @@ package object.player
 		}
 		
 		
+		/**
+		 * 
+		 * @param direction 방향
+		 * ---부딪힘---
+		 * 타원크레이터나 물개와 충돌 시 sin 그래프 모양으로 4번 튕기게 함
+		 */
 		private function crashed(direction:int):void
 		{
 			var degree:Number = _crashTheta * Math.PI / 180;
@@ -372,8 +393,9 @@ package object.player
 			
 			_crashTheta += _crashSpeed;
 			
-			trace(_playerState);
-			trace(_animator.currentState);
+			
+			_grimja.width = _stageWidth / 5 - (_grimja.y - _penguin.y);
+			_grimja.height = _grimja.width;
 			
 			if(_crashTheta >= 180)
 			{
@@ -396,7 +418,12 @@ package object.player
 				_penguin.transition(PlayerState.RUN);
 			}
 		}
-
+		
+		
+		private function fall():void
+		{
+			
+		}
 	
 
 	}

@@ -55,7 +55,7 @@ package background
 			_bitmap = new bottomBackground1() as Bitmap;
 			state.addFrame(_bitmap);
 			
-			state.animationSpeed = MainStage.speed / 3;
+			state.interval= MainStage.speed / 3;
 			state.play();
 			
 			_bottomBackground.width = _stageWidth;
@@ -71,7 +71,7 @@ package background
 		
 		private function onEnterFrame(event:Event):void
 		{
-			_animator.getState("background").animationSpeed = (_stageHeight / 100) - (MainStage.speed / 3 * 2);
+			_animator.getState("background").interval = (_stageHeight / 100) - (MainStage.speed / 3 * 2);
 			
 			//trace(_animator.getState("background").animationSpeed);
 			

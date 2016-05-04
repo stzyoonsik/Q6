@@ -79,7 +79,7 @@ package
 			
 			_coverFace.width = _stageWidth;
 			_coverFace.height = _stageHeight;
-			_coverFace.addEventListener(TouchPhase.HOVER, onTouchCoverFace);
+			_coverFace.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchCoverFace);
 			//_coverFace.addEventListener(TouchPhase.
 			addChild(_coverFace);
 			//제일 밑에 있어야함

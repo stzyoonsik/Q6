@@ -41,13 +41,14 @@ package object.crater
 			height = width;
 			
 			_collider = new Collider();
-			var rect:Rectangle = new Rectangle();
-			rect.width = width * 0.75;
-			rect.height = height / 8;
-			rect.x = (width / 2) - (rect.width / 2);
-			rect.y = (height / 2) - (rect.y / 2);
+//			var rect:Rectangle = new Rectangle();
+//			rect.width = width * 0.75;
+//			rect.height = height / 8;
+//			rect.x = (width / 2) - (rect.width / 2);
+//			rect.y = (height / 2) - (rect.y / 2);
 			
-			_collider.rect = rect;
+			_collider.setRect(0.75, 0.125);
+			colliderRender = true;
 			addComponent(_collider);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}

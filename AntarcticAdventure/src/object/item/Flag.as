@@ -53,12 +53,12 @@ package object.item
 			height = width;
 			
 			_collider = new Collider();
-			var rect:Rectangle = new Rectangle();
-			rect.width = width / 4;
-			rect.height = height / 3;
-			rect.x = (width / 2) - (rect.width / 2);
-			rect.y = (height / 2) - (rect.y / 2);
-			_collider.rect = rect;
+//			var rect:Rectangle = new Rectangle();
+//			rect.width = width / 4;
+//			rect.height = height / 3;
+//			rect.x = (width / 2) - (rect.width / 2);
+//			rect.y = (height / 2) - (rect.y / 2);
+			_collider.setRect(0.25, 0.33);
 			addComponent(_collider);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
