@@ -2,28 +2,22 @@ package gameScene
 {
 	import flash.display.Screen;
 	import flash.events.Event;
-	import flash.events.TouchEvent;
 	import flash.geom.Point;
+	import flash.net.URLRequest;
 	
 	import gameScene.background.Background;
 	import gameScene.background.Cloud;
-	
 	import gameScene.object.crater.EllipseCrater;
 	import gameScene.object.crater.RectangleCrater;
 	import gameScene.object.enemy.Enemy;
 	import gameScene.object.item.Flag;
 	import gameScene.object.player.Player;
+	import gameScene.util.PlayerState;
 	
-	import trolling.Scene;
-	import trolling.core.Trolling;
-	import trolling.event.TouchPhase;
 	import trolling.event.TrollingEvent;
+	import trolling.media.Sound;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
-	import trolling.utils.EventWith;
-	import trolling.utils.TouchPhase;
-	
-	import gameScene.util.PlayerState;
 
 	public class MainStage extends Scene
 	{
@@ -65,12 +59,8 @@ package gameScene
 			_background = new Background(_stageWidth, _stageHeight);
 			addChild(_background);
 			
-			//_cloud = new Cloud(_stageWidth, _stageHeight);
-			//addChild(_cloud);
 			
-			_enemy = new Enemy(_stageWidth, _stageHeight);			
-			//addChild(_enemy);
-			
+			_enemy = new Enemy(_stageWidth, _stageHeight);						
 			
 			
 			_player = new Player(_stageWidth, _stageHeight);			
@@ -79,13 +69,13 @@ package gameScene
 			
 			_coverFace.width = _stageWidth;
 			_coverFace.height = _stageHeight;
-			_coverFace.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchCoverFace);
-			//_coverFace.addEventListener(TouchPhase.
+			_coverFace.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchCoverFace);			
 			addChild(_coverFace);
-			//제일 밑에 있어야함
-			//initTouchFace();
 	
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);	
+			
+			//var sound:Sound = new Sound(new URLRequest(
+			//SoundManager
 		}
 
 		public static function set speed(value:Number):void
@@ -98,6 +88,11 @@ package gameScene
 			return _speed;
 		}
 
+		/**
+		 * 
+		 * @param event 터치 hover 
+		 * 사용자의 터치 좌표를 바탕으로 점프와 이동을 하는 콜백 메소드
+		 */
 		private function onTouchCoverFace(event:TrollingEvent):void
 		{
 			if(_player.state == PlayerState.ARRIVED ||
@@ -150,11 +145,12 @@ package gameScene
 				_player.penguin.x -= _playerSpeed;
 			}
 		}
-		private function initTouch():void
-		{
-			
-		}
 		
+		/**
+		 * 
+		 * @param event
+		 * 매 프레임마다 검사하여 속도를 올려주고, 오브젝트를 생성하는 콜백 메소드
+		 */
 		private function onEnterFrame(event:Event):void
 		{
 			if(_speed < _maxSpeed)
@@ -180,6 +176,10 @@ package gameScene
 			
 		}
 		
+		/**
+		 * 랜덤 오브젝트 생성 메소드 
+		 * 
+		 */
 		private function makeRandomObject():void
 		{
 			var randomNum:Number = int(Math.random() * 5);

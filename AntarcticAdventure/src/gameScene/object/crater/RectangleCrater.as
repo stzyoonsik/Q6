@@ -43,7 +43,7 @@ package gameScene.object.crater
 			_position = initRandomPosition();
 			
 			
-//			_left.pivot = PivotType.CENTER;
+			_left.pivot = PivotType.CENTER;
 //			_right.pivot = PivotType.CENTER;
 //			_middle.pivot = PivotType.CENTER;
 			
@@ -55,11 +55,14 @@ package gameScene.object.crater
 			height = width;
 			
 			_left.width = width / 4;
-			_left.height = height;
-//			_left.x = (x - width / 2) + (_left.width / 2);
-//			_left.y = y;
-			_left.x = 0;
-			_left.y = 0;
+			_left.height = height / 8;
+			_left.x = -width / 2 + _left.width;
+			_left.y = -height;
+			
+			//_left.x = (x - width / 2) + (_left.width / 2);
+			//_left.y = y;
+			//_left.x = 0;
+			//_left.y = 0;
 			_leftCollider.setRect(1, 1);
 			
 			
@@ -76,7 +79,7 @@ package gameScene.object.crater
 //			_middle.y = y;			
 //			_middleCollider.setRect(1,1);
 			
-			_left.colliderRender = true;
+			_left.colliderRender = true; 
 //			_right.colliderRender = true;
 //			_middle.colliderRender = true;
 			
@@ -91,7 +94,7 @@ package gameScene.object.crater
 			
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
-			trace(_left.getGlobalPoint());
+			//trace(_left.getGlobalPoint());
 		}
 		
 		public function get middle():GameObject
@@ -116,14 +119,19 @@ package gameScene.object.crater
 				dispose();
 				removeFromParent();
 				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-				trace(_left.getGlobalPoint());
+				//trace(_left.getGlobalPoint());
 			}
 			
 			//width = (y) - (_stageWidth / 10);
 			//height = width;
 			
-			//scaleY = (y - (_stageHeight / 3)) / 100;
-			//scaleX = scaleY;
+			scaleY = (y - (_stageHeight / 3)) / 100;
+			scaleX = scaleY;
+			
+			_left.x = -width / 2 + _left.width;
+			_left.y = -height;
+			_left.scaleY = scaleY;
+			_left.scaleX = scaleX;
 			
 			y += MainStage.speed;
 			
