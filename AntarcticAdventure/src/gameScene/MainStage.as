@@ -4,6 +4,8 @@ package gameScene
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
+	import flash.filesystem.FileMode;
+	import flash.filesystem.FileStream;
 	import flash.geom.Point;
 	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
@@ -25,6 +27,7 @@ package gameScene
 
 	public class MainStage extends Scene
 	{
+		private var _currentStage:String;
 		private var _player:Player;
 		private var _enemy:Enemy;
 		
@@ -44,6 +47,9 @@ package gameScene
 		private const MAX_FRAME:int = 240;
 		
 		private var _distanceToFinish:int = 2000;
+		
+		//private var _objectVector:Vector.<int> = new Vector.<int>();
+		private var _objectArray:Array;
 		
 		
 		private var _soundDic:Dictionary = new Dictionary();
@@ -68,6 +74,8 @@ package gameScene
 
 		private function oninit(event:Event):void
 		{
+			_currentStage = "stage1";
+			
 			_stageWidth = Screen.mainScreen.bounds.width;
 			_stageHeight = Screen.mainScreen.bounds.height;
 			
@@ -75,7 +83,7 @@ package gameScene
 			_xForMoveAtLeast = _stageWidth / 50;
 			
 			_maxSpeed = 15; 
-			_speed = _stageHeight / 100; 
+			_speed = 0; 
 			_playerSpeed = _stageWidth / 100;
 			
 			_background = new Background(_stageWidth, _stageHeight);
@@ -118,7 +126,12 @@ package gameScene
 				
 			}
 			
-			 
+			readTXT(_currentStage); 
+			
+//			for(var i:int = 0; i<_objectArray.length; ++i)
+//			{
+//				trace(_objectArray[i]);
+//			}
 			//SoundManager.addSound();
 		}
 
@@ -232,6 +245,7 @@ package gameScene
 		 */
 		private function onEnterFrame(event:Event):void
 		{
+			trace("현재 속도 = " + _speed);
 			trace("남은 거리 = " + _distanceToFinish);
 			if(_distanceToFinish <= 0)
 			{
@@ -243,11 +257,24 @@ package gameScene
 				_distanceToFinish--;
 			}
 			
-			if(_distanceToFinish < 1000)
+			if(_distanceToFinish < 1800)
 			{				
 				//왼쪽커브길
 				_background.changeCurve(1);
 			}
+			
+			if(_distanceToFinish % 50 == 0)
+			{
+				
+				if(_objectArray.length != 0)
+				{
+					trace("오브젝트 생성");
+					makeObject();
+					_objectArray.shift();
+				}
+			}
+			
+			
 			
 			
 			if(_speed < _maxSpeed)
@@ -277,64 +304,147 @@ package gameScene
 			
 			
 			
-			_currentFrame++;
-		
-			if(_player.state == PlayerState.RUN || 
-				_player.state == PlayerState.JUMPING ||
-				_player.state == PlayerState.JUMP)
-			{
-				if(_currentFrame % 20 == 0)
-				{
-					var cloud:Cloud = new Cloud(_stageWidth, _stageHeight);
-					addChild(cloud);
-					makeRandomObject();
-				}
-			}
+//			_currentFrame++;
+//			if(_currentFrame % 20 == 0)			
+//			{
+//				if(_player.state == PlayerState.RUN || 
+//					_player.state == PlayerState.JUMPING ||
+//					_player.state == PlayerState.JUMP)
+//				{
+//					var cloud:Cloud = new Cloud(_stageWidth, _stageHeight);
+//					addChild(cloud);
+//					if(_objectArray.length != 0)
+//					{
+//						makeObject();
+//						_objectArray.shift();
+//					}
+//				}
+//			}
 			
 			
 		}
 		
-		/**
-		 * 랜덤 오브젝트 생성 메소드 
-		 * 
-		 */
-		private function makeRandomObject():void
+		private function readTXT(stageName:String):void
 		{
-			var randomNum:Number = int(Math.random() * 5);
+			var file:File = new File();
+			var stream:FileStream = new FileStream();
+			file = File.applicationDirectory.resolvePath(stageName+".txt");
 			
-			switch(randomNum)
+			if(file.exists)
 			{
+				stream.open(file, FileMode.READ);
+				var str:String = stream.readMultiByte(stream.bytesAvailable, "utf-8");
+				_objectArray = str.split(',');
+				//setObjectVector(str);
+				stream.close();
+			}
+			else
+			{
+				trace(stageName + " open error");
+			}
+		}
+		
+//		private function setObjectVector(str:String):void
+//		{			
+//			_objectArray = str.split(',');
+//		}
+		
+		private function makeObject():void
+		{
+			switch(int(_objectArray[0]))
+			{
+				//아무것도 생성 안함
 				case 0:
-					var ellipseCrater:EllipseCrater = new EllipseCrater(_stageWidth, _stageHeight);
+					break;
+				//타원 크레이터 가운데
+				case 1:
+					var ellipseCrater:EllipseCrater = new EllipseCrater(_stageWidth, _stageHeight, -1);
 					addChildAt(ellipseCrater, 1);
 					break;
-				case 1:
-					var flag:Flag = new Flag(_stageWidth, _stageHeight);
-					addChildAt(flag, 1);
-					break;
+				//타원 크레이터 왼쪽
 				case 2:
-					var rectangleCrater:RectangleCrater = new RectangleCrater(_stageWidth, _stageHeight);
+					ellipseCrater = new EllipseCrater(_stageWidth, _stageHeight, 0);
+					addChildAt(ellipseCrater, 1);
+					break;
+				//타원 크레이터 오른쪽
+				case 3:
+					ellipseCrater = new EllipseCrater(_stageWidth, _stageHeight, 1);
+					addChildAt(ellipseCrater, 1);
+					break;
+				//타원 크레이터 왼쪽, 오른쪽
+				case 4:
+					ellipseCrater = new EllipseCrater(_stageWidth, _stageHeight, 0);
+					addChildAt(ellipseCrater, 1);
+					ellipseCrater = new EllipseCrater(_stageWidth, _stageHeight, 1);
+					addChildAt(ellipseCrater, 1);
+					break;
+				//네모 크레이터 왼쪽
+				case 5:
+					var rectangleCrater:RectangleCrater = new RectangleCrater(_stageWidth, _stageHeight, 0);
 					addChildAt(rectangleCrater, 1);
 					break;
-				case 3:
+				//네모 크레이터 오른쪽
+				case 6:
+					rectangleCrater = new RectangleCrater(_stageWidth, _stageHeight, 1);
+					addChildAt(rectangleCrater, 1);
 					break;
-				case 4:
+				//깃발 왼쪽
+				case 7:
+					var flag:Flag = new Flag(_stageWidth, _stageHeight, 0);
+					addChildAt(flag, 1);
 					break;
-//				case 5:
-//					break;
-//				case 0:
-//					break;
-//				case 1:
-//					break;
-//				case 0:
-//					break;
-//				case 1:
-//					break;
+				//깃발 오른쪽
+				case 8:
+					flag = new Flag(_stageWidth, _stageHeight, 1);
+					addChildAt(flag, 1);
+					break;
 				default:
 					break;
 				
 			}
 		}
+		
+//		/**
+//		 * 랜덤 오브젝트 생성 메소드 
+//		 * 
+//		 */
+//		private function makeRandomObject():void
+//		{
+//			var randomNum:Number = int(Math.random() * 5);
+//			
+//			switch(randomNum)
+//			{
+//				case 0:
+//					var ellipseCrater:EllipseCrater = new EllipseCrater(_stageWidth, _stageHeight);
+//					addChildAt(ellipseCrater, 1);
+//					break;
+//				case 1:
+//					var flag:Flag = new Flag(_stageWidth, _stageHeight);
+//					addChildAt(flag, 1);
+//					break;
+//				case 2:
+//					var rectangleCrater:RectangleCrater = new RectangleCrater(_stageWidth, _stageHeight);
+//					addChildAt(rectangleCrater, 1);
+//					break;
+//				case 3:
+//					break;
+//				case 4:
+//					break;
+////				case 5:
+////					break;
+////				case 0:
+////					break;
+////				case 1:
+////					break;
+////				case 0:
+////					break;
+////				case 1:
+////					break;
+//				default:
+//					break;
+//				
+//			}
+//		}
 	
 	}
 }

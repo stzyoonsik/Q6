@@ -30,10 +30,10 @@ package gameScene.object.item
 		private var _stageWidth:int;
 		private var _stageHeight:int;
 		
-		private var _position:int;
+		private var _direction:int;
 		private var _collider:Collider;
 		
-		public function Flag(stageWidth:int, stageHeight:int)
+		public function Flag(stageWidth:int, stageHeight:int, direction)
 		{
 			_stageWidth = stageWidth;
 			_stageHeight = stageHeight;
@@ -47,7 +47,7 @@ package gameScene.object.item
 			pivot = PivotType.CENTER;
 			addComponent(image);
 			
-			_position = initRandomPosition();
+			_direction = direction;
 			
 			x = _stageWidth / 2;
 			y = _stageHeight * 0.4;
@@ -107,7 +107,7 @@ package gameScene.object.item
 			
 			y += MainStage.speed;
 			
-			switch(_position)
+			switch(_direction)
 			{
 				//왼쪽
 				case 0:
@@ -124,15 +124,15 @@ package gameScene.object.item
 		}
 		
 		
-		public function initRandomPosition():int
-		{			
-			var randomNum:Number = Math.random();
-			
-			if(randomNum < 0.5)
-				return 0;
-			else
-				return 1;			
-		}
+//		public function initRandomPosition():int
+//		{			
+//			var randomNum:Number = Math.random();
+//			
+//			if(randomNum < 0.5)
+//				return 0;
+//			else
+//				return 1;			
+//		}
 		
 		/**
 		 *  플레이어와 깃발이 충돌했을때 깃발을 지워줌

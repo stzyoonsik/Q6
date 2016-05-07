@@ -27,10 +27,10 @@ package gameScene.object.crater
 		private var _stageWidth:int;
 		private var _stageHeight:int;
 		
-		private var _position:int;
+		private var _direction:int;
 		//private var _collider:Collider;
 		
-		public function RectangleCrater(stageWidth:int, stageHeight:int)
+		public function RectangleCrater(stageWidth:int, stageHeight:int, direction:int)
 		{
 			_stageWidth = stageWidth;
 			_stageHeight = stageHeight;
@@ -41,7 +41,7 @@ package gameScene.object.crater
 			pivot = PivotType.CENTER;
 			addComponent(image);
 			
-			_position = initRandomPosition();
+			_direction = direction;
 			
 			
 			_left.pivot = PivotType.CENTER;
@@ -151,7 +151,7 @@ package gameScene.object.crater
 			//			trace("parent.y = " + y);
 			//			trace("parent.x = " + x);
 			
-			switch(_position)
+			switch(_direction)
 			{
 				//왼쪽
 				case 0:
@@ -167,14 +167,14 @@ package gameScene.object.crater
 			}
 		}
 		
-		public function initRandomPosition():int
-		{			
-			var randomNum:Number = Math.random();
-			
-			if(randomNum < 0.5)
-				return 0;
-			else
-				return 1;			
-		}
+//		public function initRandomPosition():int
+//		{			
+//			var randomNum:Number = Math.random();
+//			
+//			if(randomNum < 0.5)
+//				return 0;
+//			else
+//				return 1;			
+//		}
 	}
 }

@@ -130,23 +130,21 @@ package gameScene.background
 
 		private function onEnterFrame(event:Event):void
 		{
-			if(int(MainStage.speed) < int(MainStage.maxSpeed))
+			switch(_curve)
 			{
-				switch(_curve)
-				{
-					case 0:
-						_animator.getState("curve_none").interval = MainStage.maxSpeed - (MainStage.speed / 3 * 2);
-						break;
-					case 1:
-						_animator.getState("curve_left").interval = MainStage.maxSpeed - (MainStage.speed / 3 * 2);
-						break;
-					case 2:
-						_animator.getState("curve_right").interval = MainStage.maxSpeed - (MainStage.speed / 3 * 2);
-						break;
-					default:
-						break;
-				}
+				case 0:
+					_animator.getState("curve_none").interval = MainStage.maxSpeed - (MainStage.speed / 3 * 2);
+					break;
+				case 1:
+					_animator.getState("curve_left").interval = MainStage.maxSpeed - (MainStage.speed / 3 * 2);
+					break;
+				case 2:
+					_animator.getState("curve_right").interval = MainStage.maxSpeed - (MainStage.speed / 3 * 2);
+					break;
+				default:
+					break;
 			}
+			
 			
 			
 		}

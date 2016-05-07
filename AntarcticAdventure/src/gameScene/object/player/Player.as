@@ -69,11 +69,13 @@ package gameScene.object.player
 		private var _jumpSpeed:int;
 		private var _jumpHeight:int;
 		private var _jumpTheta:Number = 0;
+		private var _jumpFlag:Boolean;
 		
 		private var _crashSpeed:int;
 		private var _crashHeight:int;
 		private var _crashTheta:Number = 0;
 		private var _hoppingCount:int;
+		private var _crashFlag:Boolean;
 		
 		private var _stageWidth:int;
 		private var _stageHeight:int;
@@ -220,7 +222,7 @@ package gameScene.object.player
 			{
 				if(_playerState == PlayerState.RUN)
 				{
-					MainStage.speed = 0;
+					//MainStage.speed = 0;
 					if(event.data.name == "left")
 					{
 						
@@ -260,43 +262,33 @@ package gameScene.object.player
 			if(_playerState == PlayerState.JUMP)
 			{				
 				
-				trace("점프 시작");
-				_playerState = PlayerState.JUMPING;
-				//_grimjaCollider.isActive = false;
-				_penguin.transition(PlayerState.JUMP);
-				SoundManager.play("jump");
-			}
-			
-			if(_playerState == PlayerState.JUMPING)
-			{				
 				jump();
 			}
 			
+//			if(_playerState == PlayerState.JUMPING)
+//			{				
+//				
+//			}
+//			
 			if(_playerState == PlayerState.CRASHED_LEFT)
-			{
-				//trace("왼쪽 부딪힘");
-				_playerState = PlayerState.CRASHING_LEFT;
-				_grimjaCollider.isActive = false;
-				_penguin.transition(PlayerState.CRASHED_LEFT);
-			}
-			
-			if(_playerState == PlayerState.CRASHING_LEFT)
 			{
 				crashed(0);
 			}
 			
-			if(_playerState == PlayerState.CRASHED_RIGHT)
-			{
-				//trace("오른쪽 부딪힘");
-				_playerState = PlayerState.CRASHING_RIGHT;
-				_grimjaCollider.isActive = false;
-				_penguin.transition(PlayerState.CRASHED_RIGHT);
-			}
+//			if(_playerState == PlayerState.CRASHING_LEFT)
+//			{
+//				
+//			}
 			
-			if(_playerState == PlayerState.CRASHING_RIGHT)
+			if(_playerState == PlayerState.CRASHED_RIGHT)
 			{
 				crashed(1);
 			}
+			
+//			if(_playerState == PlayerState.CRASHING_RIGHT)
+//			{
+//				
+//			}
 			
 			if(_playerState == PlayerState.FALL)
 			{
@@ -331,6 +323,15 @@ package gameScene.object.player
 		 */
 		private function jump():void
 		{
+			if(!_jumpFlag)
+			{
+				trace("점프 시작");
+				//_playerState = PlayerState.JUMPING;
+				//_grimjaCollider.isActive = false;
+				_penguin.transition(PlayerState.JUMP);
+				SoundManager.play("jump");
+				_jumpFlag = true;
+			}
 			var degree:Number = _jumpTheta * Math.PI / 180;
 			_penguin.y = (_stageHeight / 10 * 8) - (Math.sin(degree) * _jumpHeight);
 			
@@ -342,6 +343,7 @@ package gameScene.object.player
 			
 			if(_jumpTheta >= 180)
 			{
+				_jumpFlag = false;
 				_penguin.y = _stageHeight / 10 * 8;
 				_playerState = PlayerState.RUN;
 				//_grimjaCollider.isActive = true;
@@ -359,6 +361,17 @@ package gameScene.object.player
 		 */
 		private function crashed(direction:int):void
 		{
+			if(!_crashFlag)
+			{
+				//trace("왼쪽 부딪힘");
+				_grimjaCollider.isActive = false;
+				if(direction == 0)
+					_penguin.transition(PlayerState.CRASHED_LEFT);
+				else
+					_penguin.transition(PlayerState.CRASHED_RIGHT);
+				_crashFlag = true;
+			}
+			
 			var degree:Number = _crashTheta * Math.PI / 180;
 			
 			if(direction == 0)
@@ -400,6 +413,7 @@ package gameScene.object.player
 				_grimjaCollider.isActive = true;
 				_crashTheta = 0;				
 				_penguin.transition(PlayerState.RUN);
+				_crashFlag = false;
 			}
 		}
 		

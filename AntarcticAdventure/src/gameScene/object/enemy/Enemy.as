@@ -24,47 +24,43 @@ package gameScene.object.enemy
 		private var _stageWidth:int;
 		private var _stageHeight:int;
 		
-		//private var _animator:Animator;
-		private var _image:Image;
+		private var _animator:Animator;
+		//private var _image:Image;
 		private var _bitmap:Bitmap;
-		private var _bitmapVector:Vector.<Bitmap> = new Vector.<Bitmap>();
-		private var _textureVector:Vector.<Texture> = new Vector.<Texture>();
+		//private var _bitmapVector:Vector.<Bitmap> = new Vector.<Bitmap>();
+		//private var _textureVector:Vector.<Texture> = new Vector.<Texture>();
 		
-		private var _texture:Texture;
+		//private var _texture:Texture;
 		
 		public function Enemy(stageWidth:int, stageHeight:int)
 		{
 			_stageWidth = stageWidth;
 			_stageHeight = stageHeight;
+					
 			
-//			_animator = new Animator(); 
-//			
-//			var state:State = new State("enemy_appear");
-//			_bitmap = new enemy0() as Bitmap;
-//			state.addFrame(_bitmap);
-//			_bitmap = new enemy1() as Bitmap;
-//			state.addFrame(_bitmap);
-//			_bitmap = new enemy2() as Bitmap;
-//			state.addFrame(_bitmap);
-//			_animator.addState(state);
-//			state.interval = 15;
-//			
-//			state = new State("enemy");
-//			_bitmap = new enemy2() as Bitmap;
-//			state.addFrame(_bitmap);
-//			state.interval = 60;
-//			
-//			
-//			state.play();
-//						
-//			
-//			addComponent(_animator);			
+			
+			_animator = new Animator(); 
+			
+			var state:State = new State("enemy_appear");
 			_bitmap = new enemy0() as Bitmap;
-			_bitmapVector.push(_bitmap);
+			state.addFrame(_bitmap);
 			_bitmap = new enemy1() as Bitmap;
-			_bitmapVector.push(_bitmap);
+			state.addFrame(_bitmap);
 			_bitmap = new enemy2() as Bitmap;
-			_bitmapVector.push(_bitmap);
+			state.addFrame(_bitmap);
+			_animator.addState(state);
+			state.interval = 15;
+			
+			state = new State("enemy");
+			_bitmap = new enemy2() as Bitmap;
+			state.addFrame(_bitmap);
+			state.interval = 60;
+			
+			
+			state.play();
+			
+			
+			addComponent(_animator);	
 			
 			//_image = new Image(_bitmapVector[0]);		
 			
@@ -80,7 +76,6 @@ package gameScene.object.enemy
 			
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
-			_texture = new Texture(_bitmapVector[0]);
 		}
 		
 		private function onEnterFrame(event:Event):void

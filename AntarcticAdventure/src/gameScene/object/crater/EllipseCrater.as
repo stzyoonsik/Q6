@@ -20,10 +20,17 @@ package gameScene.object.crater
 		private var _stageWidth:int;
 		private var _stageHeight:int;
 		
-		private var _position:int;
+		private var _direction:int;
 		private var _collider:Collider;
 		
-		public function EllipseCrater(stageWidth:int, stageHeight:int)
+		/**
+		 * 
+		 * @param stageWidth
+		 * @param stageHeight
+		 * @param direction -1 = normal, 0 = left, 1 = right
+		 * 
+		 */
+		public function EllipseCrater(stageWidth:int, stageHeight:int, direction:int)
 		{
 			_stageWidth = stageWidth;
 			_stageHeight = stageHeight;
@@ -34,7 +41,7 @@ package gameScene.object.crater
 			pivot = PivotType.CENTER;
 			addComponent(image);
 			
-			_position = initRandomPosition();
+			_direction = direction;
 			
 			x = _stageWidth / 2;
 			y = _stageHeight * 0.4;
@@ -58,12 +65,12 @@ package gameScene.object.crater
 		
 		public function get position():int
 		{
-			return _position;
+			return _direction;
 		}
 
 		public function set position(value:int):void
 		{
-			_position = value;
+			_direction = value;
 		}
 
 		private function onEnterFrame(event:Event):void
@@ -83,17 +90,18 @@ package gameScene.object.crater
 			scaleX = scaleY;
 			y += MainStage.speed;
 			
-			switch(_position)
+			switch(_direction)
 			{
+				//가운데
+				case -1:
+					
+					break;
 				//왼쪽
 				case 0:
 					x -= MainStage.speed;
 					break;
-				//가운데
-				case 1:
-					break;
 				//오른쪽
-				case 2:
+				case 1:
 					x += MainStage.speed;
 					break;
 				default:
@@ -101,22 +109,22 @@ package gameScene.object.crater
 			}
 		}
 		
-		/**
-		 * 
-		 * @return 0~2 사이의 랜덤 값
-		 * 
-		 */
-		public function initRandomPosition():int
-		{			
-			var randomNum:Number = Math.random();
-			
-			if(randomNum < 0.33)
-				return 0;
-			else if(randomNum < 0.66)
-				return 1;
-			else
-				return 2;			
-		}
+//		/**
+//		 * 
+//		 * @return 0~2 사이의 랜덤 값
+//		 * 
+//		 */
+//		public function initRandomPosition():int
+//		{			
+//			var randomNum:Number = Math.random();
+//			
+//			if(randomNum < 0.33)
+//				return 0;
+//			else if(randomNum < 0.66)
+//				return 1;
+//			else
+//				return 2;			
+//		}
 		
 		
 		
