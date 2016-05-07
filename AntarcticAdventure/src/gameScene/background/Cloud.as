@@ -7,6 +7,7 @@ package gameScene.background
 	import gameScene.MainStage;
 	
 	import trolling.component.graphic.Image;
+	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
@@ -42,11 +43,11 @@ package gameScene.background
 			width = (_stageWidth / 10) - (y / 2);
 			height = width;
 			
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 		}
 	
 
-		private function onEnterFrame(event:Event):void
+		private function onEnterFrame(event:TrollingEvent):void
 		{		
 			var speed:int = MainStage.speed;
 			if(y < 0)

@@ -17,6 +17,7 @@ package titleScene
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
+	import trolling.rendering.Texture;
 	
 	public class TitleScene extends Scene
 	{
@@ -31,6 +32,11 @@ package titleScene
 		private var _filePath:File = File.applicationDirectory;
 		
 		public function TitleScene()
+		{
+			this.addEventListener(TrollingEvent.START, onInit);
+		}
+		
+		private function onInit(event:Event):void
 		{
 			_imageURLVector.push("title0.png");
 			_imageURLVector.push("title1.png");
@@ -49,13 +55,12 @@ package titleScene
 			
 			for(var i:int = 0; i < _soundURLVector.length; i++)
 			{
-				urlRequest = new URLRequest(_filePath.resolvePath(_soundURLVector[i]).url);	
+				urlRequest = new URLRequest(_filePath.resolvePath(_soundURLVector[i]).url); 
 				var sound:Sound = new Sound();
 				sound.load(urlRequest);
 				sound.addEventListener(Event.COMPLETE, onSoundLoaded);
-				sound.addEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFaild);		
+				sound.addEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFaild);        
 			}
-			
 		}
 		
 		private function onSoundLoaded(event:Event):void
@@ -111,7 +116,7 @@ package titleScene
 			if(_imageURLVector.length <= _imageLoadCount)
 			{
 				_imageURLVector.splice(0, _imageURLVector.length);
-				//				_resourceURLs = null;
+				//              _resourceURLs = null;
 				completeLoadImage();
 			}
 		}
@@ -122,8 +127,9 @@ package titleScene
 			_backGround.addEventListener(TrollingEvent.TOUCH_BEGAN, onTouch);
 			_backGroundAnimator = new Animator();
 			var state:State = new State("title");
-			state.addFrame(_imageDic["title0.png"]);
-			state.addFrame(_imageDic["title1.png"]);
+			state.addFrame(new Texture(_imageDic["title0.png"]));
+			state.addFrame(new Texture(_imageDic["title1.png"]));
+			state.isLoop = true;
 			state.interval = 20;
 			
 			_backGroundAnimator.addState(state);
@@ -137,6 +143,8 @@ package titleScene
 		
 		private function onTouch(event:TrollingEvent):void
 		{
+			//SoundManager.stopAll();
+			SoundManager.dispose();
 			SceneManager.switchScene("Game");
 			//사운드 빼야함
 			//SoundManager.setVolume(SoundManager.ALL, 0);

@@ -8,6 +8,7 @@ package gameScene.object.crater
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
+	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
@@ -60,7 +61,7 @@ package gameScene.object.crater
 			_collider.setRect(0.75, 0.125);
 			colliderRender = true;
 			addComponent(_collider);
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 		}
 		
 		public function get position():int
@@ -73,14 +74,14 @@ package gameScene.object.crater
 			_direction = value;
 		}
 
-		private function onEnterFrame(event:Event):void
+		private function onEnterFrame(event:TrollingEvent):void
 		{			
 			if(y > _stageHeight)
 			{
 				
 				dispose();
 				removeFromParent();
-				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+				removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 				
 			}
 			

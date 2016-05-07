@@ -1,12 +1,12 @@
 package gameScene.object.crater
 {
 	import flash.display.Bitmap;
-	import flash.events.Event;
 	
 	import gameScene.MainStage;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
+	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
@@ -30,7 +30,7 @@ package gameScene.object.crater
 		private var _direction:int;
 		//private var _collider:Collider;
 		
-		public function RectangleCrater(stageWidth:int, stageHeight:int, direction:int)
+		public function RectangleCrater(stageWidth:int, stageHeight:int, direction)
 		{
 			_stageWidth = stageWidth;
 			_stageHeight = stageHeight;
@@ -55,25 +55,25 @@ package gameScene.object.crater
 			width = _stageWidth / 10;
 			height = width;
 			
-			_left.name = "left";
-			_left.width = width / 4;
-			_left.height = height / 8;
-			_left.x = _left.width*scaleX/2;
-			_left.y = height*scaleY/2;
-			_leftCollider.setRect(1, 1);
-			
 			_middle.name = "middle";
 			_middle.width = width / 2;
 			_middle.height = height / 9;
-			_middle.x = (_left.width*scaleX)+(_middle.width*scaleX/2);
-			_middle.y = height*scaleY/2;			
+			_middle.x = 0;
+			_middle.y = 0;
 			_middleCollider.setRect(1,1);
+			
+			_left.name = "left";
+			_left.width = width / 4;
+			_left.height = height / 8;
+			_left.x = -((_middle.width/2)+(_left.width/2));
+			_left.y = 0;
+			_leftCollider.setRect(1, 1);
 			
 			_right.name = "right";
 			_right.width = width / 4;
 			_right.height = height / 8;
-			_right.x = (_left.width*scaleX)+(_middle.width*scaleX)+(_right.width*scaleX/2);
-			_right.y = height*scaleY/2;			
+			_right.x = ((_middle.width/2)+(_right.width/2));
+			_right.y = 0;
 			_rightCollider.setRect(1,1);
 			
 			_left.colliderRender = true; 
@@ -89,7 +89,7 @@ package gameScene.object.crater
 			addChild(_middle);
 			addChild(_right);
 			
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
 			//trace(_left.getGlobalPoint());
 		}
@@ -109,47 +109,22 @@ package gameScene.object.crater
 			return _left;
 		}
 		
-		private function onEnterFrame(event:Event):void
-		{			
+		private function onEnterFrame(event:TrollingEvent):void
+		{           
 			if(y > _stageHeight)
-			{				
+			{               
 				dispose();
 				removeFromParent();
-				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+				removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 				//trace(_left.getGlobalPoint());
 			}
 			
-			//width = (y) - (_stageWidth / 10);
-			//height = width;
 			
 			scaleY = (y - (_stageHeight / 3)) / 100;
 			scaleX = scaleY;
 			
-			_left.scaleY = scaleY;
-			_left.scaleX = scaleX;
-			_left.x = _left.width*_left.scaleX/2;
-			_left.y = height*scaleY/2;
-			
-			_middle.scaleY = scaleY;
-			_middle.scaleX = scaleX;
-			_middle.x = (_left.width*_left.scaleX)+(_middle.width*_middle.scaleX/2);
-			_middle.y = height*scaleY/2;
-			
-			_right.scaleY = scaleY;
-			_right.scaleX = scaleX;
-			_right.x = (_left.width*left.scaleX)+(_middle.width*_middle.scaleX)+(_right.width*_right.scaleX/2);
-			_right.y = height*scaleY/2;
-			
 			y += MainStage.speed;
 			
-			//			_left.y = y;
-			//			_right.y = y;
-			//			_middle.y = y;
-			//			trace(_left.y);
-			//			trace(_left.x);
-			
-			//			trace("parent.y = " + y);
-			//			trace("parent.x = " + x);
 			
 			switch(_direction)
 			{
@@ -167,14 +142,5 @@ package gameScene.object.crater
 			}
 		}
 		
-//		public function initRandomPosition():int
-//		{			
-//			var randomNum:Number = Math.random();
-//			
-//			if(randomNum < 0.5)
-//				return 0;
-//			else
-//				return 1;			
-//		}
 	}
 }

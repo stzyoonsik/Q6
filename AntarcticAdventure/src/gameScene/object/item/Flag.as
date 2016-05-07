@@ -9,6 +9,7 @@ package gameScene.object.item
 	import trolling.component.ComponentType;
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
+	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
@@ -63,7 +64,7 @@ package gameScene.object.item
 //			rect.y = (height / 2) - (rect.y / 2);
 			_collider.setRect(0.25, 0.33);
 			addComponent(_collider);
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
 			addEventListener("collideFlag", onCollidePlayer);
 			
@@ -85,7 +86,7 @@ package gameScene.object.item
 			return bitmap;
 		}
 		
-		private function onEnterFrame(event:Event):void
+		private function onEnterFrame(event:TrollingEvent):void
 		{			
 			if(y > _stageHeight)
 			{
@@ -97,7 +98,7 @@ package gameScene.object.item
 
 				dispose();
 				removeFromParent();
-				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+				removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 				removeEventListener("collideFlag", onCollidePlayer);
 			}
 					

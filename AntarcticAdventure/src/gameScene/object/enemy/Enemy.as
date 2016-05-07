@@ -8,6 +8,7 @@ package gameScene.object.enemy
 	import trolling.component.animation.Animator;
 	import trolling.component.animation.State;
 	import trolling.component.graphic.Image;
+	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
@@ -43,17 +44,17 @@ package gameScene.object.enemy
 			
 			var state:State = new State("enemy_appear");
 			_bitmap = new enemy0() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			_bitmap = new enemy1() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			_bitmap = new enemy2() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			_animator.addState(state);
 			state.interval = 15;
 			
 			state = new State("enemy");
 			_bitmap = new enemy2() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			state.interval = 60;
 			
 			
@@ -74,11 +75,11 @@ package gameScene.object.enemy
 			this.width = _stageWidth / 10;
 			this.height = this.width;
 			
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
 		}
 		
-		private function onEnterFrame(event:Event):void
+		private function onEnterFrame(event:TrollingEvent):void
 		{
 			if(this.parent.y < _stageHeight * 0.5)
 			{

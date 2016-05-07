@@ -64,7 +64,7 @@ package gameScene
 		
 		public function MainStage()
 		{
-			addEventListener(Event.ACTIVATE, oninit);
+			addEventListener(TrollingEvent.START, oninit);
 		}
 		
 		public static function get maxSpeed():Number

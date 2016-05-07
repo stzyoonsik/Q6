@@ -8,6 +8,7 @@ package gameScene.background
 	import trolling.component.animation.Animator;
 	import trolling.component.animation.State;
 	import trolling.component.graphic.Image;
+	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
@@ -74,31 +75,31 @@ package gameScene.background
 			
 			var state:State = new State("curve_none"); 				
 			_bitmap = new bottomBackground0() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			_bitmap = new bottomBackground1() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			_animator.addState(state);
 			state.interval= MainStage.maxSpeed - (MainStage.speed / 3 * 2);
 			
 			
 			state = new State("curve_left"); 						
 			_bitmap = new bottomBackgroundLeft0() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			_bitmap = new bottomBackgroundLeft1() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			_bitmap = new bottomBackgroundLeft2() as Bitmap;
-			state.addFrame(_bitmap);	
+			state.addFrame(new Texture(_bitmap));	
 			_animator.addState(state);
 			state.interval= MainStage.maxSpeed - (MainStage.speed / 3 * 2);
 			
 			
 			state = new State("curve_right"); 						
 			_bitmap = new bottomBackgroundRight0() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			_bitmap = new bottomBackgroundRight1() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			_bitmap = new bottomBackgroundRight2() as Bitmap;
-			state.addFrame(_bitmap);	
+			state.addFrame(new Texture(_bitmap));	
 			_animator.addState(state);
 			state.interval= MainStage.maxSpeed - (MainStage.speed / 3 * 2);
 			
@@ -113,7 +114,7 @@ package gameScene.background
 			_bottomBackground.addComponent(_animator);
 			addChild(_bottomBackground);
 			
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
 			
 		}
@@ -128,7 +129,7 @@ package gameScene.background
 			_curve = value;
 		}
 
-		private function onEnterFrame(event:Event):void
+		private function onEnterFrame(event:TrollingEvent):void
 		{
 			switch(_curve)
 			{

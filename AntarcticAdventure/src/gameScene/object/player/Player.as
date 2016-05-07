@@ -140,33 +140,33 @@ package gameScene.object.player
 			
 			var state:State = new State(PlayerState.RUN);
 			_bitmap = new penguinRun0() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			_bitmap = new penguinRun1() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			_bitmap = new penguinRun2() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			_bitmap = new penguinRun3() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			_animator.addState(state);
 			state.interval = 5;
 			
 			state = new State(PlayerState.JUMP);
 			_bitmap = new penguinJump0() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			_bitmap = new penguinJump1() as Bitmap;
-			state.addFrame(_bitmap);
+			state.addFrame(new Texture(_bitmap));
 			_animator.addState(state);			
 			state.interval = 3;
 			
 			state = new State(PlayerState.CRASHED_LEFT);
 			_bitmap = new penguinCrashedLeft() as Bitmap;
-			state.addFrame(_bitmap);	
+			state.addFrame(new Texture(_bitmap));	
 			state.interval = 60;
 			_animator.addState(state);	
 			
 			state = new State(PlayerState.CRASHED_RIGHT);
 			_bitmap = new penguinCrashedRight() as Bitmap;
-			state.addFrame(_bitmap);	
+			state.addFrame(new Texture(_bitmap));	
 			state.interval = 60;
 			_animator.addState(state);	
 			
@@ -180,7 +180,7 @@ package gameScene.object.player
 			addChild(_grimja);
 			addChild(_penguin);
 			
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);	
+			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);	
 		} 
 		
 		
@@ -252,7 +252,7 @@ package gameScene.object.player
 		}
 		
 		
-		private function onEnterFrame(event:Event):void
+		private function onEnterFrame(event:TrollingEvent):void
 		{
 			//trace(_playerState);
 			_grimja.x = _penguin.x;
