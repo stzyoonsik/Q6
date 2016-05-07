@@ -43,6 +43,9 @@ package gameScene
 		private var _currentFrame:int;
 		private const MAX_FRAME:int = 240;
 		
+		private var _distanceToFinish:int = 2000;
+		
+		
 		private var _soundDic:Dictionary = new Dictionary();
 		private var _soundURL:Vector.<String> = new Vector.<String>();
 		private var _soundLoadCount:uint = 0;
@@ -71,7 +74,7 @@ package gameScene
 			_yForJump = _stageHeight;
 			_xForMoveAtLeast = _stageWidth / 50;
 			
-			_maxSpeed = _stageHeight / 100; 
+			_maxSpeed = 15; 
 			_speed = _stageHeight / 100; 
 			_playerSpeed = _stageWidth / 100;
 			
@@ -229,6 +232,24 @@ package gameScene
 		 */
 		private function onEnterFrame(event:Event):void
 		{
+			trace("남은 거리 = " + _distanceToFinish);
+			if(_distanceToFinish <= 0)
+			{
+				//도착함
+				trace("도착");
+			}
+			else
+			{
+				_distanceToFinish--;
+			}
+			
+			if(_distanceToFinish < 1000)
+			{				
+				//왼쪽커브길
+				_background.changeCurve(1);
+			}
+			
+			
 			if(_speed < _maxSpeed)
 			{
 				_speed += _maxSpeed / 50;
@@ -237,7 +258,6 @@ package gameScene
 			if(_currentFrame > MAX_FRAME)
 			{
 				_currentFrame = 0;
-				_background.changeCurve(1);
 			}
 			
 			switch(_background.curve)

@@ -42,7 +42,7 @@ package gameScene.background
 		public static const bottomBackgroundRight2:Class;
 		
 		/** 0 = normal, 1 = left, 2 = right*/
-		private var _curve:int;
+		private var _curve:int = 0;
 		
 		private var _topBackground:GameObject = new GameObject();
 		private var _bottomBackground:GameObject = new GameObject();
@@ -70,41 +70,37 @@ package gameScene.background
 			
 			
 			
-			_animator = new Animator(); 
-			var state:State = new State("curve_none"); 
-			_animator.addState(state);
+			_animator = new Animator();
 			
+			var state:State = new State("curve_none"); 				
 			_bitmap = new bottomBackground0() as Bitmap;
 			state.addFrame(_bitmap);
 			_bitmap = new bottomBackground1() as Bitmap;
 			state.addFrame(_bitmap);
-			
-			state.interval= (_stageHeight / 100) - (MainStage.speed / 3 * 2);
-			
-			
-			state = new State("curve_left"); 
 			_animator.addState(state);
+			state.interval= MainStage.maxSpeed - (MainStage.speed / 3 * 2);
 			
+			
+			state = new State("curve_left"); 						
 			_bitmap = new bottomBackgroundLeft0() as Bitmap;
 			state.addFrame(_bitmap);
 			_bitmap = new bottomBackgroundLeft1() as Bitmap;
 			state.addFrame(_bitmap);
 			_bitmap = new bottomBackgroundLeft2() as Bitmap;
-			state.addFrame(_bitmap);
-			
-			state.interval= (_stageHeight / 100) - (MainStage.speed / 3 * 2);
-			
-			state = new State("curve_right"); 
+			state.addFrame(_bitmap);	
 			_animator.addState(state);
+			state.interval= MainStage.maxSpeed - (MainStage.speed / 3 * 2);
 			
+			
+			state = new State("curve_right"); 						
 			_bitmap = new bottomBackgroundRight0() as Bitmap;
 			state.addFrame(_bitmap);
 			_bitmap = new bottomBackgroundRight1() as Bitmap;
 			state.addFrame(_bitmap);
 			_bitmap = new bottomBackgroundRight2() as Bitmap;
-			state.addFrame(_bitmap);
-			
-			state.interval= (_stageHeight / 100) - (MainStage.speed / 3 * 2);
+			state.addFrame(_bitmap);	
+			_animator.addState(state);
+			state.interval= MainStage.maxSpeed - (MainStage.speed / 3 * 2);
 			
 			state.play();
 			
@@ -139,13 +135,13 @@ package gameScene.background
 				switch(_curve)
 				{
 					case 0:
-						_animator.getState("curve_none").interval = (_stageHeight / 100) - (MainStage.speed / 3 * 2);
+						_animator.getState("curve_none").interval = MainStage.maxSpeed - (MainStage.speed / 3 * 2);
 						break;
 					case 1:
-						_animator.getState("curve_left").interval = (_stageHeight / 100) - (MainStage.speed / 3 * 2);
+						_animator.getState("curve_left").interval = MainStage.maxSpeed - (MainStage.speed / 3 * 2);
 						break;
 					case 2:
-						_animator.getState("curve_right").interval = (_stageHeight / 100) - (MainStage.speed / 3 * 2);
+						_animator.getState("curve_right").interval = MainStage.maxSpeed - (MainStage.speed / 3 * 2);
 						break;
 					default:
 						break;
