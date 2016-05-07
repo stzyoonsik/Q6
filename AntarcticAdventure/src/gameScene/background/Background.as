@@ -23,6 +23,27 @@ package gameScene.background
 		[Embed(source="bottomBackground1.png")]
 		public static const bottomBackground1:Class;
 		
+		[Embed(source="bottomBackgroundLeft0.png")]
+		public static const bottomBackgroundLeft0:Class;
+		
+		[Embed(source="bottomBackgroundLeft1.png")]
+		public static const bottomBackgroundLeft1:Class;
+		
+		[Embed(source="bottomBackgroundLeft2.png")]
+		public static const bottomBackgroundLeft2:Class;
+		
+		[Embed(source="bottomBackgroundRight0.png")]
+		public static const bottomBackgroundRight0:Class;
+		
+		[Embed(source="bottomBackgroundRight1.png")]
+		public static const bottomBackgroundRight1:Class;
+		
+		[Embed(source="bottomBackgroundRight2.png")]
+		public static const bottomBackgroundRight2:Class;
+		
+		/** 0 = normal, 1 = left, 2 = right*/
+		private var _curve:int;
+		
 		private var _topBackground:GameObject = new GameObject();
 		private var _bottomBackground:GameObject = new GameObject();
 		
@@ -50,7 +71,7 @@ package gameScene.background
 			
 			
 			_animator = new Animator(); 
-			var state:State = new State("background"); 
+			var state:State = new State("curve_none"); 
 			_animator.addState(state);
 			
 			_bitmap = new bottomBackground0() as Bitmap;
@@ -58,8 +79,37 @@ package gameScene.background
 			_bitmap = new bottomBackground1() as Bitmap;
 			state.addFrame(_bitmap);
 			
-			state.interval= MainStage.speed / 3;
+			state.interval= (_stageHeight / 100) - (MainStage.speed / 3 * 2);
+			
+			
+			state = new State("curve_left"); 
+			_animator.addState(state);
+			
+			_bitmap = new bottomBackgroundLeft0() as Bitmap;
+			state.addFrame(_bitmap);
+			_bitmap = new bottomBackgroundLeft1() as Bitmap;
+			state.addFrame(_bitmap);
+			_bitmap = new bottomBackgroundLeft2() as Bitmap;
+			state.addFrame(_bitmap);
+			
+			state.interval= (_stageHeight / 100) - (MainStage.speed / 3 * 2);
+			
+			state = new State("curve_right"); 
+			_animator.addState(state);
+			
+			_bitmap = new bottomBackgroundRight0() as Bitmap;
+			state.addFrame(_bitmap);
+			_bitmap = new bottomBackgroundRight1() as Bitmap;
+			state.addFrame(_bitmap);
+			_bitmap = new bottomBackgroundRight2() as Bitmap;
+			state.addFrame(_bitmap);
+			
+			state.interval= (_stageHeight / 100) - (MainStage.speed / 3 * 2);
+			
 			state.play();
+			
+			
+			
 			
 			_bottomBackground.width = _stageWidth;
 			_bottomBackground.height = _stageHeight / 10 * 6.66;	
@@ -72,13 +122,63 @@ package gameScene.background
 			
 		}
 		
+		public function get curve():int
+		{
+			return _curve;
+		}
+
+		public function set curve(value:int):void
+		{
+			_curve = value;
+		}
+
 		private function onEnterFrame(event:Event):void
 		{
-			_animator.getState("background").interval = (_stageHeight / 100) - (MainStage.speed / 3 * 2);
-			
-			//trace(_animator.getState("background").animationSpeed);
+			if(int(MainStage.speed) < int(MainStage.maxSpeed))
+			{
+				switch(_curve)
+				{
+					case 0:
+						_animator.getState("curve_none").interval = (_stageHeight / 100) - (MainStage.speed / 3 * 2);
+						break;
+					case 1:
+						_animator.getState("curve_left").interval = (_stageHeight / 100) - (MainStage.speed / 3 * 2);
+						break;
+					case 2:
+						_animator.getState("curve_right").interval = (_stageHeight / 100) - (MainStage.speed / 3 * 2);
+						break;
+					default:
+						break;
+				}
+			}
 			
 			
 		}
+		
+		/**
+		 * 
+		 * @param curveNum 변경할 커브길 번호 (0 = 일반, 1 = 왼쪽, 2 = 오른쪽)
+		 * 해당 길로 애니메이션을 바꿔주는 메소드
+		 */
+		public function changeCurve(curveNum:int):void
+		{
+			_curve = curveNum;
+			switch(curveNum)
+			{
+				case 0:
+					_bottomBackground.transition("curve_none");
+					break;
+				case 1:
+					_bottomBackground.transition("curve_left");
+					break;
+				case 2:
+					_bottomBackground.transition("curve_right");
+					break;
+				default:
+					break;				
+			}
+		}
+		
+		
 	}
 }

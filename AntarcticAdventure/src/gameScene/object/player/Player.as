@@ -117,11 +117,6 @@ package gameScene.object.player
 			_grimja.pivot = PivotType.CENTER;
 			
 			_grimjaCollider = new Collider();
-//			var rect:Rectangle = new Rectangle();
-//			rect.width = _grimja.width / 3;
-//			rect.height = _grimja.height / 16;
-//			rect.x = (_grimja.width / 2) - (rect.width / 2);
-//			rect.y = (_grimja.height / 2) - (rect.y / 2);
 			
 			_grimjaCollider.setRect(0.33, 0.0625);
 			_grimja.addComponent(_grimjaCollider);
@@ -176,20 +171,8 @@ package gameScene.object.player
 			
 			state.play();
 			
-			
-			
-			
 			_penguin.addComponent(_animator);
 			
-			
-//			_penguinCollider = new Collider();
-//			var rect:Rectangle = new Rectangle();
-//			rect.width = _grimja.width / 3;
-//			rect.height = rect.width;
-//			
-//			_grimjaCollider.rect.width = _penguin.width / 3;
-//			_grimja.addComponent(_grimjaCollider);
-//			_penguin.addEventListener(TrollingEvent.COLLIDE, onCollideWithPenguin);
 			
 			
 			addChild(_grimja);
@@ -235,9 +218,20 @@ package gameScene.object.player
 			
 			if(event.data.parent is RectangleCrater)
 			{
-				trace(event.data);
-				trace("네모크레이터");
-				
+				if(_playerState == PlayerState.RUN)
+				{
+					MainStage.speed = 0;
+					if(event.data.name == "left")
+					{
+						
+						_playerState = PlayerState.CRASHED_LEFT;
+					}
+						
+					else if(event.data.name == "right")
+					{
+						_playerState = PlayerState.CRASHED_RIGHT;
+					}
+				}
 			}
 			
 			if(event.data is Enemy)
@@ -252,29 +246,7 @@ package gameScene.object.player
 				event.data.dispatchEvent(new Event("collideFlag"));
 			}
 			
-//			switch(event.data)
-//			{
-//				case EllipseCrater:
-//					break;
-//				case Enemy:
-//					break;
-//				default:
-//					break;
-//			}
 		
-		}
-		
-		private function onCollideWithPenguin(event:TrollingEvent):void
-		{
-			if(event.data is Fish)
-			{
-				trace("생선");
-			}
-			
-			if(event.data is Flag)
-			{
-				trace("깃발");
-			}
 		}
 		
 		

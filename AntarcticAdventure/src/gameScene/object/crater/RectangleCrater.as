@@ -55,18 +55,21 @@ package gameScene.object.crater
 			width = _stageWidth / 10;
 			height = width;
 			
+			_left.name = "left";
 			_left.width = width / 4;
 			_left.height = height / 8;
 			_left.x = _left.width*scaleX/2;
 			_left.y = height*scaleY/2;
 			_leftCollider.setRect(1, 1);
 			
+			_middle.name = "middle";
 			_middle.width = width / 2;
 			_middle.height = height / 9;
 			_middle.x = (_left.width*scaleX)+(_middle.width*scaleX/2);
 			_middle.y = height*scaleY/2;			
 			_middleCollider.setRect(1,1);
 			
+			_right.name = "right";
 			_right.width = width / 4;
 			_right.height = height / 8;
 			_right.x = (_left.width*scaleX)+(_middle.width*scaleX)+(_right.width*scaleX/2);

@@ -1,13 +1,10 @@
 package gameScene
 {
-	import flash.display.Loader;
-	import flash.display.LoaderInfo;
 	import flash.display.Screen;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
 	import flash.geom.Point;
-	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
 	
@@ -36,14 +33,14 @@ package gameScene
 		private var _stageWidth:int;
 		private var _stageHeight:int;
 		
-		private var _maxSpeed:Number;
+		private static var _maxSpeed:Number;
 		private static var _speed:Number;						//세로 
 		private var _playerSpeed:Number;				//가로
 		
 		private var _yForJump:Number;
 		private var _xForMoveAtLeast:Number;
 		
-		private var _frame:int;
+		private var _currentFrame:int;
 		private const MAX_FRAME:int = 240;
 		
 		private var _soundDic:Dictionary = new Dictionary();
@@ -61,6 +58,11 @@ package gameScene
 			addEventListener(Event.ACTIVATE, oninit);
 		}
 		
+		public static function get maxSpeed():Number
+		{
+			return _maxSpeed;
+		}
+
 		private function oninit(event:Event):void
 		{
 			_stageWidth = Screen.mainScreen.bounds.width;
@@ -150,8 +152,10 @@ package gameScene
 			SoundManager.addSound("jump", _soundDic["jump.mp3"]);
 			SoundManager.addSound("crashed0", _soundDic["crashed0.mp3"]);
 			SoundManager.addSound("crashed1", _soundDic["crashed1.mp3"]);
-			SoundManager.setVolume(SoundManager.SELECT, 0.5, "MainBgm");
-		
+			//SoundManager.setVolume(SoundManager.SELECT, 0.5, "MainBgm");
+			var sound:Sound = _soundDic["MainBgm.mp3"]; 
+			sound.volume = 0.5;
+			sound.loops = Sound.INFINITE;
 			SoundManager.play("MainBgm");
 		}
 		
@@ -230,14 +234,36 @@ package gameScene
 				_speed += _maxSpeed / 50;
 			}
 			
-			if(_frame > MAX_FRAME)
-				_frame = 0;
-			
-			_frame++;
-		
-			if(_player.state == PlayerState.RUN || _player.state == PlayerState.JUMPING)
+			if(_currentFrame > MAX_FRAME)
 			{
-				if(_frame % 20 == 0)
+				_currentFrame = 0;
+				_background.changeCurve(1);
+			}
+			
+			switch(_background.curve)
+			{
+				case 0:
+					break;
+				case 1:
+					_player.penguin.x += _playerSpeed * 0.5;
+					break;
+				case 2:
+					_player.penguin.x -= _playerSpeed * 0.5;
+					break;
+				default:
+					break;
+			}
+			
+			
+			
+			
+			_currentFrame++;
+		
+			if(_player.state == PlayerState.RUN || 
+				_player.state == PlayerState.JUMPING ||
+				_player.state == PlayerState.JUMP)
+			{
+				if(_currentFrame % 20 == 0)
 				{
 					var cloud:Cloud = new Cloud(_stageWidth, _stageHeight);
 					addChild(cloud);
