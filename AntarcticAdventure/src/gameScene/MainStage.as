@@ -33,22 +33,21 @@ package gameScene
 		
 		private var _background:Background;
 		private var _coverFace:GameObject = new GameObject();
-		private var _stageWidth:int;
-		private var _stageHeight:int;
+		private static var _stageWidth:int;
+		private static var _stageHeight:int;
 		
 		private static var _maxSpeed:Number;
 		private static var _speed:Number;						//세로 
-		private var _playerSpeed:Number;				//가로
+		private var _playerSpeed:Number;						//가로
 		
 		private var _yForJump:Number;
 		private var _xForMoveAtLeast:Number;
 		
 		private var _currentFrame:int;
-		private const MAX_FRAME:int = 240;
+		private const MAX_FRAME:int = 24;
 		
 		private var _distanceToFinish:int = 2000;
 		
-		//private var _objectVector:Vector.<int> = new Vector.<int>();
 		private var _objectArray:Array;
 		
 		
@@ -57,28 +56,29 @@ package gameScene
 		private var _soundLoadCount:uint = 0;
 		private var _filePath:File = File.applicationDirectory;
 		
-//		private var _cloudVector:Vector.<Cloud> = new Vector.<Cloud>();
-//		private var _ellipseCraterVector:Vector.<EllipseCrater> = new Vector.<EllipseCrater>();
-//		private var _rectangleCraterVector:Vector.<RectangleCrater> = new Vector.<RectangleCrater>();
-//		private var _flagVector:Vector.<Flag> = new Vector.<Flag>();
+		
+		
+		public static function get stageHeight():int { return _stageHeight; }
+		
+		public static function get stageWidth():int { return _stageWidth; }
+		
+		public static function set maxSpeed(value:Number):void { _maxSpeed = value; }
+		public static function get maxSpeed():Number { return _maxSpeed; }
+		
+		public static function set speed(value:Number):void	{ _speed = value; }		
+		public static function get speed():Number {	return _speed; }
 		
 		public function MainStage()
 		{
 			addEventListener(TrollingEvent.START, oninit);
 		}
 		
-		public static function get maxSpeed():Number
-		{
-			return _maxSpeed;
-		}
-
 		private function oninit(event:Event):void
 		{
 			_currentStage = "stage1";
 			this.width = 800;
 			this.height = 600;
-//			_stageWidth = Screen.mainScreen.bounds.width;
-//			_stageHeight = Screen.mainScreen.bounds.height;
+			
 			_stageWidth = this.width;
 			_stageHeight = this.height;
 			
@@ -89,16 +89,11 @@ package gameScene
 			_speed = 0; 
 			_playerSpeed = _stageWidth / 100;
 			
-			_background = new Background(_stageWidth, _stageHeight);
+			_background = new Background();
 			addChild(_background);
 			
-			
-			//_enemy = new Enemy(_stageWidth, _stageHeight);						
-			
-			
-			_player = new Player(_stageWidth, _stageHeight);			
-			addChild(_player); 			
-			
+			_player = new Player();			
+			addChild(_player); 						
 			
 			_coverFace.width = _stageWidth;
 			_coverFace.height = _stageHeight;
@@ -107,19 +102,36 @@ package gameScene
 			
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);	
 			
+			pushSoundFiles();
+			loadSound();
 			
+			readTXT(_currentStage); 
 			
+			this.scaleX = Screen.mainScreen.bounds.width / _stageWidth;
+			this.scaleY = Screen.mainScreen.bounds.height / _stageHeight;
+	
+		}
+		
+		/**
+		 * 추가 할 사운드 파일들을 푸쉬하는 메소드 
+		 * 
+		 */
+		private function pushSoundFiles():void
+		{
 			_soundURL.push("MainBgm.mp3");
 			_soundURL.push("jump.mp3");
 			_soundURL.push("crashed0.mp3");
 			_soundURL.push("crashed1.mp3");
-			
-			
-			
-			
+		}
+		
+		/**
+		 * 푸쉬된 사운드 파일들을 로드하는 메소드 
+		 * 
+		 */
+		private function loadSound():void
+		{
 			for(var i:int = 0; i<_soundURL.length; ++i)
 			{
-				//var loader: = new Loader();
 				var url:URLRequest = new URLRequest(_filePath.resolvePath(_soundURL[i]).url);
 				trace(url.url);
 				var sound:Sound = new Sound();
@@ -128,36 +140,16 @@ package gameScene
 				sound.addEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFaild);			
 				
 			}
-			
-			readTXT(_currentStage); 
-			
-			this.scaleX = Screen.mainScreen.bounds.width / _stageWidth;
-			this.scaleY = Screen.mainScreen.bounds.height / _stageHeight;
-			
-//			for(var i:int = 0; i<_objectArray.length; ++i)
-//			{
-//				trace(_objectArray[i]);
-//			}
-			//SoundManager.addSound();
-		}
-
-		public static function set speed(value:Number):void
-		{
-			_speed = value;
-		}
-
-		public static function get speed():Number
-		{
-			return _speed;
 		}
 		
+		/**
+		 * 로드에 성공한 사운드 파일을 딕셔너리에 추가하는 메소드 
+		 * @param event
+		 * 
+		 */		
 		private function onSoundLoaded(event:Event):void
 		{
-			
-			//_soundDic
 			_soundLoadCount++;
-			trace("*******************************");
-			trace(event.currentTarget.url);
 			_soundDic[event.currentTarget.url.replace(_filePath.url.toString(), "")] = event.currentTarget as Sound;
 			
 			if(_soundLoadCount >= _soundURL.length)
@@ -167,20 +159,28 @@ package gameScene
 			}
 		}
 		
+		/**
+		 * 모든 사운드가 로드됬을때 매니저에 등록하는 메소드 
+		 * 
+		 */
 		private function loadComplete():void
 		{
-			trace("로딩끝");
 			SoundManager.addSound("MainBgm", _soundDic["MainBgm.mp3"]);
 			SoundManager.addSound("jump", _soundDic["jump.mp3"]);
 			SoundManager.addSound("crashed0", _soundDic["crashed0.mp3"]);
 			SoundManager.addSound("crashed1", _soundDic["crashed1.mp3"]);
-			//SoundManager.setVolume(SoundManager.SELECT, 0.5, "MainBgm");
+			
 			var sound:Sound = _soundDic["MainBgm.mp3"]; 
 			sound.volume = 0.5;
 			sound.loops = Sound.INFINITE;
 			SoundManager.play("MainBgm");
 		}
 		
+		/**
+		 * 사운드 로드에 실패했을때 호출되는 콜백 메소드
+		 * @param event
+		 * 
+		 */
 		private function onSoundLoadFaild(event:IOErrorEvent):void
 		{
 			trace(event.text);
@@ -200,9 +200,7 @@ package gameScene
 				_player.state == PlayerState.CRASHING_RIGHT)
 			{
 				return;
-			}
-				
-			//var point:Point = event.data[0];
+			}				
 			
 			var point:Point = Point(event.data[0]).clone();
 			point.x *= (_stageWidth / Screen.mainScreen.bounds.width);
@@ -225,10 +223,9 @@ package gameScene
 					}
 					
 				}
-				//trace(currentTouchY - prevTouchY);
 				if(prevTouchY - currentTouchY > _yForJump)
 				{
-					trace("JUMPJUMPJUMP");
+					//trace("JUMPJUMPJUMP");
 					_player.state = PlayerState.JUMP;
 				}
 			}
@@ -248,9 +245,9 @@ package gameScene
 				_player.x -= _playerSpeed;
 			}
 			
-			trace("point.x = " + point.x);
-			trace("player.x = " + _player.x);
-			trace("player.penguin.x = " + _player.penguin.x);
+//			trace("point.x = " + point.x);
+//			trace("player.x = " + _player.x);
+//			trace("player.penguin.x = " + _player.penguin.x);
 		}
 		
 		/**
@@ -278,8 +275,11 @@ package gameScene
 				//_background.changeCurve(1);
 			}
 			
-			if(_distanceToFinish % 50 == 0)
+			if(_distanceToFinish % 25 == 0)
 			{
+				//구름 생성
+				var cloud:Cloud = new Cloud();
+				addChild(cloud);
 				
 				if(_objectArray.length != 0)
 				{
@@ -297,11 +297,6 @@ package gameScene
 				_speed += _maxSpeed / 50;
 			}
 			
-			if(_currentFrame > MAX_FRAME)
-			{
-				_currentFrame = 0;
-			}
-			
 			switch(_background.curve)
 			{
 				case 0:
@@ -317,28 +312,13 @@ package gameScene
 			}
 			
 			
-			
-			
-//			_currentFrame++;
-//			if(_currentFrame % 20 == 0)			
-//			{
-//				if(_player.state == PlayerState.RUN || 
-//					_player.state == PlayerState.JUMPING ||
-//					_player.state == PlayerState.JUMP)
-//				{
-//					var cloud:Cloud = new Cloud(_stageWidth, _stageHeight);
-//					addChild(cloud);
-//					if(_objectArray.length != 0)
-//					{
-//						makeObject();
-//						_objectArray.shift();
-//					}
-//				}
-//			}
-			
-			
 		}
 		
+		/**
+		 * 데이터를 읽어서 array에 푸쉬하는 메소드 
+		 * @param stageName
+		 * 
+		 */
 		private function readTXT(stageName:String):void
 		{
 			var file:File = new File();
@@ -350,7 +330,6 @@ package gameScene
 				stream.open(file, FileMode.READ);
 				var str:String = stream.readMultiByte(stream.bytesAvailable, "utf-8");
 				_objectArray = str.split(',');
-				//setObjectVector(str);
 				stream.close();
 			}
 			else
@@ -359,11 +338,10 @@ package gameScene
 			}
 		}
 		
-//		private function setObjectVector(str:String):void
-//		{			
-//			_objectArray = str.split(',');
-//		}
-		
+		/**
+		 * 오브젝트를 생성하는 메소드 
+		 * 
+		 */
 		private function makeObject():void
 		{
 			switch(int(_objectArray[0]))
@@ -373,44 +351,44 @@ package gameScene
 					break;
 				//타원 크레이터 가운데
 				case 1:
-					var ellipseCrater:EllipseCrater = new EllipseCrater(_stageWidth, _stageHeight, -1);
+					var ellipseCrater:EllipseCrater = new EllipseCrater(-1);
 					addChildAt(ellipseCrater, 1);
 					break;
 				//타원 크레이터 왼쪽
 				case 2:
-					ellipseCrater = new EllipseCrater(_stageWidth, _stageHeight, 0);
+					ellipseCrater = new EllipseCrater(0);
 					addChildAt(ellipseCrater, 1);
 					break;
 				//타원 크레이터 오른쪽
 				case 3:
-					ellipseCrater = new EllipseCrater(_stageWidth, _stageHeight, 1);
+					ellipseCrater = new EllipseCrater(1);
 					addChildAt(ellipseCrater, 1);
 					break;
 				//타원 크레이터 왼쪽, 오른쪽
 				case 4:
-					ellipseCrater = new EllipseCrater(_stageWidth, _stageHeight, 0);
+					ellipseCrater = new EllipseCrater(0);
 					addChildAt(ellipseCrater, 1);
-					ellipseCrater = new EllipseCrater(_stageWidth, _stageHeight, 1);
+					ellipseCrater = new EllipseCrater(1);
 					addChildAt(ellipseCrater, 1);
 					break;
 				//네모 크레이터 왼쪽
 				case 5:
-					var rectangleCrater:RectangleCrater = new RectangleCrater(_stageWidth, _stageHeight, 0);
+					var rectangleCrater:RectangleCrater = new RectangleCrater(0);
 					addChildAt(rectangleCrater, 1);
 					break;
 				//네모 크레이터 오른쪽
 				case 6:
-					rectangleCrater = new RectangleCrater(_stageWidth, _stageHeight, 1);
+					rectangleCrater = new RectangleCrater(1);
 					addChildAt(rectangleCrater, 1);
 					break;
 				//깃발 왼쪽
 				case 7:
-					var flag:Flag = new Flag(_stageWidth, _stageHeight, 0);
+					var flag:Flag = new Flag(0);
 					addChildAt(flag, 1);
 					break;
 				//깃발 오른쪽
 				case 8:
-					flag = new Flag(_stageWidth, _stageHeight, 1);
+					flag = new Flag(1);
 					addChildAt(flag, 1);
 					break;
 				default:
@@ -418,48 +396,6 @@ package gameScene
 				
 			}
 		}
-		
-//		/**
-//		 * 랜덤 오브젝트 생성 메소드 
-//		 * 
-//		 */
-//		private function makeRandomObject():void
-//		{
-//			var randomNum:Number = int(Math.random() * 5);
-//			
-//			switch(randomNum)
-//			{
-//				case 0:
-//					var ellipseCrater:EllipseCrater = new EllipseCrater(_stageWidth, _stageHeight);
-//					addChildAt(ellipseCrater, 1);
-//					break;
-//				case 1:
-//					var flag:Flag = new Flag(_stageWidth, _stageHeight);
-//					addChildAt(flag, 1);
-//					break;
-//				case 2:
-//					var rectangleCrater:RectangleCrater = new RectangleCrater(_stageWidth, _stageHeight);
-//					addChildAt(rectangleCrater, 1);
-//					break;
-//				case 3:
-//					break;
-//				case 4:
-//					break;
-////				case 5:
-////					break;
-////				case 0:
-////					break;
-////				case 1:
-////					break;
-////				case 0:
-////					break;
-////				case 1:
-////					break;
-//				default:
-//					break;
-//				
-//			}
-//		}
 	
 	}
 }

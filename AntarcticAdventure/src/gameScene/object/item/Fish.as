@@ -3,10 +3,8 @@ package gameScene.object.item
 	import flash.display.Bitmap;
 	import flash.events.Event;
 	
-	import gameScene.util.PlayerState;
+	import gameScene.MainStage;
 	
-	import trolling.component.animation.Animator;
-	import trolling.component.animation.State;
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
@@ -33,7 +31,6 @@ package gameScene.object.item
 		private var _stageWidth:int;
 		private var _stageHeight:int;
 		
-		private var _animator:Animator;
 		private var _image:Image;
 		private var _bitmap:Bitmap;
 		
@@ -47,15 +44,24 @@ package gameScene.object.item
 		private var _jumpTheta:Number = 0;
 		
 		
-		public function Fish(stageWidth:int, stageHeight:int, direction:int)
+		public function Fish(direction:int)
 		{
-			_stageWidth = stageWidth;
-			_stageHeight = stageHeight;
+			_stageWidth = MainStage.stageWidth;
+			_stageHeight = MainStage.stageHeight;
 	
 			_direction = direction;
 			
 			_jumpSpeed = 4;
-			_jumpHeight = _stageHeight / 10;
+			_jumpHeight = _stageHeight / 13;
+			
+			this.pivot = PivotType.CENTER;
+			
+			
+			this.x = 0;
+			this.y = 0;
+			
+			this.width = _stageWidth / 50;
+			this.height = this.width;
 			
 			if(direction == 0)
 				_bitmap = new fishRedLeft0() as Bitmap;
@@ -65,16 +71,6 @@ package gameScene.object.item
 			_image = new Image(new Texture(_bitmap));
 			addComponent(_image);
 			
-			
-			pivot = PivotType.CENTER;
-			//addComponent(_image);
-			
-			
-			this.x = 0;
-			this.y = 0;
-			
-			this.width = _stageWidth / 30;
-			this.height = this.width;
 			
 			_collider = new Collider();
 			_collider.setRect(0.5, 0.5);
@@ -124,12 +120,12 @@ package gameScene.object.item
 			
 			
 			var degree:Number = _jumpTheta * Math.PI / 180;
-			y = -(Math.sin(degree) * _jumpHeight);
+			this.y = -(Math.sin(degree) * _jumpHeight);
 			
 			if(_direction == 0)
-				x -= _stageWidth / 500;
+				this.x -= _stageWidth / 700;
 			else
-				x += _stageWidth / 500;
+				this.x += _stageWidth / 700;
 			
 			_jumpTheta += _jumpSpeed;
 			
@@ -148,15 +144,11 @@ package gameScene.object.item
 		 */
 		private function onCollidePlayer(event:Event):void
 		{
-			trace("생선 먹음");
 			dispose();
 			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			removeEventListener("collideFish", onCollidePlayer);
 			
 		}
-		
-		
-		
 	}
 }
 

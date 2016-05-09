@@ -53,7 +53,7 @@ package titleScene
 				loader.load(urlRequest);
 			}
 			
-			for(var i:int = 0; i < _soundURLVector.length; i++)
+			for(i = 0; i < _soundURLVector.length; i++)
 			{
 				urlRequest = new URLRequest(_filePath.resolvePath(_soundURLVector[i]).url); 
 				var sound:Sound = new Sound();
@@ -82,7 +82,6 @@ package titleScene
 		private function completeLoadSound():void
 		{
 			SoundManager.addSound("Opening", _soundDic["Opening.mp3"]);
-			//SoundManager.setVolume(SoundManager.SELECT, 0.5, "Opening");
 			
 			var sound:Sound = _soundDic["Opening.mp3"]; 
 			sound.volume = 0.5;
@@ -116,7 +115,6 @@ package titleScene
 			if(_imageURLVector.length <= _imageLoadCount)
 			{
 				_imageURLVector.splice(0, _imageURLVector.length);
-				//              _resourceURLs = null;
 				completeLoadImage();
 			}
 		}
@@ -143,11 +141,8 @@ package titleScene
 		
 		private function onTouch(event:TrollingEvent):void
 		{
-			//SoundManager.stopAll();
 			SoundManager.dispose();
 			SceneManager.switchScene("Game");
-			//사운드 빼야함
-			//SoundManager.setVolume(SoundManager.ALL, 0);
 		}
 	}
 }

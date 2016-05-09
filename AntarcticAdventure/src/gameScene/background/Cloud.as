@@ -22,26 +22,26 @@ package gameScene.background
 		
 		private var _isLeft:Boolean;
 		
+		private var _speed:int;
+		
 		public function get isLeft():Boolean { return _isLeft; }
 		
-		public function Cloud(stageWidth:int, stageHeight:int)
+		public function Cloud()
 		{
-			_stageWidth = stageWidth;
-			_stageHeight = stageHeight;
+			_stageWidth = MainStage.stageWidth;
+			_stageHeight = MainStage.stageHeight;
 			pivot = PivotType.CENTER;
 			var bitmap:Bitmap = new cloud() as Bitmap;
-			var image:Image = new Image(new Texture(bitmap));		
-			
+			var image:Image = new Image(new Texture(bitmap));				
 			
 			addComponent(image);
 			
 			var point:Point = initRandomPosition();
-			x = point.x;
-			y = point.y;
+			this.x = point.x;
+			this.y = point.y;
 			
-			//this.width = _stageWidth / 200 + (y / 10) ;
-			width = (_stageWidth / 10) - (y / 2);
-			height = width;
+			this.width = (_stageWidth / 10) - (this.y / 2);
+			this.height = this.width;
 			
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 		}
@@ -49,35 +49,39 @@ package gameScene.background
 
 		private function onEnterFrame(event:TrollingEvent):void
 		{		
-			var speed:int = MainStage.speed;
-			if(y < 0)
+			_speed = MainStage.speed;
+			if(this.y < 0)
 			{
 				dispose();
 				removeFromParent();
 				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			}			
 			
-			width = (_stageWidth / 10) - (y / 2)
-			height = width;
+			this.width = (_stageWidth / 10) - (this.y / 2)
+			this.height = this.width;
 			
 			if(isLeft)
 			{
-				x -= speed / 5;
-				y -= speed/ 5;
+				this.x -= _speed / 5;
+				this.y -= _speed/ 5;
 			}
 			else
 			{
-				x += speed / 5;
-				y -= speed / 5;
+				this.x += _speed / 5;
+				this.y -= _speed / 5;
 			}
 		}
 		
+		/**
+		 * 구름의 초기 좌표를 랜덤하게 생성해주는 메소드 
+		 * @return 
+		 * 
+		 */
 		private function initRandomPosition():Point
 		{
 			var randomNum:Number = Math.random();
 						
-			_isLeft = (randomNum < 0.5) ? true : false;
-			
+			_isLeft = (randomNum < 0.5) ? true : false;			
 			
 			var point:Point = new Point(0,0);
 						

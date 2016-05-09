@@ -54,22 +54,29 @@ package gameScene.background
 		
 		private var _stageWidth:int;
 		private var _stageHeight:int;
-		//private var _state:State;
 		
-		public function Background(stageWidth:int, stageHeight:int)
+		public function get curve():int	{ return _curve; }		
+		public function set curve(value:int):void { _curve = value; }
+		
+		public function Background()
 		{
-			_stageWidth = stageWidth;
-			_stageHeight = stageHeight;
+			_stageWidth = MainStage.stageWidth;
+			_stageHeight = MainStage.stageHeight;
 			
 			_bitmap = new topBackground0() as Bitmap;
 			_image = new Image(new Texture(_bitmap));			
+			_topBackground.addComponent(_image);
 			
 			_topBackground.width = _stageWidth;
 			_topBackground.height = _stageHeight / 10 * 3.33;
-			_topBackground.addComponent(_image);	
-			addChild(_topBackground);
+				
+			addChild(_topBackground);	
 			
 			
+			
+			_bottomBackground.width = _stageWidth;
+			_bottomBackground.height = _stageHeight / 10 * 6.66;	
+			_bottomBackground.y = _stageHeight / 10 * 3.33;
 			
 			_animator = new Animator();
 			
@@ -103,31 +110,15 @@ package gameScene.background
 			_animator.addState(state);
 			state.interval= MainStage.maxSpeed - (MainStage.speed / 3 * 2);
 			
-			state.play();
-			
-			
-			
-			
-			_bottomBackground.width = _stageWidth;
-			_bottomBackground.height = _stageHeight / 10 * 6.66;	
-			_bottomBackground.y = _stageHeight / 10 * 3.33;
+			state.play();				
 			_bottomBackground.addComponent(_animator);
 			addChild(_bottomBackground);
 			
-			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
-			
+			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);			
 		}
 		
-		public function get curve():int
-		{
-			return _curve;
-		}
-
-		public function set curve(value:int):void
-		{
-			_curve = value;
-		}
+		
 
 		private function onEnterFrame(event:TrollingEvent):void
 		{
@@ -145,9 +136,6 @@ package gameScene.background
 				default:
 					break;
 			}
-			
-			
-			
 		}
 		
 		/**
@@ -173,7 +161,5 @@ package gameScene.background
 					break;				
 			}
 		}
-		
-		
 	}
 }

@@ -28,17 +28,16 @@ package gameScene.object.crater
 		private var _stageHeight:int;
 		
 		private var _direction:int;
-		//private var _collider:Collider;
 		
-		public function RectangleCrater(stageWidth:int, stageHeight:int, direction)
+		public function RectangleCrater(direction)
 		{
-			_stageWidth = stageWidth;
-			_stageHeight = stageHeight;
+			_stageWidth = MainStage.stageWidth;
+			_stageHeight = MainStage.stageHeight;
 			
 			var bitmap:Bitmap = new rectangleCrater() as Bitmap;
 			var image:Image = new Image(new Texture(bitmap));
 			
-			pivot = PivotType.CENTER;
+			this.pivot = PivotType.CENTER;
 			addComponent(image);
 			
 			_direction = direction;
@@ -48,12 +47,12 @@ package gameScene.object.crater
 			_right.pivot = PivotType.CENTER;
 			_middle.pivot = PivotType.CENTER;
 			
-			x = _stageWidth / 2;
-			y = _stageHeight * 0.4;
+			this.x = _stageWidth / 2;
+			this.y = _stageHeight * 0.4;
 			
 			
-			width = _stageWidth / 10;
-			height = width;
+			this.width = _stageWidth / 10;
+			this.height = this.width;
 			
 			_middle.name = "middle";
 			_middle.width = width / 2;
@@ -91,52 +90,34 @@ package gameScene.object.crater
 			
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
-			scaleY = (y - (_stageHeight / 3)) / 100;
-			scaleX = scaleY;
-			//trace(_left.getGlobalPoint());
-		}
-		
-		public function get middle():GameObject
-		{
-			return _middle;
-		}
-		
-		public function get right():GameObject
-		{
-			return _right;
-		}
-		
-		public function get left():GameObject
-		{
-			return _left;
+			this.scaleY = (y - (_stageHeight / 3)) / 100;
+			this.scaleX = scaleY;
 		}
 		
 		private function onEnterFrame(event:TrollingEvent):void
 		{           
-			if(y > _stageHeight)
+			if(this.y > _stageHeight)
 			{               
 				dispose();
 				removeFromParent();
 				removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
-				//trace(_left.getGlobalPoint());
-			}
+			}			
 			
+			this.scaleY += 0.02 * MainStage.speed;
+			this.scaleX = this.scaleY;
 			
-			scaleY = (y - (_stageHeight / 3)) / 100;
-			scaleX = scaleY;
-			
-			y += MainStage.speed;
+			this.y += MainStage.speed;
 			
 			
 			switch(_direction)
 			{
 				//왼쪽
 				case 0:
-					x -= MainStage.speed * 0.5;
+					this.x -= MainStage.speed * 0.5;
 					break;
 				//오른쪽
 				case 1:
-					x += MainStage.speed * 0.5;
+					this.x += MainStage.speed * 0.5;
 					break;
 				
 				default:

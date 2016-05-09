@@ -2,8 +2,6 @@ package gameScene.object.player
 {
 	import flash.display.Bitmap;
 	import flash.events.Event;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
 	
 	import gameScene.MainStage;
 	import gameScene.object.crater.EllipseCrater;
@@ -21,7 +19,6 @@ package gameScene.object.player
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
-	import trolling.utils.EventWith;
 	import trolling.utils.PivotType;
 
 	public class Player extends GameObject
@@ -63,8 +60,6 @@ package gameScene.object.player
 		private var _penguinCollider:Collider;
 		
 		private var _playerState:String;
-		//private const MAX_MUJUK_FRAME:int = 10;
-		//private var _mujukFrame:int;
 		
 		private var _jumpSpeed:Number;
 		private var _jumpHeight:Number;
@@ -89,17 +84,14 @@ package gameScene.object.player
 		public function get penguin():GameObject{ return _penguin;}
 		public function set penguin(value:GameObject):void{ _penguin = value;}
 		
-		public function Player(stageWidth:int, stageHeight:int)
+		public function Player()
 		{
-			_stageWidth = stageWidth;
-			_stageHeight = stageHeight;
+			_stageWidth = MainStage.stageWidth;
+			_stageHeight = MainStage.stageHeight;
 			
-			pivot = PivotType.CENTER;
+			this.pivot = PivotType.CENTER;
 			this.x = _stageWidth / 2;
 			this.y = _stageHeight / 10 * 8;
-
-//			x = 0;
-//			y = 0;
 			
 			_playerState = PlayerState.RUN;
 			
@@ -109,42 +101,15 @@ package gameScene.object.player
 			_crashSpeed = 10;
 			_crashHeight = _stageHeight / 20;
 			
-			
-			_bitmap = new shadow() as Bitmap;
-			_image = new Image(new Texture(_bitmap));				
-			
-			
+			_penguin.pivot = PivotType.CENTER;
 			
 			_penguin.width = _stageWidth / 5;
 			_penguin.height = _penguin.width;
-//			_penguin.x = _stageWidth / 2;		
-//			_penguin.y = _stageHeight / 10 * 8;
-			
-			_penguin.pivot = PivotType.CENTER;
 			
 			_penguinCollider = new Collider();
-			
-			
-			
-			_grimja.width = _stageWidth / 5;
-			_grimja.height = _grimja.width
-			//_grimja.x = _stageWidth / 2;		
-			_grimja.y = _stageHeight * 0.06;
-			//_grimja.y = _penguin.height / 2 + _grimja.height / 2;
-			_grimja.addComponent(_image);	
-			_grimja.pivot = PivotType.CENTER;
-			
-			_grimjaCollider = new Collider();
-			
-			_grimjaCollider.setRect(0.33, 0.0625);
-			_grimja.addComponent(_grimjaCollider);
-			
-			_grimja.addEventListener(TrollingEvent.COLLIDE, onCollideWithGrimja);
-			
-			
-				
-			
-			
+			_penguinCollider.setRect(0.5, 0.5);
+			_penguin.addComponent(_penguinCollider);
+			_penguin.addEventListener(TrollingEvent.COLLIDE, onCollideWithPenguin);
 			
 			
 			_animator = new Animator(); 
@@ -179,13 +144,28 @@ package gameScene.object.player
 			_bitmap = new penguinCrashedRight() as Bitmap;
 			state.addFrame(new Texture(_bitmap));	
 			state.interval = 60;
-			_animator.addState(state);	
-			
+			_animator.addState(state);				
 			
 			state.play();
 			
 			_penguin.addComponent(_animator);
 			
+			
+			_bitmap = new shadow() as Bitmap;
+			_image = new Image(new Texture(_bitmap));				
+			_grimja.addComponent(_image);
+			
+			_grimja.pivot = PivotType.CENTER;
+			
+			_grimja.width = _stageWidth / 5;
+			_grimja.height = _grimja.width	
+			_grimja.y = _stageHeight * 0.06;
+			
+			_grimjaCollider = new Collider();			
+			_grimjaCollider.setRect(0.33, 0.0625);
+			_grimja.addComponent(_grimjaCollider);
+			
+			_grimja.addEventListener(TrollingEvent.COLLIDE, onCollideWithGrimja);
 			
 			
 			addChild(_grimja);
@@ -195,11 +175,25 @@ package gameScene.object.player
 		} 
 		
 		
-
 		/**
 		 * 
 		 * @param event
-		 * 그림자의 콜라이더에 다른 콜라이더가 충돌했을때 그 콜라이더에 대한 정보를
+		 * 그림자의 콜라이더에 다른 콜라이더가 충돌했을때 그 콜라이더에 대한 정보를 바탕으로 어느 오브젝트와 충돌했는지를 검사하는 메소드
+		 */
+		private function onCollideWithPenguin(event:TrollingEvent):void
+		{
+			if(event.data is Fish)
+			{
+				//trace("생선");
+				event.data.dispatchEvent(new Event("collideFish"));
+			}
+		}
+		
+		
+		/**
+		 * 
+		 * @param event
+		 * 그림자의 콜라이더에 다른 콜라이더가 충돌했을때 그 콜라이더에 대한 정보를 바탕으로 어느 오브젝트와 충돌했는지를 검사하는 메소드
 		 */
 		private function onCollideWithGrimja(event:TrollingEvent):void
 		{
@@ -216,8 +210,7 @@ package gameScene.object.player
 				{
 					MainStage.speed = 0;
 					if(this.x < event.data.x)
-					{
-						
+					{						
 						_playerState = PlayerState.CRASHED_LEFT;
 					}
 						
@@ -235,14 +228,16 @@ package gameScene.object.player
 				{
 					//MainStage.speed = 0;
 					if(event.data.name == "left")
-					{
-						
+					{						
 						_playerState = PlayerState.CRASHED_LEFT;
-					}
-						
+					}						
 					else if(event.data.name == "right")
 					{
 						_playerState = PlayerState.CRASHED_RIGHT;
+					}
+					else
+					{
+						//_playerState = PlayerState.FALL;
 					}
 				}
 			}
@@ -257,43 +252,30 @@ package gameScene.object.player
 			{
 				trace("깃발");				
 				event.data.dispatchEvent(new Event("collideFlag"));
-			}
-			
-//			if(event.data is Fish)
-//			{
-//				trace("생선");
-//				event.data.dispatchEvent(new Event("collideFish"));
-//			}
-			
-		
+			}		
 		}
 		
 		
 		private function onEnterFrame(event:TrollingEvent):void
-		{
-			//trace(_playerState);
-			//_grimja.x = _penguin.x;
-			
+		{			
 			collideWall();
 			
-			if(_playerState == PlayerState.JUMP)
-			{				
-				
-				jump();
-			}
-			
-			if(_playerState == PlayerState.CRASHED_LEFT)
+			switch(_playerState)
 			{
-				crashed(0);
-			}
-			if(_playerState == PlayerState.CRASHED_RIGHT)
-			{
-				crashed(1);
-			}			
-			if(_playerState == PlayerState.FALL)
-			{
-				_grimjaCollider.isActive = false;
-				_penguin.transition(PlayerState.FALL);
+				case PlayerState.JUMP:
+					jump();
+					break;
+				case PlayerState.CRASHED_LEFT:
+					crashed(0);
+					break;
+				case PlayerState.CRASHED_RIGHT:
+					crashed(1);
+					break;
+				case PlayerState.FALL:
+					fall();
+					break;
+				default:
+					break;
 			}
 		}
 		
@@ -388,13 +370,13 @@ package gameScene.object.player
 			{
 				_crashTheta = 0;
 				_crashHeight *= 0.75;			
-				_crashSpeed *= 1.25;
-				_hoppingCount++;
-				
+				_crashSpeed *= 1.25;				
 				if(_hoppingCount == 0)
 					SoundManager.play("crashed0");
 				else
 					SoundManager.play("crashed1");
+				
+				_hoppingCount++;
 			}
 			
 			

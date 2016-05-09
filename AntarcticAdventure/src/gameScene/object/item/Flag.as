@@ -2,11 +2,9 @@ package gameScene.object.item
 {
 	import flash.display.Bitmap;
 	import flash.events.Event;
-	import flash.geom.Rectangle;
 	
 	import gameScene.MainStage;
 	
-	import trolling.component.ComponentType;
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
@@ -34,34 +32,27 @@ package gameScene.object.item
 		private var _direction:int;
 		private var _collider:Collider;
 		
-		public function Flag(stageWidth:int, stageHeight:int, direction)
+		public function Flag(direction)
 		{
-			_stageWidth = stageWidth;
-			_stageHeight = stageHeight;
+			_stageWidth = MainStage.stageWidth;
+			_stageHeight = MainStage.stageHeight;
 			
-			//var color:int = initRandomColor();
-			var bitmap:Bitmap = initRandomColor(bitmap);
-			
-			
+			var bitmap:Bitmap;
+			bitmap = initRandomColor(bitmap);			
 			var image:Image = new Image(new Texture(bitmap));	
 			
-			pivot = PivotType.CENTER;
+			this.pivot = PivotType.CENTER;
 			addComponent(image);
 			
 			_direction = direction;
 			
-			x = _stageWidth / 2;
-			y = _stageHeight * 0.4;
+			this.x = _stageWidth / 2;
+			this.y = _stageHeight * 0.4;
 			
-			width = _stageWidth / 20;
-			height = width;
+			this.width = _stageWidth / 20;
+			this.height = width;
 			
 			_collider = new Collider();
-//			var rect:Rectangle = new Rectangle();
-//			rect.width = width / 4;
-//			rect.height = height / 3;
-//			rect.x = (width / 2) - (rect.width / 2);
-//			rect.y = (height / 2) - (rect.y / 2);
 			_collider.setRect(0.25, 0.33);
 			addComponent(_collider);
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
@@ -70,6 +61,12 @@ package gameScene.object.item
 			
 		}
 		
+		/**
+		 * 
+		 * @param bitmap
+		 * @return 
+		 * 
+		 */
 		private function initRandomColor(bitmap:Bitmap):Bitmap
 		{
 			var randomNum:Number = Math.random();
@@ -88,14 +85,8 @@ package gameScene.object.item
 		
 		private function onEnterFrame(event:TrollingEvent):void
 		{			
-			if(y > _stageHeight)
+			if(this.y > _stageHeight)
 			{
-				//initSize();
-				//x = _stageWidth / 2;
-				//y = _stageHeight /2;
-				//_position = initRandomPosition();
-			
-
 				dispose();
 				removeFromParent();
 				removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
@@ -103,20 +94,20 @@ package gameScene.object.item
 			}
 					
 			
-			scaleY = (y - (_stageHeight / 3)) / 100;
-			scaleX = scaleY;
+			this.scaleY = (this.y - (_stageHeight / 3)) / 100;
+			this.scaleX = this.scaleY;
 			
-			y += MainStage.speed;
+			this.y += MainStage.speed;
 			
 			switch(_direction)
 			{
 				//왼쪽
 				case 0:
-					x -= MainStage.speed * 0.5;
+					this.x -= MainStage.speed * 0.5;
 					break;
 				//오른쪽
 				case 1:
-					x += MainStage.speed * 0.5;
+					this.x += MainStage.speed * 0.5;
 					break;
 				
 				default:
@@ -125,26 +116,13 @@ package gameScene.object.item
 		}
 		
 		
-//		public function initRandomPosition():int
-//		{			
-//			var randomNum:Number = Math.random();
-//			
-//			if(randomNum < 0.5)
-//				return 0;
-//			else
-//				return 1;			
-//		}
-		
 		/**
 		 *  플레이어와 깃발이 충돌했을때 깃발을 지워줌
 		 * 
 		 */
 		private function onCollidePlayer(event:Event):void
 		{
-			trace("aa");
 			dispose();
-			//removeComponent(image);
-			//removeComponent(ComponentType.COLLIDER);
 			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			removeEventListener("collideFlag", onCollidePlayer);
 			

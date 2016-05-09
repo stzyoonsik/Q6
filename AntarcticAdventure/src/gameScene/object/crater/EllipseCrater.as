@@ -1,12 +1,9 @@
 package gameScene.object.crater
 {
 	import flash.display.Bitmap;
-	import flash.events.Event;
-	import flash.geom.Rectangle;
 	
 	import gameScene.MainStage;
 	import gameScene.object.enemy.Enemy;
-	import gameScene.object.enemy.initRandom;
 	import gameScene.object.item.Fish;
 	
 	import trolling.component.graphic.Image;
@@ -36,55 +33,40 @@ package gameScene.object.crater
 		 * @param direction -1 = normal, 0 = left, 1 = right
 		 * 
 		 */
-		public function EllipseCrater(stageWidth:int, stageHeight:int, direction:int)
+		public function EllipseCrater(direction:int)
 		{
-			_stageWidth = stageWidth;
-			_stageHeight = stageHeight;
+			_stageWidth = MainStage.stageWidth;
+			_stageHeight = MainStage.stageHeight;
 			
 			var bitmap:Bitmap = new crater() as Bitmap;
 			var image:Image = new Image(new Texture(bitmap));		
 			
-			pivot = PivotType.CENTER;
+			this.pivot = PivotType.CENTER;
 			addComponent(image);
 			
 			_direction = direction;
 			
-			x = _stageWidth / 2;
-			y = _stageHeight * 0.4;
+			this.x = _stageWidth / 2;
+			this.y = _stageHeight * 0.4;
 			
-			//this.width = _stageWidth / 200 + (y / 10) ;
-			width = _stageWidth / 20;
-			height = width;
+			this.width = _stageWidth / 20;
+			this.height = this.width;
 			
 			_collider = new Collider();
-//			var rect:Rectangle = new Rectangle();
-//			rect.width = width * 0.75;
-//			rect.height = height / 8;
-//			rect.x = (width / 2) - (rect.width / 2);
-//			rect.y = (height / 2) - (rect.y / 2);
 			
 			_collider.setRect(0.75, 0.125);
 			//colliderRender = true;
 			addComponent(_collider);
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
-			scaleY = (y - (_stageHeight / 3)) / 100;
-			scaleX = scaleY;
-		}
-		
-		public function get position():int
-		{
-			return _direction;
-		}
-
-		public function set position(value:int):void
-		{
-			_direction = value;
-		}
+			this.scaleY = (this.y - (_stageHeight / 3)) / 100;
+			this.scaleX = scaleY;
+		}		
+	
 
 		private function onEnterFrame(event:TrollingEvent):void
 		{			
-			if(y > _stageHeight)
+			if(this.y > _stageHeight)
 			{
 				
 				dispose();
@@ -93,11 +75,9 @@ package gameScene.object.crater
 				
 			}
 			
-			//width = (y) - (_stageWidth / 4);
-			//height = width;
-			scaleY = (y - (_stageHeight / 3)) / 100;
-			scaleX = scaleY;
-			y += MainStage.speed;
+			this.scaleY += 0.02 * MainStage.speed;
+			this.scaleX = this.scaleY;
+			this.y += MainStage.speed;
 			
 			switch(_direction)
 			{
@@ -107,17 +87,17 @@ package gameScene.object.crater
 					break;
 				//왼쪽
 				case 0:
-					x -= MainStage.speed;
+					this.x -= MainStage.speed;
 					break;
 				//오른쪽
 				case 1:
-					x += MainStage.speed;
+					this.x += MainStage.speed;
 					break;
 				default:
 					break;
 			}
 			
-			if(y > _stageHeight / 2)
+			if(this.y > _stageHeight / 2)
 			{
 				if(!_isObjectCreate)
 				{
@@ -125,53 +105,11 @@ package gameScene.object.crater
 					{
 						//타원 크레이터만 생성
 						case 0:
-//							trace("물개 생성");
-//							var enemy:Enemy = new Enemy(_stageWidth, _stageHeight);
-//							addChild(enemy);
-							switch(_direction)
-							{
-								case -1:
-									trace("생선 랜덤 생성");
-									var fish:Fish = new Fish(_stageWidth, _stageHeight, makeRandomForFish());
-									addChild(fish);
-									break;
-								case 0:
-									trace("생선 오른쪽 생성");
-									fish = new Fish(_stageWidth, _stageHeight, 1);		
-									addChild(fish);
-									break;
-								case 1:
-									trace("생선 왼쪽 생성");
-									fish = new Fish(_stageWidth, _stageHeight, 0);
-									addChild(fish);
-									break;
-								default:
-									break;
-							}
-							
 							break;
 						//물개 생성
 						case 1:
-							switch(_direction)
-							{
-								case -1:
-									trace("생선 랜덤 생성");
-									var fish:Fish = new Fish(_stageWidth, _stageHeight, makeRandomForFish());
-									addChild(fish);
-									break;
-								case 0:
-									trace("생선 오른쪽 생성");
-									fish = new Fish(_stageWidth, _stageHeight, 1);		
-									addChild(fish);
-									break;
-								case 1:
-									trace("생선 왼쪽 생성");
-									fish = new Fish(_stageWidth, _stageHeight, 0);
-									addChild(fish);
-									break;
-								default:
-									break;
-							}
+							var enemy:Enemy = new Enemy();
+							addChild(enemy);
 							break;
 						//생선 생성
 						case 2:
@@ -179,23 +117,24 @@ package gameScene.object.crater
 							{
 								case -1:
 									trace("생선 랜덤 생성");
-									var fish:Fish = new Fish(_stageWidth, _stageHeight, makeRandomForFish());
+									var fish:Fish = new Fish(makeRandomForFish());
 									addChild(fish);
 									break;
 								case 0:
 									trace("생선 오른쪽 생성");
-									fish = new Fish(_stageWidth, _stageHeight, 1);		
+									fish = new Fish(1);		
 									addChild(fish);
 									break;
 								case 1:
 									trace("생선 왼쪽 생성");
-									fish = new Fish(_stageWidth, _stageHeight, 0);
+									fish = new Fish(0);
 									addChild(fish);
 									break;
 								default:
 									break;
 							}
 							break;
+						
 						default:
 							break;
 					}
@@ -206,6 +145,11 @@ package gameScene.object.crater
 			
 		}
 		
+		/**
+		 * 0 또는 1 또는 2를 랜덤으로 리턴하는 메소드 
+		 * @return 
+		 * 
+		 */
 		private function initRandom():int
 		{			
 			var randomNum:Number = Math.random();
@@ -218,6 +162,11 @@ package gameScene.object.crater
 				return 2;			
 		}
 		
+		/**
+		 * 생선이 튀는 방향을 랜덤으로 하기위한 메소드 
+		 * @return 
+		 * 
+		 */
 		private function makeRandomForFish():int
 		{
 			var randomNum:Number = Math.random();
