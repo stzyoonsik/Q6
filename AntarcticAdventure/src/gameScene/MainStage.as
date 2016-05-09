@@ -197,11 +197,9 @@ package gameScene
 		 */
 		private function onTouchCoverFace(event:TrollingEvent):void
 		{
-			if(_player.state == PlayerState.ARRIVED ||
+			if(_player.state == PlayerState.ARRIVE ||
 				_player.state == PlayerState.CRASHED_LEFT ||
-				_player.state == PlayerState.CRASHING_LEFT ||
-				_player.state == PlayerState.CRASHED_RIGHT ||
-				_player.state == PlayerState.CRASHING_RIGHT)
+				_player.state == PlayerState.CRASHED_RIGHT)
 			{
 				return;
 			}				
@@ -266,11 +264,29 @@ package gameScene
 			if(_distanceToFinish <= 0)
 			{
 				//도착함
-				trace("도착");
+				//                trace("도착");
+				_speed = 0;
+				_coverFace.removeEventListener(TrollingEvent.TOUCH_HOVER, onTouchCoverFace);
+				if(_player.state == PlayerState.RUN)
+					_player.state = PlayerState.ARRIVE;
 			}
 			else
 			{
 				_distanceToFinish--;
+				
+				if(_distanceToFinish % 25 == 0)
+				{
+					//구름 생성
+					var cloud:Cloud = new Cloud();
+					addChild(cloud);
+					
+					if(_objectArray.length != 0)
+					{
+						trace("오브젝트 생성");
+						makeObject();
+						_objectArray.shift();
+					}
+				}
 			}
 			
 			if(_distanceToFinish < 1800)
@@ -279,19 +295,7 @@ package gameScene
 				//_background.changeCurve(1);
 			}
 			
-			if(_distanceToFinish % 25 == 0)
-			{
-				//구름 생성
-				var cloud:Cloud = new Cloud();
-				addChild(cloud);
-				
-				if(_objectArray.length != 0)
-				{
-					trace("오브젝트 생성");
-					makeObject();
-					_objectArray.shift();
-				}
-			}
+			
 			
 			
 			if(_speed < _maxSpeed)
