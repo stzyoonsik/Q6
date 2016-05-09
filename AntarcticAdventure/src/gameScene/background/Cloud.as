@@ -30,10 +30,11 @@ package gameScene.background
 		{
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
-			pivot = PivotType.CENTER;
-			var bitmap:Bitmap = new cloud() as Bitmap;
-			var image:Image = new Image(new Texture(bitmap));				
 			
+			pivot = PivotType.CENTER;
+			
+			var bitmap:Bitmap = new cloud() as Bitmap;
+			var image:Image = new Image(new Texture(bitmap));	
 			addComponent(image);
 			
 			var point:Point = initRandomPosition();
@@ -53,7 +54,6 @@ package gameScene.background
 			if(this.y < 0)
 			{
 				dispose();
-				removeFromParent();
 				removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			}			
 			
@@ -88,12 +88,12 @@ package gameScene.background
 			switch(_isLeft)
 			{
 				case true:					
-					point.x = (Math.random() * _stageWidth / 10 * 3) + (_stageWidth / 10);
-					point.y = (Math.random() * _stageHeight / 10 * 3) + (_stageHeight / 10);					
+					point.x = (Math.random() * _stageWidth * 0.3) + (_stageWidth * 0.1);
+					point.y = (Math.random() * _stageHeight * 0.2) + (_stageHeight * 0.1);					
 					break;
 				case false:
-					point.x = (Math.random() * _stageWidth / 10 * 3) + (_stageWidth / 10 * 6);
-					point.y = (Math.random() * _stageHeight / 10 * 3) + (_stageHeight / 10);					
+					point.x = (Math.random() * _stageWidth * 0.3) + (_stageWidth * 0.6);
+					point.y = (Math.random() * _stageHeight * 0.2) + (_stageHeight * 0.1);				
 					break;
 				default:
 					break;

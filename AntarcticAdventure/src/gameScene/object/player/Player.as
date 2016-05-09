@@ -107,7 +107,8 @@ package gameScene.object.player
 			_penguin.height = _penguin.width;
 			
 			_penguinCollider = new Collider();
-			_penguinCollider.setRect(0.5, 0.5);
+			_penguinCollider.setRect(0.3, 0.2);
+			_penguin.colliderRender = true;
 			_penguin.addComponent(_penguinCollider);
 			_penguin.addEventListener(TrollingEvent.COLLIDE, onCollideWithPenguin);
 			
@@ -164,7 +165,7 @@ package gameScene.object.player
 			_grimjaCollider = new Collider();			
 			_grimjaCollider.setRect(0.33, 0.0625);
 			_grimja.addComponent(_grimjaCollider);
-			
+			_grimja.colliderRender = true;
 			_grimja.addEventListener(TrollingEvent.COLLIDE, onCollideWithGrimja);
 			
 			
@@ -184,7 +185,7 @@ package gameScene.object.player
 		{
 			if(event.data is Fish)
 			{
-				//trace("생선");
+				SoundManager.play("fish");
 				event.data.dispatchEvent(new Event("collideFish"));
 			}
 		}
@@ -226,13 +227,15 @@ package gameScene.object.player
 			{
 				if(_playerState == PlayerState.RUN)
 				{
-					//MainStage.speed = 0;
+					
 					if(event.data.name == "left")
-					{						
+					{			
+						MainStage.speed = 0;
 						_playerState = PlayerState.CRASHED_LEFT;
 					}						
 					else if(event.data.name == "right")
 					{
+						MainStage.speed = 0;
 						_playerState = PlayerState.CRASHED_RIGHT;
 					}
 					else
@@ -244,13 +247,23 @@ package gameScene.object.player
 			
 			if(event.data is Enemy)
 			{
-				trace("몬스터");
-				dispatchEvent(new Event("checkDirection"));
+				trace("물개와 충돌");
+				MainStage.speed = 0;
+				if(this.x < event.data.x)
+				{						
+					_playerState = PlayerState.CRASHED_LEFT;
+				}
+					
+				else
+				{
+					_playerState = PlayerState.CRASHED_RIGHT;
+				}
 			}
 			
 			if(event.data is Flag)
 			{
-				trace("깃발");				
+				trace("깃발 먹음");
+				SoundManager.play("flag");			
 				event.data.dispatchEvent(new Event("collideFlag"));
 			}		
 		}

@@ -99,7 +99,6 @@ package gameScene.object.crater
 			if(this.y > _stageHeight)
 			{               
 				dispose();
-				removeFromParent();
 				removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			}			
 			

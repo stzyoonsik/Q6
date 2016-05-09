@@ -122,6 +122,8 @@ package gameScene
 			_soundURL.push("jump.mp3");
 			_soundURL.push("crashed0.mp3");
 			_soundURL.push("crashed1.mp3");
+			_soundURL.push("fish.mp3");
+			_soundURL.push("flag.mp3");
 		}
 		
 		/**
@@ -169,6 +171,8 @@ package gameScene
 			SoundManager.addSound("jump", _soundDic["jump.mp3"]);
 			SoundManager.addSound("crashed0", _soundDic["crashed0.mp3"]);
 			SoundManager.addSound("crashed1", _soundDic["crashed1.mp3"]);
+			SoundManager.addSound("fish", _soundDic["fish.mp3"]);
+			SoundManager.addSound("flag", _soundDic["flag.mp3"]);
 			
 			var sound:Sound = _soundDic["MainBgm.mp3"]; 
 			sound.volume = 0.5;
@@ -290,8 +294,6 @@ package gameScene
 			}
 			
 			
-			
-			
 			if(_speed < _maxSpeed)
 			{
 				_speed += _maxSpeed / 50;
@@ -309,9 +311,7 @@ package gameScene
 					break;
 				default:
 					break;
-			}
-			
-			
+			}			
 		}
 		
 		/**

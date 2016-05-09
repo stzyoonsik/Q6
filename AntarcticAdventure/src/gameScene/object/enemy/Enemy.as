@@ -40,12 +40,12 @@ package gameScene.object.enemy
 			this.x = 0;
 			this.y = -this.height / 10;
 			
-			this.width = _stageWidth / 30;
+			this.width = _stageWidth / 100;
 			this.height = this.width;
 			
 			_bitmap = new enemy0() as Bitmap;
 			_image = new Image(new Texture(_bitmap));
-			
+			addComponent(_image);
 			
 			_collider = new Collider();
 			_collider.setRect(0.4, 0.4);

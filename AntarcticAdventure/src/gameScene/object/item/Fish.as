@@ -60,7 +60,7 @@ package gameScene.object.item
 			this.x = 0;
 			this.y = 0;
 			
-			this.width = _stageWidth / 50;
+			this.width = _stageWidth / 100;
 			this.height = this.width;
 			
 			if(direction == 0)

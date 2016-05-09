@@ -55,7 +55,7 @@ package gameScene.object.crater
 			_collider = new Collider();
 			
 			_collider.setRect(0.75, 0.125);
-			//colliderRender = true;
+			colliderRender = true;
 			addComponent(_collider);
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
@@ -67,10 +67,8 @@ package gameScene.object.crater
 		private function onEnterFrame(event:TrollingEvent):void
 		{			
 			if(this.y > _stageHeight)
-			{
-				
+			{				
 				dispose();
-				removeFromParent();
 				removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 				
 			}
@@ -108,6 +106,7 @@ package gameScene.object.crater
 							break;
 						//물개 생성
 						case 1:
+							trace("물개 생성");
 							var enemy:Enemy = new Enemy();
 							addChild(enemy);
 							break;

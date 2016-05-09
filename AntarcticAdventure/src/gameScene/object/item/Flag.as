@@ -54,6 +54,7 @@ package gameScene.object.item
 			
 			_collider = new Collider();
 			_collider.setRect(0.25, 0.33);
+			colliderRender = true;
 			addComponent(_collider);
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
@@ -88,7 +89,6 @@ package gameScene.object.item
 			if(this.y > _stageHeight)
 			{
 				dispose();
-				removeFromParent();
 				removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 				removeEventListener("collideFlag", onCollidePlayer);
 			}
