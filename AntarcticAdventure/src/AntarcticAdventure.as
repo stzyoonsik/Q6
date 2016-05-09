@@ -11,6 +11,7 @@ package
 	import trolling.core.SceneManager;
 	import trolling.core.Trolling;
 	
+	[SWF(frameRate = "24", width="800", height="600")]
 	public class AntarcticAdventure extends Sprite
 	{
 		public function AntarcticAdventure()

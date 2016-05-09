@@ -75,14 +75,17 @@ package gameScene
 		private function oninit(event:Event):void
 		{
 			_currentStage = "stage1";
-			
-			_stageWidth = Screen.mainScreen.bounds.width;
-			_stageHeight = Screen.mainScreen.bounds.height;
+			this.width = 800;
+			this.height = 600;
+//			_stageWidth = Screen.mainScreen.bounds.width;
+//			_stageHeight = Screen.mainScreen.bounds.height;
+			_stageWidth = this.width;
+			_stageHeight = this.height;
 			
 			_yForJump = _stageHeight;
 			_xForMoveAtLeast = _stageWidth / 50;
 			
-			_maxSpeed = 15; 
+			_maxSpeed = 5; 
 			_speed = 0; 
 			_playerSpeed = _stageWidth / 100;
 			
@@ -127,6 +130,9 @@ package gameScene
 			}
 			
 			readTXT(_currentStage); 
+			
+			this.scaleX = Screen.mainScreen.bounds.width / _stageWidth;
+			this.scaleY = Screen.mainScreen.bounds.height / _stageHeight;
 			
 //			for(var i:int = 0; i<_objectArray.length; ++i)
 //			{
@@ -196,7 +202,12 @@ package gameScene
 				return;
 			}
 				
-			var point:Point = event.data[0];
+			//var point:Point = event.data[0];
+			
+			var point:Point = Point(event.data[0]).clone();
+			point.x *= (_stageWidth / Screen.mainScreen.bounds.width);
+			point.y *= (_stageHeight / Screen.mainScreen.bounds.height);
+			
 			if(event.data.length >= 10)
 			{
 				var prevTouchY:int;
@@ -224,18 +235,22 @@ package gameScene
 			
 			
 			//플레이어 위치와 너무 가까운 곳을 터치하면 플레이어 이동 안함
-			if(Math.abs(point.x - _player.penguin.x) < _xForMoveAtLeast)
+			if(Math.abs(point.x - _player.x) < _xForMoveAtLeast)
 				return;
 			
 			//터치 지점이 현재 플레이어 위치보다 오른쪽
-			if(point.x > _player.penguin.x)
+			if(point.x > _player.x)
 			{
-				_player.penguin.x += _playerSpeed;
+				_player.x += _playerSpeed;
 			}
 			else
 			{
-				_player.penguin.x -= _playerSpeed;
+				_player.x -= _playerSpeed;
 			}
+			
+			trace("point.x = " + point.x);
+			trace("player.x = " + _player.x);
+			trace("player.penguin.x = " + _player.penguin.x);
 		}
 		
 		/**
@@ -245,8 +260,8 @@ package gameScene
 		 */
 		private function onEnterFrame(event:Event):void
 		{
-			trace("현재 속도 = " + _speed);
-			trace("남은 거리 = " + _distanceToFinish);
+			//trace("현재 속도 = " + _speed);
+			//trace("남은 거리 = " + _distanceToFinish);
 			if(_distanceToFinish <= 0)
 			{
 				//도착함
@@ -260,7 +275,7 @@ package gameScene
 			if(_distanceToFinish < 1800)
 			{				
 				//왼쪽커브길
-				_background.changeCurve(1);
+				//_background.changeCurve(1);
 			}
 			
 			if(_distanceToFinish % 50 == 0)
@@ -292,10 +307,10 @@ package gameScene
 				case 0:
 					break;
 				case 1:
-					_player.penguin.x += _playerSpeed * 0.5;
+					_player.x += _playerSpeed * 0.5;
 					break;
 				case 2:
-					_player.penguin.x -= _playerSpeed * 0.5;
+					_player.x -= _playerSpeed * 0.5;
 					break;
 				default:
 					break;
