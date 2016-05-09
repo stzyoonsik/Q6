@@ -86,7 +86,7 @@ package gameScene.background
 			_bitmap = new bottomBackground1() as Bitmap;
 			state.addFrame(new Texture(_bitmap));
 			_animator.addState(state);
-			state.interval= MainStage.maxSpeed - (MainStage.speed / 3 * 2);
+			state.interval= ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;
 			
 			
 			state = new State("curve_left"); 						
@@ -97,7 +97,7 @@ package gameScene.background
 			_bitmap = new bottomBackgroundLeft2() as Bitmap;
 			state.addFrame(new Texture(_bitmap));	
 			_animator.addState(state);
-			state.interval= MainStage.maxSpeed - (MainStage.speed / 3 * 2);
+			state.interval= ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;
 			
 			
 			state = new State("curve_right"); 						
@@ -108,7 +108,7 @@ package gameScene.background
 			_bitmap = new bottomBackgroundRight2() as Bitmap;
 			state.addFrame(new Texture(_bitmap));	
 			_animator.addState(state);
-			state.interval= MainStage.maxSpeed - (MainStage.speed / 3 * 2);
+			state.interval= ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;
 			
 			state.play();				
 			_bottomBackground.addComponent(_animator);
@@ -122,20 +122,29 @@ package gameScene.background
 
 		private function onEnterFrame(event:TrollingEvent):void
 		{
-			switch(_curve)
+			if(MainStage.speed == 0)
 			{
-				case 0:
-					_animator.getState("curve_none").interval = MainStage.maxSpeed - (MainStage.speed / 3 * 2);
-					break;
-				case 1:
-					_animator.getState("curve_left").interval = MainStage.maxSpeed - (MainStage.speed / 3 * 2);
-					break;
-				case 2:
-					_animator.getState("curve_right").interval = MainStage.maxSpeed - (MainStage.speed / 3 * 2);
-					break;
-				default:
-					break;
+				_animator.freeze(true);
 			}
+			else
+			{
+				_animator.freeze(false);
+				switch(_curve)
+				{
+					case 0:						
+						_animator.getState("curve_none").interval = ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;
+						break;
+					case 1:
+						_animator.getState("curve_left").interval = ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;
+						break;
+					case 2:
+						_animator.getState("curve_right").interval = ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;
+						break;
+					default:
+						break;
+				}
+			}
+			
 		}
 		
 		/**
