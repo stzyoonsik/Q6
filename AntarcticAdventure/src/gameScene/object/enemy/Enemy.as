@@ -8,6 +8,7 @@ package gameScene.object.enemy
 	import trolling.component.animation.Animator;
 	import trolling.component.animation.State;
 	import trolling.component.graphic.Image;
+	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
@@ -28,6 +29,10 @@ package gameScene.object.enemy
 		private var _animator:Animator;
 		//private var _image:Image;
 		private var _bitmap:Bitmap;
+		
+		private var _collider:Collider;
+		
+		
 		//private var _bitmapVector:Vector.<Bitmap> = new Vector.<Bitmap>();
 		//private var _textureVector:Vector.<Texture> = new Vector.<Texture>();
 		
@@ -41,21 +46,28 @@ package gameScene.object.enemy
 			
 			
 			_animator = new Animator(); 
-			
-			var state:State = new State("enemy_appear");
+			var state:State = new State("enemy0");
 			_bitmap = new enemy0() as Bitmap;
 			state.addFrame(new Texture(_bitmap));
+			_animator.addState(state);
+			state.interval = 60;
+			
+			state = new State("enemy1");
 			_bitmap = new enemy1() as Bitmap;
 			state.addFrame(new Texture(_bitmap));
+			_animator.addState(state);
+			state.interval = 60;
+			
+			state = new State("enemy2");
 			_bitmap = new enemy2() as Bitmap;
 			state.addFrame(new Texture(_bitmap));
 			_animator.addState(state);
-			state.interval = 15;
-			
-			state = new State("enemy");
-			_bitmap = new enemy2() as Bitmap;
-			state.addFrame(new Texture(_bitmap));
 			state.interval = 60;
+			
+//			state = new State("enemy");
+//			//_bitmap = new enemy2() as Bitmap;
+//			state.addFrame(new Texture(_bitmap));
+//			state.interval = 60;
 			
 			
 			state.play();
@@ -69,11 +81,17 @@ package gameScene.object.enemy
 			//addComponent(_image);
 			
 			
-			this.x = _stageWidth / 2;
-			this.y = _stageHeight / 2;
+			this.x = 0;
+			this.y = -this.height / 10;
 			
-			this.width = _stageWidth / 10;
+			this.width = _stageWidth / 30;
 			this.height = this.width;
+			
+			_collider = new Collider();
+			_collider.setRect(0.4, 0.4);
+			colliderRender = true;
+			addComponent(_collider);
+			
 			
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
@@ -81,12 +99,25 @@ package gameScene.object.enemy
 		
 		private function onEnterFrame(event:TrollingEvent):void
 		{
-			if(this.parent.y < _stageHeight * 0.5)
+//			scaleY = (y - (_stageHeight / 3)) / 100;
+//			scaleX = scaleY;
+			
+			if(this.parent.y < _stageHeight * 0.6)
 			{
-				
+				trace(this.parent.y);
+				_animator.transition("enemy0");				
+			}
+			else if(this.parent.y < _stageHeight * 0.7)
+			{
+				_animator.transition("enemy1");				
+			}
+			else
+			{
+				_animator.transition("enemy2");	
 			}
 				 //_image.texture = _bitmapVector[0];
 		}
+		
 		
 		
 	}
