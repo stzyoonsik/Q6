@@ -249,7 +249,7 @@ package gameScene.object.player
 			{
 				trace("물개와 충돌");
 				MainStage.speed = 0;
-				if(this.x < event.data.x)
+				if(this.x < event.data.parent.x)
 				{						
 					_playerState = PlayerState.CRASHED_LEFT;
 				}
@@ -287,8 +287,31 @@ package gameScene.object.player
 				case PlayerState.FALL:
 					fall();
 					break;
+				case PlayerState.ARRIVE:
+					arrived();
+					break;
 				default:
 					break;
+			}
+		}
+		
+		
+		/**
+		 * 남은거리가 0이 되었을때의 이벤트
+		 * 
+		 */
+		private function arrived():void
+		{
+			if(this.y <= (_stageHeight * 0.8) - 10)
+			{
+				_penguin.transition(PlayerState.ARRIVED);
+				_playerState = PlayerState.ARRIVED;
+			}
+			else
+			{
+				this.y -= 1;
+				this.scaleY -= 0.01;
+				this.scaleX = this.scaleY;
 			}
 		}
 		
@@ -406,6 +429,9 @@ package gameScene.object.player
 				_crashTheta = 0;				
 				_penguin.transition(PlayerState.RUN);
 				_crashFlag = false;
+				
+				_jumpFlag = false;
+				_jumpTheta = 0;
 			}
 		}
 		

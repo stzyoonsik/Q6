@@ -7,22 +7,13 @@ package gameScene.util
 		public static const RUN:String = "run"; 
 		
 		/** 점프 */
-		public static const JUMP:String = "jump";
-		
-		/** 점프 중*/
-		public static const JUMPING:String = "jumping";
+		public static const JUMP:String = "jump";		
 		
 		/** 왼쪽 부딪힘 */
-		public static const CRASHED_LEFT:String = "crashed_left"; 
-		
-		/** 왼쪽 튕김 */
-		public static const CRASHING_LEFT:String = "crashing_left"; 
+		public static const CRASHED_LEFT:String = "crashed_left"; 		
 		
 		/** 오른쪽 부딪힘 */
-		public static const CRASHED_RIGHT:String = "crashed_right"; 
-		
-		/** 오른쪽 튕김 */
-		public static const CRASHING_RIGHT:String = "crashing_right"; 
+		public static const CRASHED_RIGHT:String = "crashed_right"; 		
 		
 		/** 빠짐 */
 		public static const FALL:String = "fall"; 
@@ -31,6 +22,9 @@ package gameScene.util
 		public static const STRUGGLE:String = "struggle";
 		
 		/** 도착 */
+		public static const ARRIVE:String = "arrive";
+		
+		/** 도착 후*/		
 		public static const ARRIVED:String = "arrived";
 		
 		/** 프로펠러 달리기 */
