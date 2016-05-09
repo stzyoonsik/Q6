@@ -91,6 +91,8 @@ package gameScene.object.crater
 			
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
+			scaleY = (y - (_stageHeight / 3)) / 100;
+			scaleX = scaleY;
 			//trace(_left.getGlobalPoint());
 		}
 		

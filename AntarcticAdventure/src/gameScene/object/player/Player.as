@@ -66,13 +66,13 @@ package gameScene.object.player
 		//private const MAX_MUJUK_FRAME:int = 10;
 		//private var _mujukFrame:int;
 		
-		private var _jumpSpeed:int;
-		private var _jumpHeight:int;
+		private var _jumpSpeed:Number;
+		private var _jumpHeight:Number;
 		private var _jumpTheta:Number = 0;
 		private var _jumpFlag:Boolean;
 		
-		private var _crashSpeed:int;
-		private var _crashHeight:int;
+		private var _crashSpeed:Number;
+		private var _crashHeight:Number;
 		private var _crashTheta:Number = 0;
 		private var _hoppingCount:int;
 		private var _crashFlag:Boolean;
@@ -95,13 +95,15 @@ package gameScene.object.player
 			_stageHeight = stageHeight;
 			
 			pivot = PivotType.CENTER;
-			
-			x = 0;
-			y = 0;
+			this.x = _stageWidth / 2;
+			this.y = _stageHeight / 10 * 8;
+
+//			x = 0;
+//			y = 0;
 			
 			_playerState = PlayerState.RUN;
 			
-			_jumpSpeed = 7.5;
+			_jumpSpeed = 7;
 			_jumpHeight = _stageHeight / 10;
 			
 			_crashSpeed = 10;
@@ -111,10 +113,24 @@ package gameScene.object.player
 			_bitmap = new shadow() as Bitmap;
 			_image = new Image(new Texture(_bitmap));				
 			
+			
+			
+			_penguin.width = _stageWidth / 5;
+			_penguin.height = _penguin.width;
+//			_penguin.x = _stageWidth / 2;		
+//			_penguin.y = _stageHeight / 10 * 8;
+			
+			_penguin.pivot = PivotType.CENTER;
+			
+			_penguinCollider = new Collider();
+			
+			
+			
 			_grimja.width = _stageWidth / 5;
 			_grimja.height = _grimja.width
-			_grimja.x = _stageWidth / 2;		
-			_grimja.y = _stageHeight / 10 * 8.75;
+			//_grimja.x = _stageWidth / 2;		
+			_grimja.y = _stageHeight * 0.06;
+			//_grimja.y = _penguin.height / 2 + _grimja.height / 2;
 			_grimja.addComponent(_image);	
 			_grimja.pivot = PivotType.CENTER;
 			
@@ -128,12 +144,7 @@ package gameScene.object.player
 			
 				
 			
-			_penguin.width = _stageWidth / 5;
-			_penguin.height = _penguin.width;
-			_penguin.x = _stageWidth / 2;		
-			_penguin.y = _stageHeight / 10 * 8;
 			
-			_penguin.pivot = PivotType.CENTER;
 			
 			
 			_animator = new Animator(); 
@@ -204,7 +215,7 @@ package gameScene.object.player
 				if(_playerState == PlayerState.RUN)
 				{
 					MainStage.speed = 0;
-					if(_penguin.x < event.data.x)
+					if(this.x < event.data.x)
 					{
 						
 						_playerState = PlayerState.CRASHED_LEFT;
@@ -248,6 +259,12 @@ package gameScene.object.player
 				event.data.dispatchEvent(new Event("collideFlag"));
 			}
 			
+//			if(event.data is Fish)
+//			{
+//				trace("생선");
+//				event.data.dispatchEvent(new Event("collideFish"));
+//			}
+			
 		
 		}
 		
@@ -255,7 +272,7 @@ package gameScene.object.player
 		private function onEnterFrame(event:TrollingEvent):void
 		{
 			//trace(_playerState);
-			_grimja.x = _penguin.x;
+			//_grimja.x = _penguin.x;
 			
 			collideWall();
 			
@@ -265,31 +282,14 @@ package gameScene.object.player
 				jump();
 			}
 			
-//			if(_playerState == PlayerState.JUMPING)
-//			{				
-//				
-//			}
-//			
 			if(_playerState == PlayerState.CRASHED_LEFT)
 			{
 				crashed(0);
 			}
-			
-//			if(_playerState == PlayerState.CRASHING_LEFT)
-//			{
-//				
-//			}
-			
 			if(_playerState == PlayerState.CRASHED_RIGHT)
 			{
 				crashed(1);
-			}
-			
-//			if(_playerState == PlayerState.CRASHING_RIGHT)
-//			{
-//				
-//			}
-			
+			}			
 			if(_playerState == PlayerState.FALL)
 			{
 				_grimjaCollider.isActive = false;
@@ -304,16 +304,16 @@ package gameScene.object.player
 		private function collideWall():void
 		{
 			//왼쪽 벽에 부딪힘
-			if(_penguin.x - _penguin.width / 2 < 0)
+			if(this.x - _penguin.width / 2 < 0)
 			{
-				_penguin.x = _penguin.width / 2;
+				this.x = _penguin.width / 2;
 				
 			}
 			
 			//오른쪽 벽에 부딪힘
-			if(_penguin.x + _penguin.width / 2 > _stageWidth)
+			if(this.x + _penguin.width / 2 > _stageWidth)
 			{
-				_penguin.x = _stageWidth - _penguin.width / 2;
+				this.x = _stageWidth - _penguin.width / 2;
 			}
 		}
 		
@@ -326,27 +326,24 @@ package gameScene.object.player
 			if(!_jumpFlag)
 			{
 				trace("점프 시작");
-				//_playerState = PlayerState.JUMPING;
-				//_grimjaCollider.isActive = false;
 				_penguin.transition(PlayerState.JUMP);
 				SoundManager.play("jump");
 				_jumpFlag = true;
 			}
 			var degree:Number = _jumpTheta * Math.PI / 180;
-			_penguin.y = (_stageHeight / 10 * 8) - (Math.sin(degree) * _jumpHeight);
+			_penguin.y = -(Math.sin(degree) * _jumpHeight);
 			
 			_jumpTheta += _jumpSpeed;
 			
 			//점프 시 그림자의 크기가 작아졌다가 커짐
-			_grimja.width = _stageWidth / 5 - (_grimja.y - _penguin.y);
+			_grimja.width = _stageWidth / 5 + _penguin.y;
 			_grimja.height = _grimja.width;
 			
 			if(_jumpTheta >= 180)
 			{
 				_jumpFlag = false;
-				_penguin.y = _stageHeight / 10 * 8;
-				_playerState = PlayerState.RUN;
-				//_grimjaCollider.isActive = true;
+				_penguin.y = 0;
+				_playerState = PlayerState.RUN;				
 				_jumpTheta = 0;
 				_penguin.transition(PlayerState.RUN);
 			}
@@ -375,16 +372,16 @@ package gameScene.object.player
 			var degree:Number = _crashTheta * Math.PI / 180;
 			
 			if(direction == 0)
-				_penguin.x -= _stageWidth / 500;
+				this.x -= _stageWidth / 500;
 			else
-				_penguin.x += _stageWidth / 500;
+				this.x += _stageWidth / 500;
 			
-			_penguin.y = (_stageHeight / 10 * 8) - (Math.sin(degree) * _crashHeight);
+			_penguin.y = -(Math.sin(degree) * _crashHeight);
 			
 			_crashTheta += _crashSpeed;
 			
 			
-			_grimja.width = _stageWidth / 5 - (_grimja.y - _penguin.y);
+			_grimja.width = _stageWidth / 5 + _penguin.y;
 			_grimja.height = _grimja.width;
 			
 			if(_crashTheta >= 180)
@@ -408,7 +405,7 @@ package gameScene.object.player
 				_crashHeight = _stageHeight / 20;
 				
 				_hoppingCount = 0;
-				_penguin.y = _stageHeight / 10 * 8;
+				_penguin.y = 0;
 				_playerState = PlayerState.RUN;
 				_grimjaCollider.isActive = true;
 				_crashTheta = 0;				
