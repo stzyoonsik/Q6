@@ -141,12 +141,12 @@ package gameScene.object.item
 		 */
 		private function onCollidePlayer(event:Event):void
 		{
-//			trace("aa");
-//			dispose();
-//			removeComponent(ComponentType.COLLIDER);
-//			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-//			removeEventListener("collideFlag", onCollidePlayer);
-//			removeFromParent();
+			trace("aa");
+			dispose();
+			//removeComponent(image);
+			//removeComponent(ComponentType.COLLIDER);
+			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			removeEventListener("collideFlag", onCollidePlayer);
 			
 		}
 	}
