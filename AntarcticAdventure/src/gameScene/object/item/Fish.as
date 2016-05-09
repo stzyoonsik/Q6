@@ -54,14 +54,6 @@ package gameScene.object.item
 			_jumpSpeed = 4;
 			_jumpHeight = _stageHeight / 13;
 			
-			this.pivot = PivotType.CENTER;
-			
-			
-			this.x = 0;
-			this.y = 0;
-			
-			this.width = _stageWidth / 100;
-			this.height = this.width;
 			
 			if(direction == 0)
 				_bitmap = new fishRedLeft0() as Bitmap;
@@ -70,6 +62,17 @@ package gameScene.object.item
 			
 			_image = new Image(new Texture(_bitmap));
 			addComponent(_image);
+			
+			this.pivot = PivotType.CENTER;
+			
+			
+			this.x = 0;
+			this.y = 0;
+			
+			this.width = _stageWidth / 50;
+			this.height = this.width;
+			
+		
 			
 			
 			_collider = new Collider();
@@ -84,14 +87,14 @@ package gameScene.object.item
 		
 		private function onEnterFrame(event:TrollingEvent):void
 		{
-			if(this.parent.y < _stageHeight * 0.6)
+			if(_jumpTheta < 60)
 			{
 				if(_imageIndex == 0)
 				{
 					_imageIndex++;
 				}
 			}
-			else if(this.parent.y < _stageHeight * 0.7)
+			else if(_jumpTheta < 120)
 			{				
 				if(_imageIndex == 1)
 				{

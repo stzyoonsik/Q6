@@ -55,7 +55,7 @@ package gameScene.object.crater
 			_collider = new Collider();
 			
 			_collider.setRect(0.75, 0.125);
-			colliderRender = true;
+			//colliderRender = true;
 			addComponent(_collider);
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			

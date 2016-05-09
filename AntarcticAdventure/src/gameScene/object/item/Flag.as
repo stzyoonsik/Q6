@@ -54,11 +54,14 @@ package gameScene.object.item
 			
 			_collider = new Collider();
 			_collider.setRect(0.25, 0.33);
-			colliderRender = true;
+			//colliderRender = true;
 			addComponent(_collider);
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
 			addEventListener("collideFlag", onCollidePlayer);
+			
+			this.scaleY = (this.y - (_stageHeight / 3)) / 100;
+			this.scaleX = scaleY;
 			
 		}
 		
@@ -94,7 +97,7 @@ package gameScene.object.item
 			}
 					
 			
-			this.scaleY = (this.y - (_stageHeight / 3)) / 100;
+			this.scaleY += 0.02 * MainStage.speed;
 			this.scaleX = this.scaleY;
 			
 			this.y += MainStage.speed;

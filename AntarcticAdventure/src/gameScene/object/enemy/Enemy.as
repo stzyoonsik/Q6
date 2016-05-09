@@ -34,18 +34,19 @@ package gameScene.object.enemy
 			_stageWidth = MainStage.stageWidth; 
 			_stageHeight = MainStage.stageHeight;
 					
+			_bitmap = new enemy0() as Bitmap;
+			_image = new Image(new Texture(_bitmap));
+			addComponent(_image);
 			
 			this.pivot = PivotType.CENTER;			
 			
 			this.x = 0;
-			this.y = -this.height / 10;
+			this.y = -this.height * 0.03;
 			
-			this.width = _stageWidth / 100;
-			this.height = this.width;
 			
-			_bitmap = new enemy0() as Bitmap;
-			_image = new Image(new Texture(_bitmap));
-			addComponent(_image);
+			this.width = _stageWidth / 30;
+			this.height = this.width;			
+			
 			
 			_collider = new Collider();
 			_collider.setRect(0.4, 0.4);
