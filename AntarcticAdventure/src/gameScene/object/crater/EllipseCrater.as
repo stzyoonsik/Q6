@@ -41,10 +41,15 @@ package gameScene.object.crater
 			
 			_direction = direction;
 			
-			this.x = _stageWidth / 2;
+			if(_direction == 0)
+				this.x = _stageWidth * 0.475;
+			else if(_direction == -1)
+				this.x = _stageWidth * 0.5;
+			else
+				this.x = _stageWidth * 0.525
 			this.y = _stageHeight * 0.4;
 			
-			this.width = _stageWidth / 20;
+			this.width = _stageWidth * 0.05;
 			this.height = this.width;
 			
 			_collider = new Collider();			
@@ -53,7 +58,7 @@ package gameScene.object.crater
 			addComponent(_collider);
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
-			this.scaleY = (this.y - (_stageHeight / 3)) / 100;
+			this.scaleY = 0.5
 			this.scaleX = scaleY;
 		}		
 	

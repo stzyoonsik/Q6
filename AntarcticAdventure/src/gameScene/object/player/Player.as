@@ -49,6 +49,12 @@ package gameScene.object.player
 		[Embed(source="penguinCrashedRight0.png")]
 		public static const penguinCrashedRight0:Class;
 		
+		[Embed(source="penguinArrived0.png")]
+		public static const penguinArrived0:Class;
+		
+		[Embed(source="penguinArrived1.png")]
+		public static const penguinArrived1:Class;
+		
 		[Embed(source="shadow0.png")]
 		public static const shadow0:Class;
 		
@@ -107,7 +113,7 @@ package gameScene.object.player
 			
 			_penguinCollider = new Collider();
 			_penguinCollider.setRect(0.3, 0.3);
-			_penguin.colliderRender = true;
+//			_penguin.colliderRender = true;
 			_penguin.addComponent(_penguinCollider);
 			_penguin.addEventListener(TrollingEvent.COLLIDE, onCollideWithPenguin);
 			
@@ -130,7 +136,7 @@ package gameScene.object.player
 			_grimjaCollider = new Collider();			
 			_grimjaCollider.setRect(0.33, 0.0625);
 			_grimja.addComponent(_grimjaCollider);
-			_grimja.colliderRender = true;
+//			_grimja.colliderRender = true;
 			_grimja.addEventListener(TrollingEvent.COLLIDE, onCollideWithGrimja);
 			
 			
@@ -178,7 +184,15 @@ package gameScene.object.player
 			_bitmap = new penguinCrashedRight0() as Bitmap;
 			state.addFrame(new Texture(_bitmap));	
 			state.interval = 60;
-			_animator.addState(state);				
+			_animator.addState(state);		
+			
+			state = new State(PlayerState.ARRIVED);
+			_bitmap = new penguinArrived0() as Bitmap;
+			state.addFrame(new Texture(_bitmap));
+			_bitmap = new penguinArrived1() as Bitmap;
+			state.addFrame(new Texture(_bitmap));
+			state.interval = 5;
+			_animator.addState(state);
 			
 			state.play();
 		}
@@ -298,6 +312,8 @@ package gameScene.object.player
 				case PlayerState.ARRIVE:
 					arrived();
 					break;
+				case PlayerState.ARRIVE:
+					arrived();
 				default:
 					break;
 			}

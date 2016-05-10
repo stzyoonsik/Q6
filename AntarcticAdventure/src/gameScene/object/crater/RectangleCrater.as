@@ -43,11 +43,14 @@ package gameScene.object.crater
 			_right.pivot = PivotType.CENTER;
 			_middle.pivot = PivotType.CENTER;
 			
-			this.x = _stageWidth / 2;
+			if(_direction == 0)
+				this.x = _stageWidth * 0.475;
+			else
+				this.x = _stageWidth * 0.525;
 			this.y = _stageHeight * 0.4;
 			
 			
-			this.width = _stageWidth / 10;
+			this.width = _stageWidth * 0.05;
 			this.height = this.width;
 			
 			_middle.name = "middle";
@@ -58,14 +61,14 @@ package gameScene.object.crater
 			_middleCollider.setRect(1,1);
 			
 			_left.name = "left";
-			_left.width = width / 4;
+			_left.width = width / 5;
 			_left.height = height / 8;
 			_left.x = -((_middle.width/2)+(_left.width/2));
 			_left.y = 0;
 			_leftCollider.setRect(1, 1);
 			
 			_right.name = "right";
-			_right.width = width / 4;
+			_right.width = width / 5;
 			_right.height = height / 8;
 			_right.x = ((_middle.width/2)+(_right.width/2));
 			_right.y = 0;
@@ -86,8 +89,9 @@ package gameScene.object.crater
 			
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
-			this.scaleY = (y - (_stageHeight / 3)) / 100;
-			this.scaleX = scaleY;
+			//this.scaleY = 0.5;
+			//this.scaleX = scaleY;
+			
 		}
 		
 		private function onEnterFrame(event:TrollingEvent):void
@@ -98,7 +102,7 @@ package gameScene.object.crater
 				removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			}			
 			
-			this.scaleY += 0.02 * MainStage.speed;
+			this.scaleY += 0.03 * MainStage.speed;
 			this.scaleX = this.scaleY;
 			
 			this.y += MainStage.speed;

@@ -14,6 +14,7 @@ package gameScene
 	import gameScene.object.crater.EllipseCrater;
 	import gameScene.object.crater.RectangleCrater;
 	import gameScene.object.enemy.Enemy;
+	import gameScene.object.home.Home;
 	import gameScene.object.item.Flag;
 	import gameScene.object.player.Player;
 	import gameScene.util.FileStreamWithLineReader;
@@ -60,7 +61,7 @@ package gameScene
 		private var _soundLoadCount:uint = 0;
 		private var _filePath:File = File.applicationDirectory;
 		
-		
+		private var _playerArrive:Boolean;
 		
 		public static function get stageHeight():int { return _stageHeight; }
 		
@@ -73,7 +74,7 @@ package gameScene
 		
 		public function MainStage()
 		{
-			addEventListener(TrollingEvent.START, oninit);
+			addEventListener(TrollingEvent.START_SCENE, oninit);
 		}
 		
 		private function oninit(event:Event):void
@@ -85,7 +86,7 @@ package gameScene
 			_stageWidth = this.width;
 			_stageHeight = this.height;
 			
-			_yForJump = _stageHeight;
+			_yForJump = Screen.mainScreen.bounds.height * 0.05;
 			_xForMoveAtLeast = _stageWidth / 50;
 			
 			_speed = 0; 
@@ -99,7 +100,8 @@ package gameScene
 			
 			_coverFace.width = _stageWidth;
 			_coverFace.height = _stageHeight;
-			_coverFace.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchCoverFace);			
+			_coverFace.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchHover);		
+			_coverFace.addEventListener(TrollingEvent.TOUCH_ENDED, onTouchEnded);
 			addChild(_coverFace);
 			
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);	
@@ -193,11 +195,42 @@ package gameScene
 		}
 
 		/**
+		 * 터치 뗏을때 이벤트
+		 * @param event
+		 * 
+		 */
+		private function onTouchEnded(event:TrollingEvent):void
+		{
+			if(_player.state == PlayerState.ARRIVE ||
+				_player.state == PlayerState.CRASHED_LEFT ||
+				_player.state == PlayerState.CRASHED_RIGHT)
+			{
+				return;
+			}
+			
+			var pointsTemp:Vector.<Point> = event.data as Vector.<Point>;
+			trace(pointsTemp);
+			if(pointsTemp.length <= 1)
+				return;
+			var prevTouch:Point = pointsTemp[0];
+			var currentTouch:Point = pointsTemp[pointsTemp.length-1];
+			
+			trace(currentTouch.y - prevTouch.y);
+			trace("_yForJump = " + _yForJump);
+			
+			if(currentTouch.y - prevTouch.y > _yForJump)
+			{
+				//trace("JUMPJUMPJUMP");
+				_player.state = PlayerState.JUMP;
+			}
+		}
+		
+		/**
 		 * 
 		 * @param event 터치 hover 
 		 * 사용자의 터치 좌표를 바탕으로 점프와 이동을 하는 콜백 메소드
 		 */
-		private function onTouchCoverFace(event:TrollingEvent):void
+		private function onTouchHover(event:TrollingEvent):void
 		{
 			if(_player.state == PlayerState.ARRIVE ||
 				_player.state == PlayerState.CRASHED_LEFT ||
@@ -263,40 +296,32 @@ package gameScene
 		{
 			//trace("현재 속도 = " + _speed);
 			//trace("남은 거리 = " + _distanceToFinish);
-			if(_distanceToFinish <= 0)
+		
+			
+			
+			if(_speed < MAX_SPEED && _player.state != PlayerState.FALL)
 			{
-				//도착함
-				//                trace("도착");
-				_speed = 0;
-				_coverFace.removeEventListener(TrollingEvent.TOUCH_HOVER, onTouchCoverFace);
-				if(_player.state == PlayerState.RUN)
-					_player.state = PlayerState.ARRIVE;
+				_speed += MAX_SPEED / 50;
 			}
-			else
+			//trace("현재 속도 = " + _speed);
+			_distanceToFinish -= _speed;
+			_intervalBetweenObject += _speed;
+			//trace(_intervalBetweenObject);
+			if(_intervalBetweenObject > 100)
 			{
-				if(_speed < MAX_SPEED && _player.state != PlayerState.FALL)
+				//구름 생성
+				var cloud:Cloud = new Cloud();
+				addChild(cloud);
+				
+				if(_objectArray.length != 0)
 				{
-					_speed += MAX_SPEED / 50;
+					//trace(_objectArray[0] + "오브젝트 생성");
+					makeObject();
+					_objectArray.shift();
 				}
-				//trace("현재 속도 = " + _speed);
-				_distanceToFinish -= _speed;
-				_intervalBetweenObject += _speed;
-				trace(_intervalBetweenObject);
-				if(_intervalBetweenObject > 100)
-				{
-					//구름 생성
-					var cloud:Cloud = new Cloud();
-					addChild(cloud);
-					
-					if(_objectArray.length != 0)
-					{
-						trace(_objectArray[0] + "오브젝트 생성");
-						makeObject();
-						_objectArray.shift();
-					}
-					_intervalBetweenObject = 0;
-				}
-			}			
+				_intervalBetweenObject = 0;
+			}
+						
 			
 			if(_curveCount < _maxCurveCount)
 			{
@@ -322,7 +347,26 @@ package gameScene
 					break;
 				default:
 					break;
-			}			
+			}		
+			
+			if(_playerArrive && _player.state == PlayerState.RUN)
+			{
+				_player.state = PlayerState.ARRIVE;
+			}
+		}
+		
+		/**
+		 * 도착 
+		 * @param event
+		 * 
+		 */
+		private function onArrive(event:TrollingEvent):void
+		{
+			trace("원모어타임");
+			_playerArrive = true;
+			_speed = 0;
+			_coverFace.removeEventListener(TrollingEvent.TOUCH_HOVER, onTouchHover);
+			event.currentTarget.removeEventListener(PlayerState.ARRIVE, onArrive);
 		}
 		
 		/**
@@ -367,11 +411,11 @@ package gameScene
 									_maxCurveCount++;
 								}
 								trace("--------------커브------------------");
-								for(i = 0; i < tempArray.length; ++i)
-								{
-									trace(_curveDistanceVector[i]);
-									trace(_curveDirectionVector[i]);
-								}
+//								for(i = 0; i < tempArray.length; ++i)
+//								{
+//									trace(_curveDistanceVector[i]);
+//									trace(_curveDirectionVector[i]);
+//								}
 								break;
 							case 2:
 								_objectArray = new Array();
@@ -403,6 +447,12 @@ package gameScene
 		{
 			switch(int(_objectArray[0]))
 			{
+				//도착
+				case -1:
+					var home:Home = new Home();
+					addChildAt(home, 1);
+					home.addEventListener(PlayerState.ARRIVE, onArrive);
+					break;
 				//아무것도 생성 안함
 				case 0:
 					break;

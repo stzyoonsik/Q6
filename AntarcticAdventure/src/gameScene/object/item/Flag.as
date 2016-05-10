@@ -36,7 +36,7 @@ package gameScene.object.item
 			this.x = _stageWidth / 2;
 			this.y = _stageHeight * 0.4;
 			
-			this.width = _stageWidth / 20;
+			this.width = _stageWidth * 0.05;
 			this.height = width;
 			
 			_collider = new Collider();
@@ -47,8 +47,8 @@ package gameScene.object.item
 			
 			addEventListener("collideFlag", onCollidePlayer);
 			
-			this.scaleY = (this.y - (_stageHeight / 3)) / 100;
-			this.scaleX = scaleY;
+//			this.scaleY = (this.y - (_stageHeight / 3)) / 100;
+//			this.scaleX = scaleY;
 			
 		}
 		

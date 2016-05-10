@@ -43,7 +43,7 @@ package gameScene.object.item
 			_direction = direction;
 			
 			_jumpSpeed = 4;
-			_jumpHeight = _stageHeight / 13;
+			_jumpHeight = _stageHeight / 15;
 			
 			
 			if(direction == 0)
