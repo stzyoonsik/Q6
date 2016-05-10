@@ -71,15 +71,15 @@ package gameScene.object.crater
 			_right.y = 0;
 			_rightCollider.setRect(1,1);
 			
-			_left.colliderRender = true; 
-			_middle.colliderRender = true;
-			_right.colliderRender = true;
+			_left.colliderRender = false; 
+			_middle.colliderRender = false;
+			_right.colliderRender = false;
 			
 			_left.addComponent(_leftCollider);
 			_middle.addComponent(_middleCollider);
 			_right.addComponent(_rightCollider);
 			
-			colliderRender = true;
+			//colliderRender = true;
 			addChild(_left);
 			addChild(_middle);
 			addChild(_right);

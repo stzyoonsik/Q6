@@ -42,8 +42,8 @@ package gameScene.background
 		[Embed(source="bottomBackgroundRight2.png")]
 		public static const bottomBackgroundRight2:Class;
 		
-		/** 0 = normal, 1 = left, 2 = right*/
-		private var _curve:int = 0;
+		/** -1 = normal, 0 = left, 1 = right*/
+		private var _curve:int = -1;
 		
 		private var _topBackground:GameObject = new GameObject();
 		private var _bottomBackground:GameObject = new GameObject();
@@ -124,6 +124,7 @@ package gameScene.background
 		{
 			if(MainStage.speed == 0)
 			{
+				//trace("배경 프리즈");
 				_animator.freeze(true);
 			}
 			else
@@ -131,13 +132,13 @@ package gameScene.background
 				_animator.freeze(false);
 				switch(_curve)
 				{
-					case 0:						
+					case -1:						
 						_animator.getState("curve_none").interval = ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;
 						break;
-					case 1:
+					case 0:
 						_animator.getState("curve_left").interval = ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;
 						break;
-					case 2:
+					case 1:
 						_animator.getState("curve_right").interval = ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;
 						break;
 					default:
@@ -149,7 +150,7 @@ package gameScene.background
 		
 		/**
 		 * 
-		 * @param curveNum 변경할 커브길 번호 (0 = 일반, 1 = 왼쪽, 2 = 오른쪽)
+		 * @param curveNum 변경할 커브길 번호 (-1 = 일반, 0 = 왼쪽, 1 = 오른쪽)
 		 * 해당 길로 애니메이션을 바꿔주는 메소드
 		 */
 		public function changeCurve(curveNum:int):void
@@ -157,13 +158,13 @@ package gameScene.background
 			_curve = curveNum;
 			switch(curveNum)
 			{
-				case 0:
+				case -1:
 					_bottomBackground.transition("curve_none");
 					break;
-				case 1:
+				case 0:
 					_bottomBackground.transition("curve_left");
 					break;
-				case 2:
+				case 1:
 					_bottomBackground.transition("curve_right");
 					break;
 				default:

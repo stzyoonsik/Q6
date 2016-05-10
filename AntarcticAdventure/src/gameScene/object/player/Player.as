@@ -4,6 +4,7 @@ package gameScene.object.player
 	import flash.events.Event;
 	
 	import gameScene.MainStage;
+	import gameScene.object.Curve;
 	import gameScene.object.Objects;
 	import gameScene.object.crater.EllipseCrater;
 	import gameScene.object.crater.RectangleCrater;
@@ -194,6 +195,7 @@ package gameScene.object.player
 				SoundManager.play("fish");
 				event.data.dispatchEvent(new Event("collideFish"));
 			}
+			
 		}
 		
 		
