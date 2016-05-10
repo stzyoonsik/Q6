@@ -3,6 +3,7 @@ package gameScene.object.enemy
 	import flash.display.Bitmap;
 	
 	import gameScene.MainStage;
+	import gameScene.ObjectTag;
 	import gameScene.object.Objects;
 	
 	import trolling.component.graphic.Image;
@@ -24,6 +25,8 @@ package gameScene.object.enemy
 		
 		public function Enemy()
 		{
+			this.tag = ObjectTag.ENEMY;
+			
 			_stageWidth = MainStage.stageWidth; 
 			_stageHeight = MainStage.stageHeight;
 					

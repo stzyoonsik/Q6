@@ -1,4 +1,3 @@
-import gameScene.util;
 
 /**
  *
@@ -24,7 +23,6 @@ import gameScene.util;
 package gameScene.util
 {
 	import flash.filesystem.FileStream;
-	import flash.geom.PerspectiveProjection;
 	import flash.utils.ByteArray;
 	
 	/**

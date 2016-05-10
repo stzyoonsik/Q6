@@ -243,31 +243,7 @@ package gameScene
 			point.x *= (_stageWidth / Screen.mainScreen.bounds.width);
 			point.y *= (_stageHeight / Screen.mainScreen.bounds.height);
 			
-			if(event.data.length >= 10)
-			{
-				var prevTouchY:int;
-				var currentTouchY:int;
-				for(var i:int = 0; i<event.data.length; ++i)
-				{
-					
-					if(i < 5)
-					{
-						currentTouchY += int(event.data[i].y);
-					}
-					else
-					{
-						prevTouchY += int(event.data[i].y);
-					}
-					
-				}
-				if(prevTouchY - currentTouchY > _yForJump)
-				{
-					//trace("JUMPJUMPJUMP");
-					_player.state = PlayerState.JUMP;
-				}
-			}
-			
-			
+						
 			//플레이어 위치와 너무 가까운 곳을 터치하면 플레이어 이동 안함
 			if(Math.abs(point.x - _player.x) < _xForMoveAtLeast)
 				return;
@@ -299,7 +275,7 @@ package gameScene
 		
 			
 			
-			if(_speed < MAX_SPEED && _player.state != PlayerState.FALL)
+			if(_speed < MAX_SPEED && _player.state != PlayerState.FALL && !_playerArrive)
 			{
 				_speed += MAX_SPEED / 50;
 			}

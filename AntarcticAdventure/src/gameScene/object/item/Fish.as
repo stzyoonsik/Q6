@@ -4,6 +4,7 @@ package gameScene.object.item
 	import flash.events.Event;
 	
 	import gameScene.MainStage;
+	import gameScene.ObjectTag;
 	import gameScene.object.Objects;
 	
 	import trolling.component.graphic.Image;
@@ -37,6 +38,8 @@ package gameScene.object.item
 		
 		public function Fish(direction:int)
 		{
+			this.tag = ObjectTag.ITEM;
+			
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
 	

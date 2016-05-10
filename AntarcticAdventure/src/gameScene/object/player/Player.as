@@ -4,7 +4,7 @@ package gameScene.object.player
 	import flash.events.Event;
 	
 	import gameScene.MainStage;
-	import gameScene.object.Curve;
+	import gameScene.ObjectTag;
 	import gameScene.object.Objects;
 	import gameScene.object.crater.EllipseCrater;
 	import gameScene.object.crater.RectangleCrater;
@@ -113,6 +113,7 @@ package gameScene.object.player
 			
 			_penguinCollider = new Collider();
 			_penguinCollider.setRect(0.3, 0.3);
+			_penguinCollider.addignoreTag(ObjectTag.ENEMY);
 //			_penguin.colliderRender = true;
 			_penguin.addComponent(_penguinCollider);
 			_penguin.addEventListener(TrollingEvent.COLLIDE, onCollideWithPenguin);
@@ -135,6 +136,7 @@ package gameScene.object.player
 			
 			_grimjaCollider = new Collider();			
 			_grimjaCollider.setRect(0.33, 0.0625);
+			_grimjaCollider.addignoreTag(ObjectTag.ITEM);
 			_grimja.addComponent(_grimjaCollider);
 //			_grimja.colliderRender = true;
 			_grimja.addEventListener(TrollingEvent.COLLIDE, onCollideWithGrimja);
@@ -210,6 +212,13 @@ package gameScene.object.player
 				event.data.dispatchEvent(new Event("collideFish"));
 			}
 			
+			if(event.data is Flag)
+			{
+				trace("깃발 먹음");
+				SoundManager.play("flag");			
+				event.data.dispatchEvent(new Event("collideFlag"));
+			}	
+			
 		}
 		
 		
@@ -282,12 +291,7 @@ package gameScene.object.player
 				}
 			}
 			
-			if(event.data is Flag)
-			{
-				trace("깃발 먹음");
-				SoundManager.play("flag");			
-				event.data.dispatchEvent(new Event("collideFlag"));
-			}		
+			
 		}
 		
 		

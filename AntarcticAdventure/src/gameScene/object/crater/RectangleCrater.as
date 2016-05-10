@@ -3,6 +3,7 @@ package gameScene.object.crater
 	import flash.display.Bitmap;
 	
 	import gameScene.MainStage;
+	import gameScene.ObjectTag;
 	import gameScene.object.Objects;
 	
 	import trolling.component.graphic.Image;
@@ -53,6 +54,7 @@ package gameScene.object.crater
 			this.width = _stageWidth * 0.05;
 			this.height = this.width;
 			
+			_middle.tag = ObjectTag.ENEMY;
 			_middle.name = "middle";
 			_middle.width = width / 2;
 			_middle.height = height / 9;
@@ -60,6 +62,7 @@ package gameScene.object.crater
 			_middle.y = 0;
 			_middleCollider.setRect(1,1);
 			
+			_left.tag = ObjectTag.ENEMY;
 			_left.name = "left";
 			_left.width = width / 5;
 			_left.height = height / 8;
@@ -67,6 +70,7 @@ package gameScene.object.crater
 			_left.y = 0;
 			_leftCollider.setRect(1, 1);
 			
+			_right.tag = ObjectTag.ENEMY;
 			_right.name = "right";
 			_right.width = width / 5;
 			_right.height = height / 8;

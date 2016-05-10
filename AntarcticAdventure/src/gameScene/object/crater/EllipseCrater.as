@@ -3,6 +3,7 @@ package gameScene.object.crater
 	import flash.display.Bitmap;
 	
 	import gameScene.MainStage;
+	import gameScene.ObjectTag;
 	import gameScene.object.Objects;
 	import gameScene.object.enemy.Enemy;
 	import gameScene.object.item.Fish;
@@ -30,6 +31,8 @@ package gameScene.object.crater
 		 */
 		public function EllipseCrater(direction:int)
 		{
+			this.tag = ObjectTag.ENEMY;
+			 
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
 			
