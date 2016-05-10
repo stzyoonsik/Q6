@@ -4,39 +4,30 @@ package gameScene.object.item
 	import flash.events.Event;
 	
 	import gameScene.MainStage;
+	import gameScene.object.Objects;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
-	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 	
-	public class Fish extends GameObject
+	public class Fish extends Objects
 	{
-		[Embed(source="fish_red_left_0.png")]
-		public static const fishRedLeft0:Class; 
-		[Embed(source="fish_red_left_1.png")]
-		public static const fishRedLeft1:Class;  
-		[Embed(source="fish_red_left_2.png")]
-		public static const fishRedLeft2:Class; 
+		[Embed(source="leftFish0.png")]
+		public static const leftFish0:Class; 
+		[Embed(source="leftFish1.png")]
+		public static const leftFish1:Class;  
+		[Embed(source="leftFish2.png")]
+		public static const leftFish2:Class; 
 		
-		[Embed(source="fish_red_right_0.png")]
-		public static const fishRedRight0:Class; 
-		[Embed(source="fish_red_right_1.png")]
-		public static const fishRedRight1:Class;  
-		[Embed(source="fish_red_right_2.png")]
-		public static const fishRedRight2:Class; 
+		[Embed(source="rightFish0.png")]
+		public static const rightFish0:Class; 
+		[Embed(source="rightFish1.png")]
+		public static const rightFish1:Class;  
+		[Embed(source="rightFish2.png")]
+		public static const rightFish2:Class; 
 		
-		private var _stageWidth:int;
-		private var _stageHeight:int;
-		
-		private var _image:Image;
-		private var _bitmap:Bitmap;
-		
-		private var _collider:Collider;
-		
-		private var _direction:int;
 		private var _imageIndex:int;
 		
 		private var _jumpSpeed:int;
@@ -56,9 +47,11 @@ package gameScene.object.item
 			
 			
 			if(direction == 0)
-				_bitmap = new fishRedLeft0() as Bitmap;
+				_bitmap = new leftFish0() as Bitmap;
 			else
-				_bitmap = new fishRedRight0() as Bitmap;
+				_bitmap = new rightFish0() as Bitmap;
+			
+			initRandomColor();			
 			
 			_image = new Image(new Texture(_bitmap));
 			addComponent(_image);
@@ -72,14 +65,10 @@ package gameScene.object.item
 			this.width = _stageWidth / 50;
 			this.height = this.width;
 			
-		
-			
-			
 			_collider = new Collider();
 			_collider.setRect(0.5, 0.5);
 			//colliderRender = true;
-			addComponent(_collider);
-			
+			addComponent(_collider);			
 			
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			addEventListener("collideFish", onCollidePlayer);
@@ -99,9 +88,9 @@ package gameScene.object.item
 				if(_imageIndex == 1)
 				{
 					if(_direction == 0)
-						_bitmap = new fishRedLeft1() as Bitmap;
+						_bitmap = new leftFish1() as Bitmap;
 					else
-						_bitmap = new fishRedRight1() as Bitmap;
+						_bitmap = new rightFish1() as Bitmap;
 					
 					_image.texture = new Texture(_bitmap);
 					_imageIndex++;
@@ -112,9 +101,9 @@ package gameScene.object.item
 				if(_imageIndex == 2)
 				{
 					if(_direction == 0)
-						_bitmap = new fishRedLeft2() as Bitmap;
+						_bitmap = new leftFish2() as Bitmap;
 					else
-						_bitmap = new fishRedRight2() as Bitmap;
+						_bitmap = new rightFish2() as Bitmap;
 					
 					_image.texture = new Texture(_bitmap);
 					_imageIndex++;

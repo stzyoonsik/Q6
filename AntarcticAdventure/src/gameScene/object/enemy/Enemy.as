@@ -3,31 +3,24 @@ package gameScene.object.enemy
 	import flash.display.Bitmap;
 	
 	import gameScene.MainStage;
+	import gameScene.object.Objects;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
-	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 
-	public class Enemy extends GameObject
+	public class Enemy extends Objects
 	{
-		[Embed(source="enemy_0.png")]
+		[Embed(source="enemy0.png")]
 		public static const enemy0:Class; 
-		[Embed(source="enemy_1.png")]
+		[Embed(source="enemy1.png")]
 		public static const enemy1:Class; 
-		[Embed(source="enemy_2.png")]
+		[Embed(source="enemy2.png")]
 		public static const enemy2:Class; 
 		
-		private var _stageWidth:int;
-		private var _stageHeight:int;
-		
-		private var _image:Image;
-		private var _bitmap:Bitmap;
-		private var _imageIndex:int;
-		
-		private var _collider:Collider;
+		private var _imageIndex:int;		
 		
 		public function Enemy()
 		{

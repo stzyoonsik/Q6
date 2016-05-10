@@ -3,26 +3,21 @@ package gameScene.object.crater
 	import flash.display.Bitmap;
 	
 	import gameScene.MainStage;
+	import gameScene.object.Objects;
 	import gameScene.object.enemy.Enemy;
 	import gameScene.object.item.Fish;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
-	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 
-	public class EllipseCrater extends GameObject
+	public class EllipseCrater extends Objects
 	{
-		[Embed(source="crater_ellipse_0.png")]
+		[Embed(source="ellipseCrater0.png")]
 		public static const crater:Class;
 		
-		private var _stageWidth:int;
-		private var _stageHeight:int;
-		
-		private var _direction:int;
-		private var _collider:Collider;
 		
 		private var _isObjectCreate:Boolean;
 		
@@ -52,8 +47,7 @@ package gameScene.object.crater
 			this.width = _stageWidth / 20;
 			this.height = this.width;
 			
-			_collider = new Collider();
-			
+			_collider = new Collider();			
 			_collider.setRect(0.75, 0.125);
 			//colliderRender = true;
 			addComponent(_collider);
@@ -80,8 +74,7 @@ package gameScene.object.crater
 			switch(_direction)
 			{
 				//가운데
-				case -1:
-					
+				case -1:					
 					break;
 				//왼쪽
 				case 0:
@@ -174,7 +167,6 @@ package gameScene.object.crater
 				return 0;
 			else 
 				return 1;
-		}
-		
+		}		
 	}
 }

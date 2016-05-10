@@ -4,6 +4,7 @@ package gameScene.object.player
 	import flash.events.Event;
 	
 	import gameScene.MainStage;
+	import gameScene.object.Objects;
 	import gameScene.object.crater.EllipseCrater;
 	import gameScene.object.crater.RectangleCrater;
 	import gameScene.object.enemy.Enemy;
@@ -21,7 +22,7 @@ package gameScene.object.player
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 
-	public class Player extends GameObject
+	public class Player extends Objects
 	{
 		[Embed(source="penguinRun0.png")]
 		public static const penguinRun0:Class;
@@ -41,21 +42,18 @@ package gameScene.object.player
 		[Embed(source="penguinJump1.png")]
 		public static const penguinJump1:Class;
 		
-		[Embed(source="penguinCrashedLeft.png")]
-		public static const penguinCrashedLeft:Class;
+		[Embed(source="penguinCrashedLeft0.png")]
+		public static const penguinCrashedLeft0:Class;
 		
-		[Embed(source="penguinCrashedRight.png")]
-		public static const penguinCrashedRight:Class;
+		[Embed(source="penguinCrashedRight0.png")]
+		public static const penguinCrashedRight0:Class;
 		
-		[Embed(source="shadow.png")]
-		public static const shadow:Class;
+		[Embed(source="shadow0.png")]
+		public static const shadow0:Class;
 		
 		private var _penguin:GameObject = new GameObject();		
 		private var _grimja:GameObject = new GameObject();
 		
-		private var _bitmap:Bitmap;
-		private var _image:Image;
-		private var _animator:Animator;
 		private var _grimjaCollider:Collider;
 		private var _penguinCollider:Collider;
 		
@@ -63,17 +61,15 @@ package gameScene.object.player
 		
 		private var _jumpSpeed:Number;
 		private var _jumpHeight:Number;
-		private var _jumpTheta:Number = 0;
+		private var _jumpTheta:Number;
 		private var _jumpFlag:Boolean;
 		
 		private var _crashSpeed:Number;
 		private var _crashHeight:Number;
-		private var _crashTheta:Number = 0;
+		private var _crashTheta:Number;
 		private var _hoppingCount:int;
 		private var _crashFlag:Boolean;
 		
-		private var _stageWidth:int;
-		private var _stageHeight:int;
 		
 		public function get state():String{ return _playerState; }
 		public function set state(value:String):void{ _playerState = value; }
@@ -97,9 +93,11 @@ package gameScene.object.player
 			
 			_jumpSpeed = 7;
 			_jumpHeight = _stageHeight / 10;
+			_jumpTheta = 0;
 			
 			_crashSpeed = 10;
 			_crashHeight = _stageHeight / 20;
+			_crashTheta = 0;
 			
 			_penguin.pivot = PivotType.CENTER;
 			
@@ -107,12 +105,46 @@ package gameScene.object.player
 			_penguin.height = _penguin.width;
 			
 			_penguinCollider = new Collider();
-			_penguinCollider.setRect(0.3, 0.2);
+			_penguinCollider.setRect(0.3, 0.3);
 			_penguin.colliderRender = true;
 			_penguin.addComponent(_penguinCollider);
 			_penguin.addEventListener(TrollingEvent.COLLIDE, onCollideWithPenguin);
 			
 			
+			
+			initAnimator();
+			_penguin.addComponent(_animator);
+			
+			
+			_bitmap = new shadow0() as Bitmap;
+			_image = new Image(new Texture(_bitmap));				
+			_grimja.addComponent(_image);
+			
+			_grimja.pivot = PivotType.CENTER;
+			
+			_grimja.width = _stageWidth / 5;
+			_grimja.height = _grimja.width	
+			_grimja.y = _stageHeight * 0.06;
+			
+			_grimjaCollider = new Collider();			
+			_grimjaCollider.setRect(0.33, 0.0625);
+			_grimja.addComponent(_grimjaCollider);
+			_grimja.colliderRender = true;
+			_grimja.addEventListener(TrollingEvent.COLLIDE, onCollideWithGrimja);
+			
+			
+			addChild(_grimja);
+			addChild(_penguin);
+			
+			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);	
+		} 
+		
+		/**
+		 * 애니메이터를 초기 세팅하는 메소드 
+		 * 
+		 */
+		private function initAnimator():void
+		{
 			_animator = new Animator(); 
 			
 			var state:State = new State(PlayerState.RUN);
@@ -136,45 +168,19 @@ package gameScene.object.player
 			state.interval = 3;
 			
 			state = new State(PlayerState.CRASHED_LEFT);
-			_bitmap = new penguinCrashedLeft() as Bitmap;
+			_bitmap = new penguinCrashedLeft0() as Bitmap;
 			state.addFrame(new Texture(_bitmap));	
 			state.interval = 60;
 			_animator.addState(state);	
 			
 			state = new State(PlayerState.CRASHED_RIGHT);
-			_bitmap = new penguinCrashedRight() as Bitmap;
+			_bitmap = new penguinCrashedRight0() as Bitmap;
 			state.addFrame(new Texture(_bitmap));	
 			state.interval = 60;
 			_animator.addState(state);				
 			
 			state.play();
-			
-			_penguin.addComponent(_animator);
-			
-			
-			_bitmap = new shadow() as Bitmap;
-			_image = new Image(new Texture(_bitmap));				
-			_grimja.addComponent(_image);
-			
-			_grimja.pivot = PivotType.CENTER;
-			
-			_grimja.width = _stageWidth / 5;
-			_grimja.height = _grimja.width	
-			_grimja.y = _stageHeight * 0.06;
-			
-			_grimjaCollider = new Collider();			
-			_grimjaCollider.setRect(0.33, 0.0625);
-			_grimja.addComponent(_grimjaCollider);
-			_grimja.colliderRender = true;
-			_grimja.addEventListener(TrollingEvent.COLLIDE, onCollideWithGrimja);
-			
-			
-			addChild(_grimja);
-			addChild(_penguin);
-			
-			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);	
-		} 
-		
+		}
 		
 		/**
 		 * 

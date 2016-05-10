@@ -3,6 +3,7 @@ package gameScene.object.crater
 	import flash.display.Bitmap;
 	
 	import gameScene.MainStage;
+	import gameScene.object.Objects;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
@@ -11,9 +12,9 @@ package gameScene.object.crater
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 	
-	public class RectangleCrater extends GameObject
+	public class RectangleCrater extends Objects
 	{
-		[Embed(source="crater_rect_0.png")]
+		[Embed(source="rectCrater0.png")]
 		public static const rectangleCrater:Class;
 		
 		private var _left:GameObject = new GameObject();
@@ -22,12 +23,7 @@ package gameScene.object.crater
 		
 		private var _leftCollider:Collider = new Collider();
 		private var _rightCollider:Collider = new Collider();
-		private var _middleCollider:Collider = new Collider();
-		
-		private var _stageWidth:int;
-		private var _stageHeight:int;
-		
-		private var _direction:int;
+		private var _middleCollider:Collider = new Collider();		
 		
 		public function RectangleCrater(direction)
 		{
@@ -122,7 +118,6 @@ package gameScene.object.crater
 				default:
 					break;
 			}
-		}
-		
+		}		
 	}
 }

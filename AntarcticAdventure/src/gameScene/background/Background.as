@@ -127,7 +127,7 @@ package gameScene.background
 				_animator.freeze(true);
 			}
 			else
-			{
+			{				
 				_animator.freeze(false);
 				switch(_curve)
 				{

@@ -4,41 +4,28 @@ package gameScene.object.item
 	import flash.events.Event;
 	
 	import gameScene.MainStage;
+	import gameScene.object.Objects;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
-	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 
-	public class Flag extends GameObject
+	public class Flag extends Objects
 	{
-		[Embed(source="blueFlag.png")]
-		public static const blueFlag:Class;
-		
-		[Embed(source="greenFlag.png")]
-		public static const greenFlag:Class;
-		
-		[Embed(source="redFlag.png")]
-		public static const redFlag:Class;
-		
-		[Embed(source="yellowFlag.png")]
-		public static const yellowFlag:Class;
-		
-		private var _stageWidth:int;
-		private var _stageHeight:int;
-		
-		private var _direction:int;
-		private var _collider:Collider;
+		[Embed(source="flag0.png")]
+		public static const flag:Class;			
 		
 		public function Flag(direction)
 		{
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
 			
+			initRandomColor();
+			
 			var bitmap:Bitmap;
-			bitmap = initRandomColor(bitmap);			
+			bitmap = new flag() as Bitmap;		
 			var image:Image = new Image(new Texture(bitmap));	
 			
 			this.pivot = PivotType.CENTER;
@@ -65,27 +52,7 @@ package gameScene.object.item
 			
 		}
 		
-		/**
-		 * 
-		 * @param bitmap
-		 * @return 
-		 * 
-		 */
-		private function initRandomColor(bitmap:Bitmap):Bitmap
-		{
-			var randomNum:Number = Math.random();
-			
-			if(randomNum < 0.25)
-				bitmap = new blueFlag() as Bitmap;
-			else if(randomNum < 0.5)
-				bitmap = new greenFlag() as Bitmap;
-			else if(randomNum < 0.75)
-				bitmap = new redFlag() as Bitmap;
-			else
-				bitmap = new yellowFlag() as Bitmap;
-			
-			return bitmap;
-		}
+		
 		
 		private function onEnterFrame(event:TrollingEvent):void
 		{			
