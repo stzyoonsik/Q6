@@ -33,7 +33,7 @@ package titleScene
 		
 		public function TitleScene()
 		{
-			this.addEventListener(TrollingEvent.START_SCENE, onInit);
+			addEventListener(TrollingEvent.START_SCENE, onInit);
 		}
 		
 		private function onInit(event:Event):void

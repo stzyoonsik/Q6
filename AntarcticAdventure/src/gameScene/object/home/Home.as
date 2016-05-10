@@ -8,7 +8,6 @@ package gameScene.object.home
 	
 	import trolling.component.graphic.Image;
 	import trolling.event.TrollingEvent;
-	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 	

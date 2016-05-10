@@ -22,6 +22,7 @@ package
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
+			Trolling.multitouchEnabled = true;
 			var trolling:Trolling = new Trolling(stage);
 			SceneManager.addScene(TitleScene, "Title");
 			SceneManager.addScene(MainStage, "Game");
