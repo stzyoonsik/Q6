@@ -5,7 +5,6 @@ package gameScene
 	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
-	import flash.filesystem.FileStream;
 	import flash.geom.Point;
 	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
@@ -17,6 +16,7 @@ package gameScene
 	import gameScene.object.enemy.Enemy;
 	import gameScene.object.item.Flag;
 	import gameScene.object.player.Player;
+	import gameScene.util.FileStreamWithLineReader;
 	import gameScene.util.PlayerState;
 	
 	import trolling.event.TrollingEvent;
@@ -27,7 +27,8 @@ package gameScene
 
 	public class MainStage extends Scene
 	{
-		private var _currentStage:String;
+		private var _isStop:Boolean;
+		private var _currentStage:int;
 		private var _player:Player;
 		private var _enemy:Enemy;
 		
@@ -36,19 +37,22 @@ package gameScene
 		private static var _stageWidth:int;
 		private static var _stageHeight:int;
 		
-		private static var _maxSpeed:Number;
+		private static const MAX_SPEED:Number = 5;
 		private static var _speed:Number;						//세로 
 		private var _playerSpeed:Number;						//가로
 		
 		private var _yForJump:Number;
-		private var _xForMoveAtLeast:Number;
+		private var _xForMoveAtLeast:Number;		
 		
-		private var _currentFrame:int;
-		private const MAX_FRAME:int = 24;
-		
-		private var _distanceToFinish:int = 2000;
+		private var _distanceToFinish:Number;
+		private var _intervalBetweenObject:Number = 0;
 		
 		private var _objectArray:Array;
+		
+		private var _curveDistanceVector:Vector.<int> = new Vector.<int>();
+		private var _curveDirectionVector:Vector.<int> = new Vector.<int>();
+		private var _maxCurveCount:int;
+		private var _curveCount:int
 		
 		
 		private var _soundDic:Dictionary = new Dictionary();
@@ -62,8 +66,7 @@ package gameScene
 		
 		public static function get stageWidth():int { return _stageWidth; }
 		
-		public static function set maxSpeed(value:Number):void { _maxSpeed = value; }
-		public static function get maxSpeed():Number { return _maxSpeed; }
+		public static function get maxSpeed():Number { return MAX_SPEED; }
 		
 		public static function set speed(value:Number):void	{ _speed = value; }		
 		public static function get speed():Number {	return _speed; }
@@ -75,7 +78,7 @@ package gameScene
 		
 		private function oninit(event:Event):void
 		{
-			_currentStage = "stage1";
+			_currentStage = 2;
 			this.width = 800;
 			this.height = 600;
 			
@@ -85,7 +88,6 @@ package gameScene
 			_yForJump = _stageHeight;
 			_xForMoveAtLeast = _stageWidth / 50;
 			
-			_maxSpeed = 5; 
 			_speed = 0; 
 			_playerSpeed = _stageWidth / 100;
 			
@@ -93,7 +95,7 @@ package gameScene
 			addChild(_background);
 			
 			_player = new Player();			
-			addChild(_player); 						
+			addChild(_player); 				
 			
 			_coverFace.width = _stageWidth;
 			_coverFace.height = _stageHeight;
@@ -105,7 +107,7 @@ package gameScene
 			pushSoundFiles();
 			loadSound();
 			
-			readTXT(_currentStage); 
+			readTXT("stage.txt"); 
 			
 			this.scaleX = Screen.mainScreen.bounds.width / _stageWidth;
 			this.scaleY = Screen.mainScreen.bounds.height / _stageHeight;
@@ -272,9 +274,15 @@ package gameScene
 			}
 			else
 			{
-				_distanceToFinish--;
-				
-				if(_distanceToFinish % 25 == 0)
+				if(_speed < MAX_SPEED && _player.state != PlayerState.FALL)
+				{
+					_speed += MAX_SPEED / 50;
+				}
+				//trace("현재 속도 = " + _speed);
+				_distanceToFinish -= _speed;
+				_intervalBetweenObject += _speed;
+				trace(_intervalBetweenObject);
+				if(_intervalBetweenObject > 100)
 				{
 					//구름 생성
 					var cloud:Cloud = new Cloud();
@@ -282,35 +290,34 @@ package gameScene
 					
 					if(_objectArray.length != 0)
 					{
-						trace("오브젝트 생성");
+						trace(_objectArray[0] + "오브젝트 생성");
 						makeObject();
 						_objectArray.shift();
 					}
+					_intervalBetweenObject = 0;
+				}
+			}			
+			
+			if(_curveCount < _maxCurveCount)
+			{
+				if( _objectArray.length < _curveDistanceVector[_curveCount])
+				{
+					trace("****************커브 변경****************");
+					_background.changeCurve(_curveDirectionVector[_curveCount]);	
+					//_curveDistanceArray.shift();
+					_curveCount++;
 				}
 			}
-			
-			if(_distanceToFinish < 1800)
-			{				
-				//왼쪽커브길
-				//_background.changeCurve(1);
-			}
-			
-			
-			
-			
-			if(_speed < _maxSpeed)
-			{
-				_speed += _maxSpeed / 50;
-			}
+						
 			
 			switch(_background.curve)
 			{
-				case 0:
+				case -1:
 					break;
-				case 1:
+				case 0:
 					_player.x += _playerSpeed * 0.5;
 					break;
-				case 2:
+				case 1:
 					_player.x -= _playerSpeed * 0.5;
 					break;
 				default:
@@ -323,22 +330,68 @@ package gameScene
 		 * @param stageName
 		 * 
 		 */
-		private function readTXT(stageName:String):void
+		private function readTXT(fileName:String):void
 		{
 			var file:File = new File();
-			var stream:FileStream = new FileStream();
-			file = File.applicationDirectory.resolvePath(stageName+".txt");
+			var stream:FileStreamWithLineReader = new FileStreamWithLineReader();
+			file = File.applicationDirectory.resolvePath(fileName);
+			var lineCount:int;
+			var findStage:Boolean;
 			
 			if(file.exists)
 			{
 				stream.open(file, FileMode.READ);
-				var str:String = stream.readMultiByte(stream.bytesAvailable, "utf-8");
-				_objectArray = str.split(',');
+				while(stream.bytesAvailable)
+				{
+					var line:String = stream.readUTFLine();
+					
+					if(line != "#"+_currentStage.toString() && !findStage)
+					{
+						continue;
+					}
+					else
+					{
+						//trace(line);
+						findStage = true;
+						switch(lineCount)
+						{
+							case 0:
+								break;							
+							case 1:
+								var tempArray:Array = line.split('/');
+								
+								for(var i:int = 0; i < tempArray.length; ++i)
+								{
+									_curveDistanceVector.push(int(tempArray[i].split(',')[0]));
+									_curveDirectionVector.push(int(tempArray[i].split(',')[1]));
+									_maxCurveCount++;
+								}
+								trace("--------------커브------------------");
+								for(i = 0; i < tempArray.length; ++i)
+								{
+									trace(_curveDistanceVector[i]);
+									trace(_curveDirectionVector[i]);
+								}
+								break;
+							case 2:
+								_objectArray = new Array();
+								_objectArray = line.split(',');
+								break;
+							default:
+								break;
+						}
+						lineCount++;
+						if(lineCount >= 3)
+						{
+							break;
+						}
+					}				
+				}
 				stream.close();
 			}
 			else
 			{
-				trace(stageName + " open error");
+				trace(fileName + " open error");
 			}
 		}
 		
