@@ -79,9 +79,10 @@ package gameScene
 		
 		private function oninit(event:Event):void
 		{
-			_currentStage = 2;
-			this.width = 800;
-			this.height = 600;
+			_currentStage = this.data as int;
+			trace("_currentStage = " + _currentStage);
+//			this.width = 800;
+//			this.height = 600;
 			
 			_stageWidth = this.width;
 			_stageHeight = this.height;
@@ -111,8 +112,8 @@ package gameScene
 			
 			readTXT("stage.txt"); 
 			
-			this.scaleX = Screen.mainScreen.bounds.width / _stageWidth;
-			this.scaleY = Screen.mainScreen.bounds.height / _stageHeight;
+//			this.scaleX = Screen.mainScreen.bounds.width / _stageWidth;
+//			this.scaleY = Screen.mainScreen.bounds.height / _stageHeight;
 	
 		}
 		
@@ -240,8 +241,8 @@ package gameScene
 			}				
 			
 			var point:Point = Point(event.data[0]).clone();
-			point.x *= (_stageWidth / Screen.mainScreen.bounds.width);
-			point.y *= (_stageHeight / Screen.mainScreen.bounds.height);
+//			point.x *= (_stageWidth / Screen.mainScreen.bounds.width);
+//			point.y *= (_stageHeight / Screen.mainScreen.bounds.height);
 			
 						
 			//플레이어 위치와 너무 가까운 곳을 터치하면 플레이어 이동 안함
@@ -258,9 +259,9 @@ package gameScene
 				_player.x -= _playerSpeed;
 			}
 			
-//			trace("point.x = " + point.x);
-//			trace("player.x = " + _player.x);
-//			trace("player.penguin.x = " + _player.penguin.x);
+			trace("point.x = " + point.x);
+			trace("player.x = " + _player.x);
+			trace("player.penguin.x = " + _player.penguin.x);
 		}
 		
 		/**

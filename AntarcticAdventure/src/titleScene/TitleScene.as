@@ -12,6 +12,7 @@ package titleScene
 	import trolling.component.animation.Animator;
 	import trolling.component.animation.State;
 	import trolling.core.SceneManager;
+	import trolling.core.Trolling;
 	import trolling.event.TrollingEvent;
 	import trolling.media.Sound;
 	import trolling.media.SoundManager;
@@ -48,8 +49,8 @@ package titleScene
 			{
 				loader = new Loader();
 				urlRequest = new URLRequest(_filePath.resolvePath(_imageURLVector[i]).url);
-				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompleteLoad);
-				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onImageLoaded);
+				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onImageLoadFaild);
 				loader.load(urlRequest);
 			}
 			
@@ -95,21 +96,21 @@ package titleScene
 			trace(event.text);
 		}
 		
-		private function uncaughtError(event:Event):void
+		private function onImageLoadFaild(event:IOErrorEvent):void
 		{
 			trace("Please Check " + LoaderInfo(event.currentTarget).url);
-			LoaderInfo(event.currentTarget).removeEventListener(Event.COMPLETE, onCompleteLoad);
-			LoaderInfo(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
+			LoaderInfo(event.currentTarget).removeEventListener(Event.COMPLETE, onImageLoaded);
+			LoaderInfo(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onImageLoadFaild);
 			_imageLoadCount++;
 		}
 		
-		private function onCompleteLoad(event:Event):void
+		private function onImageLoaded(event:Event):void
 		{
 			trace("ddd = " + LoaderInfo(event.currentTarget).url);
 			_imageDic[LoaderInfo(event.currentTarget).url.replace(_filePath.url.toString(), "")] = LoaderInfo(event.currentTarget).loader.content;
 			
-			LoaderInfo(event.currentTarget).removeEventListener(Event.COMPLETE, onCompleteLoad);
-			LoaderInfo(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
+			LoaderInfo(event.currentTarget).removeEventListener(Event.COMPLETE, onImageLoaded);
+			LoaderInfo(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onImageLoadFaild);
 			_imageLoadCount++;
 			
 			if(_imageURLVector.length <= _imageLoadCount)
@@ -127,22 +128,26 @@ package titleScene
 			var state:State = new State("title");
 			state.addFrame(new Texture(_imageDic["title0.png"]));
 			state.addFrame(new Texture(_imageDic["title1.png"]));
+			
 			state.isLoop = true;
 			state.interval = 20;
 			
 			_backGroundAnimator.addState(state);
 			
 			_backGround.addComponent(_backGroundAnimator);
-			_backGround.width = Screen.mainScreen.bounds.width;
-			_backGround.height = Screen.mainScreen.bounds.height;
+			_backGround.width = this.width;
+			_backGround.height = this.height;
 			
 			addChild(_backGround);
+			
+//			this.scaleX = Screen.mainScreen.bounds.width / this.width;
+//			this.scaleY = Screen.mainScreen.bounds.height / this.height;			
 		}
 		
 		private function onTouch(event:TrollingEvent):void
 		{
 			SoundManager.dispose();
-			SceneManager.switchScene("Game");
+			SceneManager.switchScene("stageSelect");
 		}
 	}
 }

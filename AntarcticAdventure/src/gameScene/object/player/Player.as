@@ -330,16 +330,27 @@ package gameScene.object.player
 		 */
 		private function arrived():void
 		{
-			if(this.y <= (_stageHeight * 0.8) - 10)
+			if(this.y <= (_stageHeight * 0.8) - 20)
 			{
 				_penguin.transition(PlayerState.ARRIVED);
 				_playerState = PlayerState.ARRIVED;
 			}
 			else
 			{
-				this.y -= 1;
-				this.scaleY -= 0.01;
-				this.scaleX = this.scaleY;
+				if(!(this.y <= (_stageHeight / 10 * 8)-20))
+				{
+					this.y -= 1;
+					this.scaleY -= 0.01;
+					this.scaleX = this.scaleY;
+				}
+				if(!(this.x > ((_stageWidth/2)-30)))
+				{
+					this.x += 3;
+				}
+				if(!(this.x < ((_stageWidth/2)+30)))
+				{
+					this.x -= 3;
+				}
 			}
 		}
 		
