@@ -1,6 +1,5 @@
 package ui
 {
-	import trolling.component.ComponentType;
 	import trolling.component.graphic.Image;
 	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;
@@ -10,14 +9,16 @@ package ui
 	public class Title extends GameObject
 	{
 		private const TAG:String = "[Title]";
-		private const NUMBER:int = 0;
+		private const MAIN:int = 0;
 		private const DEFAULT_INTERVAL:uint = 30;
 		
 		private var _isFade:Boolean;
 		private var _fadeInterval:uint;
 		private var _frameCounter:uint;
 		
-		public function Title(stageWidth:int, stageHeight:int, resources:Vector.<Texture>)
+		private var _mainTitleHeight:Number;
+		
+		public function Title(stageWidth:Number, stageHeight:Number, resources:Vector.<Texture>)
 		{
 			if (!resources)
 			{
@@ -29,20 +30,31 @@ package ui
 			this.x = stageWidth / 2;
 			this.y = stageHeight / 2;
 			
+			var main:GameObject = new GameObject;
+			main.pivot = PivotType.CENTER;
+			addChild(main);
+			
 			var titleWidth:Number = 0;
+			_mainTitleHeight = 0;
 			for (var i:int = 0; i < resources.length; i++)
 			{
 				titleWidth += resources[i].width;
+				
+				if (_mainTitleHeight < resources[i].height)
+				{
+					_mainTitleHeight = resources[i].height;
+				}
 			}
 			
-			var left:Number = this.x - titleWidth / 2;
+			var left:Number = -(titleWidth / 2);
 			var widthSoFar:Number = 0;
 			for (i = 0; i < resources.length; i++)
 			{
 				var element:GameObject = new GameObject();
-				element.x = left + widthSoFar; 
 				element.addComponent(new Image(resources[i]));
-				addChild(element);
+				element.pivot = PivotType.CENTER;
+				element.x = -(left + widthSoFar + element.width / 2);
+				main.addChild(element);
 				
 				widthSoFar += resources[i].width;
 			}
@@ -50,6 +62,13 @@ package ui
 			_isFade = false;
 			_fadeInterval = 0;
 			_frameCounter = 0;
+		}
+		
+		public override function dispose():void
+		{
+			removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
+			
+			super.dispose();
 		}
 		
 		public function addSubTitle(stageWidth:int, stageHeight:int, resources:Vector.<Texture>):void
@@ -60,24 +79,36 @@ package ui
 				return;
 			}
 			
-			var margin:Number = this.height / 5;
-			this.y = stageHeight / 2 - this.height - margin / 2;
+			var margin:Number = _mainTitleHeight / 2;
+			var main:GameObject = getChild(MAIN);
+			main.y = -(_mainTitleHeight / 2 - margin);
 			
 			var titleWidth:Number = 0;
+			var titleHeight:Number = 0;
 			for (var i:int = 0; i < resources.length; i++)
 			{
 				titleWidth += resources[i].width;
+				
+				if (titleHeight < resources[i].height)
+				{
+					titleHeight = resources[i].height;
+				}
 			}
 			
-			var left:Number = this.x - titleWidth / 2;
+			var sub:GameObject = new GameObject;
+			sub.pivot = PivotType.CENTER;
+			sub.y = titleHeight + margin;
+			addChild(sub);
+			
+			var left:Number = -(titleWidth / 2);
 			var widthSoFar:Number = 0;
 			for (i = 0; i < resources.length; i++)
 			{
 				var element:GameObject = new GameObject();
-				element.x = left + widthSoFar;
-				element.y = this.height + margin;
 				element.addComponent(new Image(resources[i]));
-				addChild(element);
+				element.pivot = PivotType.CENTER;
+				element.x = left + widthSoFar + element.width / 2;
+				sub.addChild(element);
 				
 				widthSoFar += resources[i].width;
 			}
@@ -121,7 +152,7 @@ package ui
 		
 		private function onEnterFrame(event:TrollingEvent):void
 		{
-			if (!_isFade || !components[ComponentType.IMAGE])
+			if (!_isFade)
 			{
 				return;
 			}

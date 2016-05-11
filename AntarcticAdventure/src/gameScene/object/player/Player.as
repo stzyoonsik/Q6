@@ -114,7 +114,7 @@ package gameScene.object.player
 			_penguinCollider = new Collider();
 			_penguinCollider.setRect(0.3, 0.3);
 			_penguinCollider.addignoreTag(ObjectTag.ENEMY);
-//			_penguin.colliderRender = true;
+			//_penguin.colliderRender = true;
 			_penguin.addComponent(_penguinCollider);
 			_penguin.addEventListener(TrollingEvent.COLLIDE, onCollideWithPenguin);
 			
@@ -127,18 +127,17 @@ package gameScene.object.player
 			_bitmap = new shadow0() as Bitmap;
 			_image = new Image(new Texture(_bitmap));				
 			_grimja.addComponent(_image);
-			
 			_grimja.pivot = PivotType.CENTER;
 			
 			_grimja.width = _stageWidth / 5;
 			_grimja.height = _grimja.width	
-			_grimja.y = _stageHeight * 0.06;
+			_grimja.y = _stageHeight * 0.08;
 			
 			_grimjaCollider = new Collider();			
 			_grimjaCollider.setRect(0.33, 0.0625);
 			_grimjaCollider.addignoreTag(ObjectTag.ITEM);
 			_grimja.addComponent(_grimjaCollider);
-//			_grimja.colliderRender = true;
+			_grimja.colliderRender = true;
 			_grimja.addEventListener(TrollingEvent.COLLIDE, onCollideWithGrimja);
 			
 			
@@ -330,27 +329,16 @@ package gameScene.object.player
 		 */
 		private function arrived():void
 		{
-			if(this.y <= (_stageHeight * 0.8) - 20)
+			if(this.y <= (_stageHeight * 0.8) - 10)
 			{
 				_penguin.transition(PlayerState.ARRIVED);
 				_playerState = PlayerState.ARRIVED;
 			}
 			else
 			{
-				if(!(this.y <= (_stageHeight / 10 * 8)-20))
-				{
-					this.y -= 1;
-					this.scaleY -= 0.01;
-					this.scaleX = this.scaleY;
-				}
-				if(!(this.x > ((_stageWidth/2)-30)))
-				{
-					this.x += 3;
-				}
-				if(!(this.x < ((_stageWidth/2)+30)))
-				{
-					this.x -= 3;
-				}
+				this.y -= 1;
+				this.scaleY -= 0.01;
+				this.scaleX = this.scaleY;
 			}
 		}
 		

@@ -5,8 +5,7 @@ package ui
 	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
-	
-	
+
 	public class Button extends GameObject
 	{
 		private const TAG:String = "[Button]";
@@ -27,18 +26,17 @@ package ui
 				return;
 			}
 			addComponent(new Image(texture));
-			
-			
+
 			_scaleDownRatio = DEFAULT_SCALE_DOWN_RATIO;
-			_originScaleX = 1.0;
-			_originScaleY = 1.0;
+			_originScaleX = 0;
+			_originScaleY = 0;
 			
 			_isOriginScaleXSet = false;
 			_isOriginScaleYSet = false;
 			
 			this.pivot = PivotType.CENTER;
 			
-			addEventListener(TrollingEvent.TOUCH_BEGAN, onBegan);            
+			addEventListener(TrollingEvent.TOUCH_BEGAN, onBegan);			
 			addEventListener(TrollingEvent.TOUCH_ENDED, onEnded);
 		}
 		
@@ -62,7 +60,6 @@ package ui
 		
 		private function onBegan(event:TrollingEvent):void
 		{
-			trace("a");
 			if (!_isOriginScaleXSet)
 			{
 				_originScaleX = this.scaleX;
@@ -81,7 +78,6 @@ package ui
 		
 		private function onEnded(event:TrollingEvent):void
 		{
-			trace("b");
 			this.scaleX = _originScaleX;
 			this.scaleY = _originScaleY;
 		}

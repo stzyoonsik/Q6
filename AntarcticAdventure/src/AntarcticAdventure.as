@@ -7,14 +7,12 @@ package
 	
 	import gameScene.MainStage;
 	
-	import stageSelectScene.StageSelectScene;
-	
 	import titleScene.TitleScene;
 	
 	import trolling.core.SceneManager;
 	import trolling.core.Trolling;
 	
-	[SWF(frameRate = "24", width="800", height="600")]
+	[SWF(frameRate = "24", width="960", height="540")]
 	public class AntarcticAdventure extends Sprite
 	{
 		public function AntarcticAdventure()
@@ -25,11 +23,9 @@ package
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
-			Trolling.multitouchEnabled = true;
-			var trolling:Trolling = new Trolling(stage, new Rectangle(0, 0, 800, 600));
+			var trolling:Trolling = new Trolling(stage, new Rectangle(0, 0, 960, 540));
 			SceneManager.addScene(TitleScene, "Title");
 			SceneManager.addScene(MainStage, "Game");
-			SceneManager.addScene(StageSelectScene, "stageSelect");
 			
 			trolling.start();
 		}
