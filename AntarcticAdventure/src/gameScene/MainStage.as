@@ -80,8 +80,6 @@ package gameScene
 		private function oninit(event:Event):void
 		{
 			_currentStage = 2;
-			this.width = 800;
-			this.height = 600;
 			
 			_stageWidth = this.width;
 			_stageHeight = this.height;
@@ -110,10 +108,6 @@ package gameScene
 			loadSound();
 			
 			readTXT("stage.txt"); 
-			
-			this.scaleX = Screen.mainScreen.bounds.width / _stageWidth;
-			this.scaleY = Screen.mainScreen.bounds.height / _stageHeight;
-	
 		}
 		
 		/**
@@ -240,9 +234,6 @@ package gameScene
 			}				
 			
 			var point:Point = Point(event.data[0]).clone();
-			point.x *= (_stageWidth / Screen.mainScreen.bounds.width);
-			point.y *= (_stageHeight / Screen.mainScreen.bounds.height);
-			
 						
 			//플레이어 위치와 너무 가까운 곳을 터치하면 플레이어 이동 안함
 			if(Math.abs(point.x - _player.x) < _xForMoveAtLeast)
