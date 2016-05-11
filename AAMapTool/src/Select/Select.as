@@ -1,5 +1,6 @@
 package Select
 {
+	import Select.Background.Background;
 	import Select.Objects.Objects;
 	
 	import starling.display.Image;
@@ -10,11 +11,17 @@ package Select
 	public class Select extends Sprite
 	{
 		
-		private var _Objects:Objects = new Objects();
+		private var _objects:Objects = new Objects();
+		private var _background:Background = new Background();
 		
 		public function Select()
 		{
-			addChild(_Objects);
+			_objects.x = 50;
+			_objects.y = 50;
+			addChild(_objects);
+			
+			_background.y = 400;
+			addChild(_background);
 		}
 	}
 }
