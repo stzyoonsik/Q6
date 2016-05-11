@@ -79,7 +79,7 @@ package gameScene
 		
 		private function oninit(event:Event):void
 		{
-			_currentStage = 2;
+			_currentStage = this.data as int;
 			
 			_stageWidth = this.width;
 			_stageHeight = this.height;

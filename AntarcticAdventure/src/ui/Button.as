@@ -28,8 +28,8 @@ package ui
 			addComponent(new Image(texture));
 
 			_scaleDownRatio = DEFAULT_SCALE_DOWN_RATIO;
-			_originScaleX = 0;
-			_originScaleY = 0;
+			_originScaleX = 1.0;
+			_originScaleY = 1.0;
 			
 			_isOriginScaleXSet = false;
 			_isOriginScaleYSet = false;

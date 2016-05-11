@@ -108,8 +108,8 @@ package stageSelectScene
 			_backGround.height = this.height;
 			
 			var buttonTexture:Texture = new Texture(_imageDic["buttonImage.png"]);
-			var buttonX:Number = 800 / 6;
-			var buttonY:Number = 600 / 6;
+			var buttonX:Number = this.width / 6;
+			var buttonY:Number = this.height / 6;
 			for(var i:int = 1; i <= 5; i++)
 			{
 				var stageButton:Button = new Button(buttonTexture);
@@ -150,7 +150,7 @@ package stageSelectScene
 			_nextButton = new Button(new Texture(_imageDic["nextButton.png"]));
 			_nextButton.width = 100;
 			_nextButton.height = 100;
-			_nextButton.x = 700;
+			_nextButton.x = 860;
 			_nextButton.y = 100;
 			_nextButton.pivot = PivotType.CENTER;
 			_nextButton.addEventListener(TrollingEvent.TOUCH_ENDED, onNextClick);
@@ -159,7 +159,7 @@ package stageSelectScene
 			_prevButton.width = 100;
 			_prevButton.height = 100;
 			_prevButton.x = 100;
-			_prevButton.y = 500;
+			_prevButton.y = 440;
 			_prevButton.pivot = PivotType.CENTER;
 			_prevButton.addEventListener(TrollingEvent.TOUCH_ENDED, onPrevClick);
 			

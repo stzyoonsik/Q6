@@ -142,7 +142,7 @@ package titleScene
 		private function onTouch(event:TrollingEvent):void
 		{
 			SoundManager.dispose();
-			SceneManager.switchScene("Game");
+			SceneManager.switchScene("stageSelect");
 		}
 	}
 }
