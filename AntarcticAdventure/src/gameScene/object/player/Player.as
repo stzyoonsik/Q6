@@ -102,14 +102,16 @@ package gameScene.object.player
 		private var _fallScaleY:Number = 1;
 		
 		private var _struggleFlag:Boolean;
-		private var _struggleCount:int;
+		private var _struggleLeftCount:int;
+		private var _struggleRightCount:int;
 		
+	
+
+	
+
 		private var _setCurrentLifeAtUi:Function;
 		private var _setCurrentFlagAtUi:Function;
 		private var _onFailed:Function;
-		
-		private var _isPower:Boolean;
-		private var _powerFrame:int;
 		
 		public function get fallFlag():Boolean { return _fallFlag; }
 		public function set fallFlag(value:Boolean):void { _fallFlag = value; }
@@ -125,6 +127,12 @@ package gameScene.object.player
 		public function set setCurrentLifeAtUi(value:Function):void{ _setCurrentLifeAtUi = value;}
 		public function set setCurrentFlagAtUi(value:Function):void{ _setCurrentFlagAtUi = value;}
 		public function set onFailed(value:Function):void{ _onFailed = value;}
+		
+		public function get struggleLeftCount():int	{ return _struggleLeftCount; }		
+		public function set struggleLeftCount(value:int):void {	_struggleLeftCount = value; }
+		
+		public function get struggleRightCount():int { return _struggleRightCount; }		
+		public function set struggleRightCount(value:int):void { _struggleRightCount = value; }
 		
 		public function Player()
 		{
@@ -314,12 +322,7 @@ package gameScene.object.player
 		 * 그림자의 콜라이더에 다른 콜라이더가 충돌했을때 그 콜라이더에 대한 정보를 바탕으로 어느 오브젝트와 충돌했는지를 검사하는 메소드
 		 */
 		private function onCollideWithGrimja(event:TrollingEvent):void
-		{
-			 
-			//몬스터와 충돌
-			//플레이어를 충돌 무시 상태로 만들고 n초(프레임)동안 부딪힘 상태로 변경
-			//MainStage.speed 를 변경
-			
+		{			
 			if(event.data is EllipseCrater)
 			{
 				
@@ -342,10 +345,8 @@ package gameScene.object.player
 			
 			else if(event.data.parent is RectangleCrater)
 			{
-				trace("RECTANGLE CRATER");
 				if(_state == PlayerState.RUN)
-				{
-					
+				{					
 					if(event.data.name == "left")
 					{			
 						MainStage.speed = 0;
@@ -391,27 +392,6 @@ package gameScene.object.player
 		private function onEnterFrame(event:TrollingEvent):void
 		{			
 			collideWall();
-			//_grimjaCollider.isActive = false;
-			//trace(_grimjaCollider.isActive);
-			//trace("Player클래스 state = " + _state);
-			//빠지고 난 후 24프레임동안 무적
-//			if(_isPower)
-//			{
-//				//trace("무적");
-//				_powerFrame++;
-//				_penguin.blendColor(1, 0, 0);
-//				
-//				if(_powerFrame > 24)
-//				{
-//					trace("무적 끝");
-//					_penguin.blendColor(1, 1, 1);
-//					_powerFrame = 0;
-//					_grimjaCollider.removeIgnoreTag(ObjectTag.ENEMY);
-//					//_grimjaCollider.isActive = true;
-//					_isPower = false;
-//				}
-//				return;
-//			}
 			
 			switch(_state)
 			{
@@ -649,14 +629,13 @@ package gameScene.object.player
 			{
 				_penguin.transition(PlayerState.STRUGGLE);
 				_struggleFlag = true;
-			}
+			}			
 			
-			_struggleCount++;
-			
-			if(_struggleCount > 10)
+			if(_struggleLeftCount > 5 && _struggleRightCount > 5)
 			{
 				trace("탈출");
-				_struggleCount = 0;
+				_struggleLeftCount = 0;
+				_struggleRightCount = 0;
 				_fallFlag = false;
 				_struggleFlag = false;
 				
@@ -664,14 +643,14 @@ package gameScene.object.player
 				_penguin.scaleX = 1;
 				
 				_grimja.visible = true;
+				_grimjaCollider.isActive = true;
+				
 				this.y = _stageHeight / 10 * 8;
 				
 				_state = PlayerState.RUN;
 				_penguin.transition(PlayerState.RUN);
 				
 				MainStage.coverFaceForFall.removeFromParent();
-				
-				_isPower = true;
 			}
 			
 		}

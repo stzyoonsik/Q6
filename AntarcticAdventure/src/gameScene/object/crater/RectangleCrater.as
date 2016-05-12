@@ -7,7 +7,6 @@ package gameScene.object.crater
 	import gameScene.ObjectTag;
 	import gameScene.object.Objects;
 	
-	import trolling.component.ComponentType;
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
@@ -95,8 +94,6 @@ package gameScene.object.crater
 			
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			addEventListener("collideRect", onCollidePlayer);
-			//this.scaleY = 0.5;
-			//this.scaleX = scaleY;
 			
 		}
 		
@@ -139,9 +136,6 @@ package gameScene.object.crater
 			_leftCollider.isActive = false;
 			_middleCollider.isActive = false;
 			_rightCollider.isActive = false;
-//			_left.removeComponent(ComponentType.COLLIDER);
-//			_middle.removeComponent(ComponentType.COLLIDER);
-//			_right.removeComponent(ComponentType.COLLIDER);
 			removeEventListener("collideFlag", onCollidePlayer);			
 		}
 	}

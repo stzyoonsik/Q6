@@ -122,7 +122,7 @@ package titleScene
 		private function completeLoadImage():void
 		{
 			_backGround = new GameObject();
-			_backGround.addEventListener(TrollingEvent.TOUCH_BEGAN, onTouch);
+			_backGround.addEventListener(TrollingEvent.TOUCH_ENDED, onTouch);
 			_backGroundAnimator = new Animator();
 			var state:State = new State("title");
 			state.addFrame(new Texture(_imageDic["title0.png"]));

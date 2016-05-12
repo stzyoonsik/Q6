@@ -99,7 +99,7 @@ package gameScene
 			_stageHeight = this.height;
 			
 			_yForJump = _stageHeight * 0.05;
-			_xForStruggle = _stageWidth * 5;
+			_xForStruggle = _stageWidth * 0.3;
 			_xForMoveAtLeast = _stageWidth / 50;
 			
 			_speed = 0; 
@@ -384,47 +384,36 @@ package gameScene
 			}
 		}
 		
+		/**
+		 * 
+		 * @param event
+		 * 빠짐 상태 전용 커버 페이스 터치 이벤트 리스너
+		 */
 		private function onTouchCoverFaceForFall(event:TrollingEvent):void
 		{
+			var pointsTemp:Vector.<Point> = event.data as Vector.<Point>;
+			if(pointsTemp.length <= 1)
+				return;
+			var prevTouch:Point = pointsTemp[0];
+			var currentTouch:Point = pointsTemp[pointsTemp.length-1];
 			
-			//trace("위에있는 커버페이스");
-			
-			var point:Point = Point(event.data[0]).clone();
-			
-			if(event.data.length >= 10)
-			{
-				var prevTouchX:int;
-				var currentTouchX:int;
-				for(var i:int = 0; i<event.data.length; ++i)
-				{
-					
-					if(i < 5)
-					{
-						currentTouchX += int(event.data[i].x);
-					}
-					else
-					{
-						prevTouchX += int(event.data[i].x);
-					}
-					
-				}
-				//trace(currentTouchY - prevTouchY);
-				if(Math.abs(prevTouchX - currentTouchX) > _xForStruggle)
-				{
-					//trace("STRUGGLE");
+			trace(currentTouch.x - prevTouch.x);
+			if(currentTouch.x - prevTouch.x > _xForStruggle)
+			{				
+				_player.struggleLeftCount++;
+				if(_player.state == PlayerState.FALL)
 					_player.state = PlayerState.STRUGGLE;
-				}
-				else
-				{
-					//trace("FALL");
-					_player.state = PlayerState.FALL;
-				}
+				
+				trace(_player.struggleLeftCount);
 			}
 			
-			else
+			if(currentTouch.x - prevTouch.x < -_xForStruggle)
 			{
-				//trace("FALL");
-				_player.state = PlayerState.FALL;
+				_player.struggleRightCount++;
+				if(_player.state == PlayerState.FALL)
+					_player.state = PlayerState.STRUGGLE;
+				
+				trace(_player.struggleRightCount);
 			}
 		}
 		/**
