@@ -8,7 +8,6 @@ package gameScene.object.home
 	
 	import trolling.component.graphic.Image;
 	import trolling.event.TrollingEvent;
-	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 	
@@ -25,13 +24,10 @@ package gameScene.object.home
 			this.pivot = PivotType.CENTER;
 			
 			this.x = _stageWidth / 2;
-			this.y = _stageHeight * 0.4;
+			this.y = _stageHeight * 0.35;
 			
 			this.width = _stageWidth * 0.1;
 			this.height = this.width;
-//			
-//			this.scaleY = (this.y - (_stageHeight / 3)) / 100;
-//			this.scaleX = scaleY;
 			
 			_bitmap = new home0() as Bitmap;
 			_image = new Image(new Texture(_bitmap));
@@ -43,15 +39,14 @@ package gameScene.object.home
 		
 		private function onEnterFrame(event:TrollingEvent):void
 		{	
-			this.scaleY += 0.04 * MainStage.speed;
+			this.scaleY += 0.025 * MainStage.speed;
 			this.scaleX = this.scaleY;
-			this.y += MainStage.speed;
+			this.y += MainStage.speed / 2;
 			
-			if(this.y >= (_stageHeight * 0.4) + (MainStage.speed * 16))
+			if(this.y > _stageHeight * 0.475)
 			{
 				removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 				dispatchEvent(new TrollingEvent(PlayerState.ARRIVE));
-				return;
 			}
 		}
 	}

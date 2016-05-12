@@ -133,16 +133,15 @@ package titleScene
 			_backGroundAnimator.addState(state);
 			
 			_backGround.addComponent(_backGroundAnimator);
-			_backGround.width = Screen.mainScreen.bounds.width;
-			_backGround.height = Screen.mainScreen.bounds.height;
+			_backGround.width = this.width;
+			_backGround.height = this.height;
 			
 			addChild(_backGround);
 		}
 		
 		private function onTouch(event:TrollingEvent):void
-		{
-			SoundManager.dispose();
-			SceneManager.switchScene("Game");
+		{			
+			SceneManager.switchScene("stageSelect");
 		}
 	}
 }
