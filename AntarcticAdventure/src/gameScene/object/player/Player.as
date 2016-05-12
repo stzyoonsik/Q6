@@ -55,6 +55,21 @@ package gameScene.object.player
 		[Embed(source="penguinArrived1.png")]
 		public static const penguinArrived1:Class;
 		
+		[Embed(source="penguinFall0.png")]
+		public static const penguinFall0:Class;
+		
+		[Embed(source="penguinStruggle0.png")]
+		public static const penguinStruggle0:Class;
+		
+		[Embed(source="penguinStruggle1.png")]
+		public static const penguinStruggle1:Class;
+		
+		[Embed(source="penguinStruggle2.png")]
+		public static const penguinStruggle2:Class;
+		
+		[Embed(source="penguinStruggle3.png")]
+		public static const penguinStruggle3:Class;
+		
 		[Embed(source="shadow0.png")]
 		public static const shadow0:Class;
 		
@@ -64,7 +79,11 @@ package gameScene.object.player
 		private var _grimjaCollider:Collider;
 		private var _penguinCollider:Collider;
 		
-		private var _playerState:String;
+		private var _state:String;
+		
+		private var _maxLife:int;
+		private var _currentLife:int;
+		private var _currentFlag:int;
 		
 		private var _jumpSpeed:Number;
 		private var _jumpHeight:Number;
@@ -77,15 +96,35 @@ package gameScene.object.player
 		private var _hoppingCount:int;
 		private var _crashFlag:Boolean;
 		
+		private var _fallFlag:Boolean;
+		private var _fallY:Number = 0;
+		private var _fallScaleX:Number = 1;
+		private var _fallScaleY:Number = 1;
 		
-		public function get state():String{ return _playerState; }
-		public function set state(value:String):void{ _playerState = value; }
+		private var _struggleFlag:Boolean;
+		private var _struggleCount:int;
 		
-		public function get grimja():GameObject{ return _grimja; }		
-		public function set grimja(value:GameObject):void {	_grimja = value;}
+		private var _setCurrentLifeAtUi:Function;
+		private var _setCurrentFlagAtUi:Function;
+		private var _onFailed:Function;
 		
-		public function get penguin():GameObject{ return _penguin;}
-		public function set penguin(value:GameObject):void{ _penguin = value;}
+		private var _isPower:Boolean;
+		private var _powerFrame:int;
+		
+		public function get fallFlag():Boolean { return _fallFlag; }
+		public function set fallFlag(value:Boolean):void { _fallFlag = value; }
+
+		public function get state():String{ return _state; }
+		public function set state(value:String):void{ _state = value; }
+		
+		public function set maxLife(value:int):void{ _maxLife = value; _currentLife = _maxLife;}
+		
+		public function get currentLife():int{ return _currentLife; }
+		public function get currentFlag():int{ return _currentFlag; }
+		
+		public function set setCurrentLifeAtUi(value:Function):void{ _setCurrentLifeAtUi = value;}
+		public function set setCurrentFlagAtUi(value:Function):void{ _setCurrentFlagAtUi = value;}
+		public function set onFailed(value:Function):void{ _onFailed = value;}
 		
 		public function Player()
 		{
@@ -96,7 +135,15 @@ package gameScene.object.player
 			this.x = _stageWidth / 2;
 			this.y = _stageHeight / 10 * 8;
 			
-			_playerState = PlayerState.RUN;
+			_state = PlayerState.RUN;
+			
+			_maxLife = 0;
+			_currentLife = 0;
+			_currentFlag = 0;
+			
+			_setCurrentLifeAtUi = null;
+			_setCurrentFlagAtUi = null;
+			_onFailed = null;
 			
 			_jumpSpeed = 7;
 			_jumpHeight = _stageHeight / 10;
@@ -113,8 +160,9 @@ package gameScene.object.player
 			
 			_penguinCollider = new Collider();
 			_penguinCollider.setRect(0.3, 0.3);
-			_penguinCollider.addignoreTag(ObjectTag.ENEMY);
-//			_penguin.colliderRender = true;
+			_penguinCollider.addIgnoreTag(ObjectTag.ENEMY);
+			
+			//_penguin.colliderRender = true;
 			_penguin.addComponent(_penguinCollider);
 			_penguin.addEventListener(TrollingEvent.COLLIDE, onCollideWithPenguin);
 			
@@ -132,13 +180,14 @@ package gameScene.object.player
 			
 			_grimja.width = _stageWidth / 5;
 			_grimja.height = _grimja.width	
-			_grimja.y = _stageHeight * 0.06;
+			_grimja.y = _stageHeight * 0.08;
 			
 			_grimjaCollider = new Collider();			
 			_grimjaCollider.setRect(0.33, 0.0625);
-			_grimjaCollider.addignoreTag(ObjectTag.ITEM);
+			_grimjaCollider.addIgnoreTag(ObjectTag.ITEM);
+			
 			_grimja.addComponent(_grimjaCollider);
-//			_grimja.colliderRender = true;
+			_grimja.colliderRender = true;
 			_grimja.addEventListener(TrollingEvent.COLLIDE, onCollideWithGrimja);
 			
 			
@@ -166,7 +215,7 @@ package gameScene.object.player
 			_bitmap = new penguinRun3() as Bitmap;
 			state.addFrame(new Texture(_bitmap));
 			_animator.addState(state);
-			state.interval = 5;
+			state.interval = 4;
 			
 			state = new State(PlayerState.JUMP);
 			_bitmap = new penguinJump0() as Bitmap;
@@ -174,7 +223,7 @@ package gameScene.object.player
 			_bitmap = new penguinJump1() as Bitmap;
 			state.addFrame(new Texture(_bitmap));
 			_animator.addState(state);			
-			state.interval = 3;
+			state.interval = 2;
 			
 			state = new State(PlayerState.CRASHED_LEFT);
 			_bitmap = new penguinCrashedLeft0() as Bitmap;
@@ -187,6 +236,24 @@ package gameScene.object.player
 			state.addFrame(new Texture(_bitmap));	
 			state.interval = 60;
 			_animator.addState(state);		
+						
+			state = new State(PlayerState.FALL);
+			_bitmap = new penguinFall0() as Bitmap;
+			state.addFrame(new Texture(_bitmap));	
+			state.interval = 60;
+			_animator.addState(state);
+			
+			state = new State(PlayerState.STRUGGLE);
+			_bitmap = new penguinStruggle0() as Bitmap;
+			state.addFrame(new Texture(_bitmap));
+			_bitmap = new penguinStruggle1() as Bitmap;
+			state.addFrame(new Texture(_bitmap));
+			_bitmap = new penguinStruggle2() as Bitmap;
+			state.addFrame(new Texture(_bitmap));
+			_bitmap = new penguinStruggle3() as Bitmap;
+			state.addFrame(new Texture(_bitmap));
+			state.interval = 5;
+			_animator.addState(state);
 			
 			state = new State(PlayerState.ARRIVED);
 			_bitmap = new penguinArrived0() as Bitmap;
@@ -210,6 +277,18 @@ package gameScene.object.player
 			{
 				SoundManager.play("fish");
 				event.data.dispatchEvent(new Event("collideFish"));
+				
+				// Life 증가 처리
+				_currentLife++;
+				if (_currentLife > _maxLife)
+				{
+					_currentLife = _maxLife;
+				}
+				
+				if (_setCurrentLifeAtUi)
+				{
+					_setCurrentLifeAtUi(_currentLife);
+				}
 			}
 			
 			if(event.data is Flag)
@@ -217,6 +296,13 @@ package gameScene.object.player
 				trace("깃발 먹음");
 				SoundManager.play("flag");			
 				event.data.dispatchEvent(new Event("collideFlag"));
+				
+				// Flag 증가 처리
+				_currentFlag++;
+				if (_setCurrentFlagAtUi)
+				{
+					_setCurrentFlagAtUi(_currentFlag);
+				}
 			}	
 			
 		}
@@ -238,58 +324,65 @@ package gameScene.object.player
 			{
 				
 				//왼쪽을 부딪힘
-				if(_playerState == PlayerState.RUN)
+				if(_state == PlayerState.RUN)
 				{
 					MainStage.speed = 0;
 					if(this.x < event.data.x)
 					{						
-						_playerState = PlayerState.CRASHED_LEFT;
+						_state = PlayerState.CRASHED_LEFT;
 					}
 						
 					else
 					{
-						_playerState = PlayerState.CRASHED_RIGHT;
+						_state = PlayerState.CRASHED_RIGHT;
 					}
 				}
 				
 			}
 			
-			if(event.data.parent is RectangleCrater)
+			else if(event.data.parent is RectangleCrater)
 			{
-				if(_playerState == PlayerState.RUN)
+				trace("RECTANGLE CRATER");
+				if(_state == PlayerState.RUN)
 				{
 					
 					if(event.data.name == "left")
 					{			
 						MainStage.speed = 0;
-						_playerState = PlayerState.CRASHED_LEFT;
+						_state = PlayerState.CRASHED_LEFT;
 					}						
 					else if(event.data.name == "right")
 					{
 						MainStage.speed = 0;
-						_playerState = PlayerState.CRASHED_RIGHT;
+						_state = PlayerState.CRASHED_RIGHT;
 					}
 					else
 					{
-						//_playerState = PlayerState.FALL;
+						MainStage.speed = 0;
+						_state = PlayerState.FALL;
+						_fallY = event.data.parent.y;
+						_fallScaleY = event.data.parent.scaleY / 8.3;
+						_fallScaleX = _fallScaleY;
+							
+						event.data.parent.dispatchEvent(new Event("collideRect"));
 					}
 				}
-			}
+			} 
 			
-			if(event.data is Enemy)
+			else if(event.data is Enemy)
 			{
 				trace("물개와 충돌");
 				MainStage.speed = 0;
 				if(this.x < event.data.parent.x)
 				{						
-					_playerState = PlayerState.CRASHED_LEFT;
+					_state = PlayerState.CRASHED_LEFT;
 				}
 					
 				else
 				{
-					_playerState = PlayerState.CRASHED_RIGHT;
+					_state = PlayerState.CRASHED_RIGHT;
 				}
-			}
+			}			
 			
 			
 		}
@@ -298,8 +391,29 @@ package gameScene.object.player
 		private function onEnterFrame(event:TrollingEvent):void
 		{			
 			collideWall();
+			//_grimjaCollider.isActive = false;
+			//trace(_grimjaCollider.isActive);
+			//trace("Player클래스 state = " + _state);
+			//빠지고 난 후 24프레임동안 무적
+//			if(_isPower)
+//			{
+//				//trace("무적");
+//				_powerFrame++;
+//				_penguin.blendColor(1, 0, 0);
+//				
+//				if(_powerFrame > 24)
+//				{
+//					trace("무적 끝");
+//					_penguin.blendColor(1, 1, 1);
+//					_powerFrame = 0;
+//					_grimjaCollider.removeIgnoreTag(ObjectTag.ENEMY);
+//					//_grimjaCollider.isActive = true;
+//					_isPower = false;
+//				}
+//				return;
+//			}
 			
-			switch(_playerState)
+			switch(_state)
 			{
 				case PlayerState.JUMP:
 					jump();
@@ -313,11 +427,12 @@ package gameScene.object.player
 				case PlayerState.FALL:
 					fall();
 					break;
-				case PlayerState.ARRIVE:
-					arrived();
+				case PlayerState.STRUGGLE:
+					struggle();
 					break;
 				case PlayerState.ARRIVE:
 					arrived();
+					break;
 				default:
 					break;
 			}
@@ -330,16 +445,27 @@ package gameScene.object.player
 		 */
 		private function arrived():void
 		{
-			if(this.y <= (_stageHeight * 0.8) - 10)
+			if(this.y <= (_stageHeight * 0.8) - 20)
 			{
 				_penguin.transition(PlayerState.ARRIVED);
-				_playerState = PlayerState.ARRIVED;
+				_state = PlayerState.ARRIVED;
 			}
 			else
-			{
-				this.y -= 1;
-				this.scaleY -= 0.01;
-				this.scaleX = this.scaleY;
+			{				
+				if(!(this.y <= (_stageHeight / 10 * 8)-20))
+				{
+					this.y -= 1;
+					this.scaleY -= 0.01;
+					this.scaleX = this.scaleY;
+				}
+				if(!(this.x > ((_stageWidth/2)-30)))
+				{
+					this.x += 3;
+				}
+				if(!(this.x < ((_stageWidth/2)+30)))
+				{
+					this.x -= 3;
+				}
 			}
 		}
 		
@@ -389,7 +515,7 @@ package gameScene.object.player
 			{
 				_jumpFlag = false;
 				_penguin.y = 0;
-				_playerState = PlayerState.RUN;				
+				_state = PlayerState.RUN;				
 				_jumpTheta = 0;
 				_penguin.transition(PlayerState.RUN);
 			}
@@ -413,6 +539,24 @@ package gameScene.object.player
 				else
 					_penguin.transition(PlayerState.CRASHED_RIGHT);
 				_crashFlag = true;
+				
+				// Life 감소 처리
+				_currentLife--;
+				if (_currentLife <= 0)
+				{
+					_currentLife = 0;
+					
+				}
+				
+				if (_setCurrentLifeAtUi)
+				{
+					_setCurrentLifeAtUi(_currentLife);
+				}
+				
+				if (_currentLife <= 0) // 죽음
+				{
+					//die();
+				}
 			}
 			
 			var degree:Number = _crashTheta * Math.PI / 180;
@@ -452,7 +596,7 @@ package gameScene.object.player
 				
 				_hoppingCount = 0;
 				_penguin.y = 0;
-				_playerState = PlayerState.RUN;
+				_state = PlayerState.RUN;
 				_grimjaCollider.isActive = true;
 				_crashTheta = 0;				
 				_penguin.transition(PlayerState.RUN);
@@ -466,6 +610,69 @@ package gameScene.object.player
 		
 		private function fall():void
 		{
+			if(!_fallFlag)
+			{
+				_penguin.transition(PlayerState.FALL);
+				
+				this.y = _fallY;
+				_penguin.scaleY = _fallScaleY;
+				_penguin.scaleX = _fallScaleX;
+					
+				_grimjaCollider.isActive = false;
+				_grimja.visible = false;
+				
+				// Life 감소 처리
+				_currentLife--;
+				if (_currentLife <= 0)
+				{
+					_currentLife = 0;
+					
+				}
+				
+				if (_setCurrentLifeAtUi)
+				{
+					_setCurrentLifeAtUi(_currentLife);
+				}
+				
+				if (_currentLife <= 0) // 죽음
+				{
+					//die();
+				}
+			}
+			
+			
+		}
+		
+		private function struggle():void
+		{
+			if(!_struggleFlag)
+			{
+				_penguin.transition(PlayerState.STRUGGLE);
+				_struggleFlag = true;
+			}
+			
+			_struggleCount++;
+			
+			if(_struggleCount > 10)
+			{
+				trace("탈출");
+				_struggleCount = 0;
+				_fallFlag = false;
+				_struggleFlag = false;
+				
+				_penguin.scaleY = 1;
+				_penguin.scaleX = 1;
+				
+				_grimja.visible = true;
+				this.y = _stageHeight / 10 * 8;
+				
+				_state = PlayerState.RUN;
+				_penguin.transition(PlayerState.RUN);
+				
+				MainStage.coverFaceForFall.removeFromParent();
+				
+				_isPower = true;
+			}
 			
 		}
 	

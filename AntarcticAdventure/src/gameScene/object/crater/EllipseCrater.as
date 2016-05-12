@@ -61,8 +61,8 @@ package gameScene.object.crater
 			addComponent(_collider);
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
-			this.scaleY = 0.5
-			this.scaleX = scaleY;
+//			this.scaleY = 0.5
+//			this.scaleX = scaleY;
 		}		
 	
 

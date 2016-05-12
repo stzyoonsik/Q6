@@ -1,11 +1,13 @@
 package gameScene.object.crater
 {
 	import flash.display.Bitmap;
+	import flash.events.Event;
 	
 	import gameScene.MainStage;
 	import gameScene.ObjectTag;
 	import gameScene.object.Objects;
 	
+	import trolling.component.ComponentType;
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
@@ -92,7 +94,7 @@ package gameScene.object.crater
 			addChild(_right);
 			
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
-			
+			addEventListener("collideRect", onCollidePlayer);
 			//this.scaleY = 0.5;
 			//this.scaleX = scaleY;
 			
@@ -126,6 +128,21 @@ package gameScene.object.crater
 				default:
 					break;
 			}
-		}		
+		}
+		
+		/**
+		 *  플레이어와 깃발이 충돌했을때 콜라이더를 지워줌
+		 * 
+		 */
+		private function onCollidePlayer(event:Event):void		
+		{
+			_leftCollider.isActive = false;
+			_middleCollider.isActive = false;
+			_rightCollider.isActive = false;
+//			_left.removeComponent(ComponentType.COLLIDER);
+//			_middle.removeComponent(ComponentType.COLLIDER);
+//			_right.removeComponent(ComponentType.COLLIDER);
+			removeEventListener("collideFlag", onCollidePlayer);			
+		}
 	}
 }
