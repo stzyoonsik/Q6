@@ -1,6 +1,5 @@
 package gameScene
 {
-	import flash.display.Screen;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
@@ -18,6 +17,7 @@ package gameScene
 	import gameScene.object.item.Flag;
 	import gameScene.object.player.Player;
 	import gameScene.util.FileStreamWithLineReader;
+	import gameScene.util.ObjectName;
 	import gameScene.util.PlayerState;
 	
 	import trolling.event.TrollingEvent;
@@ -25,6 +25,7 @@ package gameScene
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
+	import gameScene.ui.IngameUi;
 
 	public class MainStage extends Scene
 	{
@@ -34,6 +35,7 @@ package gameScene
 		private var _enemy:Enemy;
 		
 		private var _background:Background;
+		private var _ui:IngameUi;
 		private var _coverFace:GameObject = new GameObject();
 		private static var _stageWidth:int;
 		private static var _stageHeight:int;
@@ -43,9 +45,10 @@ package gameScene
 		private var _playerSpeed:Number;						//가로
 		
 		private var _yForJump:Number;
+		private var _xForStruggle:Number;
 		private var _xForMoveAtLeast:Number;		
 		
-		private var _distanceToFinish:Number;
+		//private var _distanceToFinish:Number;
 		private var _intervalBetweenObject:Number = 0;
 		
 		private var _objectArray:Array;
@@ -55,6 +58,9 @@ package gameScene
 		private var _maxCurveCount:int;
 		private var _curveCount:int
 		
+		private static var _coverFaceForFall:GameObject = new GameObject();
+		private var _fallFlag:Boolean;
+		
 		
 		private var _soundDic:Dictionary = new Dictionary();
 		private var _soundURL:Vector.<String> = new Vector.<String>();
@@ -63,6 +69,12 @@ package gameScene
 		
 		private var _playerArrive:Boolean;
 		
+		private var _playerMaxLife:int;
+		private var _totalNumFlag:int;
+		
+		public static function get coverFaceForFall():GameObject { return _coverFaceForFall; }
+		public static function set coverFaceForFall(value:GameObject):void { _coverFaceForFall = value; }
+
 		public static function get stageHeight():int { return _stageHeight; }
 		
 		public static function get stageWidth():int { return _stageWidth; }
@@ -79,14 +91,15 @@ package gameScene
 		
 		private function oninit(event:Event):void
 		{
-			_currentStage = 2;
-			this.width = 800;
-			this.height = 600;
+			_currentStage = this.data as int;
+			
+			
 			
 			_stageWidth = this.width;
 			_stageHeight = this.height;
 			
-			_yForJump = Screen.mainScreen.bounds.height * 0.05;
+			_yForJump = _stageHeight * 0.05;
+			_xForStruggle = _stageWidth * 5;
 			_xForMoveAtLeast = _stageWidth / 50;
 			
 			_speed = 0; 
@@ -95,8 +108,13 @@ package gameScene
 			_background = new Background();
 			addChild(_background);
 			
+			_ui = new IngameUi();
+			addChild(_ui);
+			
 			_player = new Player();			
 			addChild(_player); 				
+			
+			readTXT("stage.txt");
 			
 			_coverFace.width = _stageWidth;
 			_coverFace.height = _stageHeight;
@@ -104,16 +122,32 @@ package gameScene
 			_coverFace.addEventListener(TrollingEvent.TOUCH_ENDED, onTouchEnded);
 			addChild(_coverFace);
 			
+			_coverFaceForFall.width = _stageWidth;
+			_coverFaceForFall.height = _stageHeight;
+			_coverFaceForFall.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchCoverFaceForFall);	
+			
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);	
 			
 			pushSoundFiles();
 			loadSound();
 			
-			readTXT("stage.txt"); 
-			
-			this.scaleX = Screen.mainScreen.bounds.width / _stageWidth;
-			this.scaleY = Screen.mainScreen.bounds.height / _stageHeight;
+			 
 	
+		}
+		
+		private function onCompleteReadTxt():void
+		{
+			// UI 테스트용 변수 임의 설정 !
+			_playerMaxLife = 5;
+			//
+			
+			_ui.initialize(_currentStage, _objectArray.length, _playerMaxLife, _totalNumFlag);
+			
+			
+			_player.maxLife = _playerMaxLife;
+			_player.setCurrentLifeAtUi = setCurrentLife;
+			_player.setCurrentFlagAtUi = setCurrentFlag;
+			_player.onFailed = onFaild;
 		}
 		
 		/**
@@ -209,14 +243,11 @@ package gameScene
 			}
 			
 			var pointsTemp:Vector.<Point> = event.data as Vector.<Point>;
-			trace(pointsTemp);
 			if(pointsTemp.length <= 1)
 				return;
 			var prevTouch:Point = pointsTemp[0];
 			var currentTouch:Point = pointsTemp[pointsTemp.length-1];
 			
-			trace(currentTouch.y - prevTouch.y);
-			trace("_yForJump = " + _yForJump);
 			
 			if(currentTouch.y - prevTouch.y > _yForJump)
 			{
@@ -239,28 +270,22 @@ package gameScene
 				return;
 			}				
 			
-			var point:Point = Point(event.data[0]).clone();
-			point.x *= (_stageWidth / Screen.mainScreen.bounds.width);
-			point.y *= (_stageHeight / Screen.mainScreen.bounds.height);
-			
+			var point:Point = Point(event.data[0]).clone();			
 						
 			//플레이어 위치와 너무 가까운 곳을 터치하면 플레이어 이동 안함
-			if(Math.abs(point.x - _player.x) < _xForMoveAtLeast)
-				return;
-			
-			//터치 지점이 현재 플레이어 위치보다 오른쪽
-			if(point.x > _player.x)
+			if(Math.abs(point.x - _player.x) > _xForMoveAtLeast)
 			{
-				_player.x += _playerSpeed;
-			}
-			else
-			{
-				_player.x -= _playerSpeed;
+				//터치 지점이 현재 플레이어 위치보다 오른쪽
+				if(point.x > _player.x)
+				{
+					_player.x += _playerSpeed;
+				}
+				else
+				{
+					_player.x -= _playerSpeed;
+				}
 			}
 			
-//			trace("point.x = " + point.x);
-//			trace("player.x = " + _player.x);
-//			trace("player.penguin.x = " + _player.penguin.x);
 		}
 		
 		/**
@@ -273,27 +298,34 @@ package gameScene
 			//trace("현재 속도 = " + _speed);
 			//trace("남은 거리 = " + _distanceToFinish);
 		
+			//trace("메인클래스 state = " + _player.state); 
 			
-			
-			if(_speed < MAX_SPEED && _player.state != PlayerState.FALL && !_playerArrive)
+			if(_speed < MAX_SPEED && 
+				_player.state != PlayerState.FALL &&
+				_player.state != PlayerState.STRUGGLE
+				&&!_playerArrive)
 			{
-				_speed += MAX_SPEED / 50;
+				_speed += MAX_SPEED / 50;				
 			}
-			//trace("현재 속도 = " + _speed);
-			_distanceToFinish -= _speed;
+			
 			_intervalBetweenObject += _speed;
-			//trace(_intervalBetweenObject);
+			
 			if(_intervalBetweenObject > 100)
 			{
 				//구름 생성
 				var cloud:Cloud = new Cloud();
-				addChild(cloud);
+				addChildAt(cloud, 1);
 				
 				if(_objectArray.length != 0)
 				{
 					//trace(_objectArray[0] + "오브젝트 생성");
 					makeObject();
 					_objectArray.shift();
+					// UI 남은 거리 업데이트
+					if(_ui)
+					{
+						_ui.setCurrentDistance(_objectArray.length);
+					}
 				}
 				_intervalBetweenObject = 0;
 			}
@@ -316,9 +348,19 @@ package gameScene
 				case -1:
 					break;
 				case 0:
+					if(_player.state == PlayerState.FALL ||
+						_player.state == PlayerState.STRUGGLE)
+					{
+						break;
+					}
 					_player.x += _playerSpeed * 0.5;
 					break;
 				case 1:
+					if(_player.state == PlayerState.FALL ||
+						_player.state == PlayerState.STRUGGLE)
+					{
+						break;
+					}
 					_player.x -= _playerSpeed * 0.5;
 					break;
 				default:
@@ -329,8 +371,62 @@ package gameScene
 			{
 				_player.state = PlayerState.ARRIVE;
 			}
+			
+			if(_player.state == PlayerState.FALL)
+			{
+				if(!_player.fallFlag)
+				{
+					trace("빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐");			
+					addChild(_coverFaceForFall);
+					_player.fallFlag = true;
+				}
+				
+			}
 		}
 		
+		private function onTouchCoverFaceForFall(event:TrollingEvent):void
+		{
+			
+			//trace("위에있는 커버페이스");
+			
+			var point:Point = Point(event.data[0]).clone();
+			
+			if(event.data.length >= 10)
+			{
+				var prevTouchX:int;
+				var currentTouchX:int;
+				for(var i:int = 0; i<event.data.length; ++i)
+				{
+					
+					if(i < 5)
+					{
+						currentTouchX += int(event.data[i].x);
+					}
+					else
+					{
+						prevTouchX += int(event.data[i].x);
+					}
+					
+				}
+				//trace(currentTouchY - prevTouchY);
+				if(Math.abs(prevTouchX - currentTouchX) > _xForStruggle)
+				{
+					//trace("STRUGGLE");
+					_player.state = PlayerState.STRUGGLE;
+				}
+				else
+				{
+					//trace("FALL");
+					_player.state = PlayerState.FALL;
+				}
+			}
+			
+			else
+			{
+				//trace("FALL");
+				_player.state = PlayerState.FALL;
+			}
+		}
 		/**
 		 * 도착 
 		 * @param event
@@ -376,7 +472,8 @@ package gameScene
 						switch(lineCount)
 						{
 							case 0:
-								break;							
+								break;	
+							
 							case 1:
 								var tempArray:Array = line.split('/');
 								
@@ -386,17 +483,26 @@ package gameScene
 									_curveDirectionVector.push(int(tempArray[i].split(',')[1]));
 									_maxCurveCount++;
 								}
-								trace("--------------커브------------------");
-//								for(i = 0; i < tempArray.length; ++i)
-//								{
-//									trace(_curveDistanceVector[i]);
-//									trace(_curveDirectionVector[i]);
-//								}
 								break;
+							
 							case 2:
 								_objectArray = new Array();
 								_objectArray = line.split(',');
+								
+								// 깃발 개수 카운트
+								_totalNumFlag = 0;
+								if (_objectArray)
+								{
+									for (i = 0; i < _objectArray.length; i++)
+									{
+										if (int(_objectArray[i]) == ObjectName.FLAG_LEFT || int(_objectArray[i]) == ObjectName.FLAG_RIGHT)
+										{
+											_totalNumFlag++;
+										}
+									}
+								}								
 								break;
+							
 							default:
 								break;
 						}
@@ -408,6 +514,8 @@ package gameScene
 					}				
 				}
 				stream.close();
+				
+				onCompleteReadTxt();
 			}
 			else
 			{
@@ -424,53 +532,53 @@ package gameScene
 			switch(int(_objectArray[0]))
 			{
 				//도착
-				case -1:
+				case ObjectName.HOME:
 					var home:Home = new Home();
 					addChildAt(home, 1);
 					home.addEventListener(PlayerState.ARRIVE, onArrive);
 					break;
 				//아무것도 생성 안함
-				case 0:
+				case ObjectName.EMPTY:
 					break;
 				//타원 크레이터 가운데
-				case 1:
+				case ObjectName.ELLIPSE_NORMAL:
 					var ellipseCrater:EllipseCrater = new EllipseCrater(-1);
 					addChildAt(ellipseCrater, 1);
 					break;
 				//타원 크레이터 왼쪽
-				case 2:
+				case ObjectName.ELLIPSE_LEFT:
 					ellipseCrater = new EllipseCrater(0);
 					addChildAt(ellipseCrater, 1);
 					break;
 				//타원 크레이터 오른쪽
-				case 3:
+				case ObjectName.ELLIPSE_RIGHT:
 					ellipseCrater = new EllipseCrater(1);
 					addChildAt(ellipseCrater, 1);
 					break;
 				//타원 크레이터 왼쪽, 오른쪽
-				case 4:
+				case ObjectName.ELLIPSE_LEFT_RIGHT:
 					ellipseCrater = new EllipseCrater(0);
 					addChildAt(ellipseCrater, 1);
 					ellipseCrater = new EllipseCrater(1);
 					addChildAt(ellipseCrater, 1);
 					break;
 				//네모 크레이터 왼쪽
-				case 5:
+				case ObjectName.RECT_LEFT:
 					var rectangleCrater:RectangleCrater = new RectangleCrater(0);
 					addChildAt(rectangleCrater, 1);
 					break;
 				//네모 크레이터 오른쪽
-				case 6:
+				case ObjectName.RECT_RIGHT:
 					rectangleCrater = new RectangleCrater(1);
 					addChildAt(rectangleCrater, 1);
 					break;
 				//깃발 왼쪽
-				case 7:
+				case ObjectName.FLAG_LEFT:
 					var flag:Flag = new Flag(0);
 					addChildAt(flag, 1);
 					break;
 				//깃발 오른쪽
-				case 8:
+				case ObjectName.FLAG_RIGHT:
 					flag = new Flag(1);
 					addChildAt(flag, 1);
 					break;
@@ -478,6 +586,38 @@ package gameScene
 					break;
 				
 			}
+		}
+		
+		private function setCurrentLife(numLife:int):void
+		{
+			if (_ui)
+			{
+				_ui.setCurrentLife(numLife);
+			}
+		}
+		
+		private function setCurrentFlag(numFlag:int):void
+		{
+			if (_ui)
+			{
+				_ui.setCurrentFlag(numFlag);
+			}
+		}
+		
+		private function onFaild():void
+		{
+			// to do
+			
+			
+			
+		}
+		
+		private function onCleared():void
+		{
+			// to do
+			
+			
+			
 		}
 	
 	}
