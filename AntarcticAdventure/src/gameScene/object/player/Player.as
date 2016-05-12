@@ -17,6 +17,7 @@ package gameScene.object.player
 	import trolling.component.animation.State;
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
+	import trolling.core.SceneManager;
 	import trolling.event.TrollingEvent;
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
@@ -175,7 +176,6 @@ package gameScene.object.player
 			_bitmap = new shadow0() as Bitmap;
 			_image = new Image(new Texture(_bitmap));				
 			_grimja.addComponent(_image);
-			
 			_grimja.pivot = PivotType.CENTER;
 			
 			_grimja.width = _stageWidth / 5;
