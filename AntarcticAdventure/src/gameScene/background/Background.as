@@ -15,8 +15,8 @@ package gameScene.background
 
 	public class Background extends GameObject
 	{
-		[Embed(source="topBackground0.png")]
-		public static const topBackground0:Class;
+		//[Embed(source="topBackground0.png")]
+		//public static const topBackground0:Class;
 		
 		[Embed(source="bottomBackground0.png")]
 		public static const bottomBackground0:Class;
@@ -42,11 +42,18 @@ package gameScene.background
 		[Embed(source="bottomBackgroundRight2.png")]
 		public static const bottomBackgroundRight2:Class;
 		
+		[Embed(source="topBackground0.png")]
+		public static const topBackground0:Class;
+		
+		[Embed(source="topBackgroundMountain0.png")]
+		public static const topBackgroundMountain0:Class;
+		
 		/** -1 = normal, 0 = left, 1 = right*/
 		private var _curve:int = -1;
 		
 		private var _topBackground:GameObject = new GameObject();
 		private var _bottomBackground:GameObject = new GameObject();
+		private var _topBackgroundMountain:GameObject = new GameObject();
 		
 		private var _bitmap:Bitmap;
 		private var _image:Image;
@@ -70,7 +77,20 @@ package gameScene.background
 			_topBackground.width = _stageWidth;
 			_topBackground.height = _stageHeight / 10 * 3.33;
 				
+			_topBackground.red = 0;
+			_topBackground.green = 1;
+			_topBackground.blue = 1;
 			addChild(_topBackground);	
+			
+			_topBackgroundMountain.pivot = PivotType.CENTER;
+			_bitmap = new topBackgroundMountain0() as Bitmap;
+			_image = new Image(new Texture(_bitmap));			
+			_topBackgroundMountain.addComponent(_image);
+			
+			_topBackgroundMountain.width = _stageWidth * 2;
+			_topBackgroundMountain.height = _stageHeight * 0.05;
+			_topBackgroundMountain.y = _stageHeight / 10 * 3.33 - (_topBackgroundMountain.height / 2);
+			addChild(_topBackgroundMountain);
 			
 			
 			
@@ -133,13 +153,23 @@ package gameScene.background
 				switch(_curve)
 				{
 					case -1:						
-						_animator.getState("curve_none").interval = ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;
+						_animator.getState("curve_none").interval = ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;						
 						break;
 					case 0:
 						_animator.getState("curve_left").interval = ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;
+						if(_topBackgroundMountain.x > _stageWidth)
+						{
+							_topBackgroundMountain.x = 0;
+						}
+						_topBackgroundMountain.x += MainStage.speed;
 						break;
 					case 1:
+						if(_topBackgroundMountain.x < 0)
+						{
+							_topBackgroundMountain.x = _stageWidth;
+						}
 						_animator.getState("curve_right").interval = ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;
+						_topBackgroundMountain.x -= MainStage.speed;
 						break;
 					default:
 						break;
