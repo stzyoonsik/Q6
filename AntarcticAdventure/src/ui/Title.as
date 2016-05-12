@@ -81,9 +81,6 @@ package ui
 			
 			var main:GameObject = getChild(MAIN);
 			main.y = -(_mainTitleHeight / 2);
-			var margin:Number = _mainTitleHeight / 2;
-			var main:GameObject = getChild(MAIN);
-			main.y = -(_mainTitleHeight / 2 - margin);
 			
 			var titleWidth:Number = 0;
 			var titleHeight:Number = 0;

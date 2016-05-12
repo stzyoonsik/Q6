@@ -133,12 +133,6 @@ package gameScene
 			
 			 
 	
-			pushSoundFiles();
-			loadSound();
-			
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			
-			readTXT("stage.txt"); 
 		}
 		
 		private function onCompleteReadTxt():void
@@ -179,6 +173,7 @@ package gameScene
 			for(var i:int = 0; i<_soundURL.length; ++i)
 			{
 				var url:URLRequest = new URLRequest(_filePath.resolvePath(_soundURL[i]).url);
+				trace(url.url);
 				var sound:Sound = new Sound();
 				sound.load(url);
 				sound.addEventListener(Event.COMPLETE, onSoundLoaded);
@@ -194,12 +189,8 @@ package gameScene
 		 */		
 		private function onSoundLoaded(event:Event):void
 		{
-			trace(Sound(event.currentTarget).url);
 			_soundLoadCount++;
 			_soundDic[event.currentTarget.url.replace(_filePath.url.toString(), "")] = event.currentTarget as Sound;
-			
-			event.currentTarget.removeEventListener(Event.COMPLETE, onSoundLoaded);
-			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFaild);
 			
 			if(_soundLoadCount >= _soundURL.length)
 			{
@@ -234,11 +225,6 @@ package gameScene
 		 */
 		private function onSoundLoadFaild(event:IOErrorEvent):void
 		{
-			_soundLoadCount++;
-			event.currentTarget.removeEventListener(Event.COMPLETE, onSoundLoaded);
-			event.currentTarget.removeEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFaild);
-			
-			trace("야이야이야이ㅑ");
 			trace(event.text);
 		}
 

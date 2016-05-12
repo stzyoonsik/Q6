@@ -246,16 +246,6 @@ package gameScene.ui
 			delete _bitmaps["setting"];
 			/////
 			
-			var setting:GameObject = new GameObject();
-			setting.addComponent(new Image(new Texture(_bitmaps["setting"])));
-			
-			setting.x = MainStage.stageWidth - setting.width - fieldsXY;
-			setting.y = fieldsXY;
-				
-			addChild(setting);
-			delete _bitmaps["setting"];
-			/////
-
 			var titleRes:Vector.<Texture> = new Vector.<Texture>();
 			titleRes.push(new Texture(_bitmaps["stage"]));
 			// TITLE
@@ -306,15 +296,6 @@ package gameScene.ui
 				if (i > 0)
 				{
 					digit.x = digit.width * i + textMargin * i;
-					scale = gaugeHeight / digit.height;
-				}
-				 
-				digit.width *= scale;
-				digit.height *= scale;  
-				
-				if (i != 0)
-				{
-					digit.x = slash.width * i;
 				}
 				
 				flag.addChild(digit);

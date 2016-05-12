@@ -118,7 +118,6 @@
 		<!-- <autoOrients>true</autoOrients> -->
         <!-- <fullScreen>false</fullScreen> -->
         <visible>true</visible>
-    <fullScreen>false</fullScreen>
     </initialWindow>
 
 	<!-- We recommend omitting the supportedProfiles element, -->
@@ -296,25 +295,6 @@
 		together in order to use AIR's NetworkInfo APIs-->
 			    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>-->
 			    <!--<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>-->
-			    
-			    <uses-permission android:name="android.permission.VIBRATE" />
-			    
-			    <application android:enabled="true">
-					<activity android:excludeFromRecents="false">
-						<intent-filter>
-							<action android:name="android.intent.action.MAIN"/>
-							<category android:name="android.intent.category.LAUNCHER"/>
-						</intent-filter>
-					</activity>
-					
-					<activity
-	    				android:name="com.push.NotificationActivity"
-	   					android:configChanges="orientation|keyboard|keyboardHidden|screenSize|screenLayout|fontScale"/>
-					
-					<service android:name="com.push.LocalNotificationService"/>
-					<receiver android:name="com.push.NotificationActivity" android:process=":remote"></receiver>
-					
-				</application>
 			</manifest>
 			
 		]]></manifestAdditions>
@@ -329,9 +309,4 @@
 		]]></InfoAdditions>
         <requestedDisplayResolution>high</requestedDisplayResolution>
     </iPhone>
-
-<extensions>
-        <extensionID>com.distriqt.AndroidSupport</extensionID>
-        <extensionID>com.push.PushExtension</extensionID>
-    </extensions>
 </application>
