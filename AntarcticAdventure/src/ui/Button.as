@@ -36,13 +36,15 @@ package ui
 			
 			this.pivot = PivotType.CENTER;
 			
-			addEventListener(TrollingEvent.TOUCH_BEGAN, onBegan);			
+			addEventListener(TrollingEvent.TOUCH_BEGAN, onBegan);
+			addEventListener(TrollingEvent.TOUCH_OUT, onEnded);
 			addEventListener(TrollingEvent.TOUCH_ENDED, onEnded);
 		}
 		
 		public override function dispose():void
 		{
 			removeEventListener(TrollingEvent.TOUCH_BEGAN, onBegan);
+			removeEventListener(TrollingEvent.TOUCH_OUT, onEnded);
 			removeEventListener(TrollingEvent.TOUCH_ENDED, onEnded);
 			
 			super.dispose();

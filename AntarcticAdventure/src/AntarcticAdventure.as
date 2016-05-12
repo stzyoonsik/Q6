@@ -27,8 +27,6 @@ package
 			
 			var trolling:Trolling = new Trolling(stage, new Rectangle(0, 0, 960, 540));
 			SceneManager.addScene(TitleScene, "Title");
-			SceneManager.addScene(StageSelectScene, "stageSelect");
-			SceneManager.addScene(MainStage, "Game");
 			
 			trolling.start();
 		}

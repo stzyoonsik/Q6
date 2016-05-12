@@ -9,6 +9,8 @@ package titleScene
 	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
 	
+	import stageSelectScene.StageSelectScene;
+	
 	import trolling.component.animation.Animator;
 	import trolling.component.animation.State;
 	import trolling.core.SceneManager;
@@ -141,8 +143,11 @@ package titleScene
 		
 		private function onTouch(event:TrollingEvent):void
 		{
-			SoundManager.dispose();
-			SceneManager.switchScene("stageSelect");
+//			var noti:NotificationExtension = new NotificationExtension();
+//			noti.showListDialog("noti!!");
+			SceneManager.addScene(StageSelectScene, "stageSelect");
+//			SceneManager.switchScene("stageSelect");
+			SceneManager.goScene("stageSelect");
 		}
 	}
 }

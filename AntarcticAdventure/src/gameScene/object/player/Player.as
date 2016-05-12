@@ -334,6 +334,10 @@ package gameScene.object.player
 			{
 				_penguin.transition(PlayerState.ARRIVED);
 				_playerState = PlayerState.ARRIVED;
+				
+//				SceneManager.outScene(0);
+//				SceneManager.deleteScene("Game");
+//				SceneManager.switchScene("stageSelect");
 			}
 			else
 			{
