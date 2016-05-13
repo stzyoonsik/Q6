@@ -5,7 +5,7 @@ package ui
 	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
-	
+
 	public class Title extends GameObject
 	{
 		private const TAG:String = "[Title]";
@@ -134,7 +134,7 @@ package ui
 			{
 				removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			}
-			
+
 			_isFade = value;
 		}
 		
@@ -142,7 +142,7 @@ package ui
 		{
 			return _fadeInterval;
 		}
-		
+
 		public function set fadeInterval(value:uint):void
 		{
 			_fadeInterval = value;
