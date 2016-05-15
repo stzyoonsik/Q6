@@ -23,8 +23,8 @@ package scene.gameScene.ui
 
 	public class IngameUI extends GameObject
 	{
-		public const CLEARED:String = "cleared";
-		public const FAILED:String = "failed";
+		public static const CLEARED:String = "cleared";
+		public static const FAILED:String = "failed";
 		
 		private const TAG:String = "[IngameUi]";
 		private const FIELDS:int = 0;
@@ -34,8 +34,8 @@ package scene.gameScene.ui
 		private const SETTING_BUTTON:int = 4;
 		private const BACKGROUND:int = 5;
 		private const SETTING_POPUP:int = 6;
-		private const STAGE_CLEARED_POPUP:int = 7;
-		private const STAGE_FAILED_POPUP:int = 8;
+		private const CLEARED_POPUP:int = 7;
+		private const FAILED_POPUP:int = 8;
 		private const TITLE:int = 9;
 		
 		private var _resourceDirectory:File;
@@ -48,6 +48,7 @@ package scene.gameScene.ui
 		private var _totalLife:Number;
 		private var _totalFlag:int;
 		private var _currentLife:int;
+		private var _currentFlag:int;
 		private var _textures:Dictionary;
 		
 		private var _runGame:Function;
@@ -97,9 +98,51 @@ package scene.gameScene.ui
 			super.dispose();
 		}
 		
-		public function showPopup(id:int):void
+		public function showPopup(type:String):void
 		{
+			if (!type)
+			{
+				trace(TAG + " showPopup : The type of Popup must be set.");
+				return;
+			}
 			
+			if (_runGame)
+			{
+				_runGame(false);
+			}
+			
+			var background:GameObject = getChild(BACKGROUND);
+			if (background)
+			{
+				background.visible = true;
+			}
+			
+			switch (type)
+			{
+				case CLEARED:
+				{
+					var clearedPopup:ClearedPopup = getChild(CLEARED_POPUP) as ClearedPopup;
+					if (clearedPopup)
+					{
+						clearedPopup.setResult(_totalFlag, _currentFlag, _textures);
+						clearedPopup.show();
+					}
+				}
+					break;
+				
+				case FAILED:
+				{
+					var failedPopup:FailedPopup = getChild(FAILED_POPUP) as FailedPopup;
+					if (failedPopup)
+					{
+						failedPopup.show();
+					}
+				}
+					break;
+				
+				default:
+					break;
+			}
 		}
 		
 		public function setCurrentDistance(distance:Number):void
@@ -116,7 +159,7 @@ package scene.gameScene.ui
 		{
 			var life:GameObject = getChild(LIFE);
 			
-			if (!life)
+			if (!life || numLife < 0)
 			{
 				return; 
 			}
@@ -157,7 +200,7 @@ package scene.gameScene.ui
 		{
 			var flag:GameObject = getChild(FLAG);
 			
-			if (!flag)
+			if (!flag || numFlag < 0)
 			{
 				return;
 			}
@@ -188,17 +231,8 @@ package scene.gameScene.ui
 				}
 				currentFlagIndex--;
 			}
-		}
-		
-		private function closePopup():void
-		{
 			
-		}
-		
-		private function showPopup():void
-		{
-			// background addEventListener
-			
+			_currentFlag = numFlag;
 		}
 		
 		private function onCompleteLoadAll():void
@@ -262,8 +296,6 @@ package scene.gameScene.ui
 			
 			var slash:GameObject = new GameObject();
 			slash.addComponent(new Image(new Texture(_bitmaps[UIResource.SLASH])));		
-
-			delete _bitmaps[UIResource.SLASH];
 			/////
 			
 			// SETTING_BUTTON
@@ -296,12 +328,26 @@ package scene.gameScene.ui
 			delete _bitmaps[UIResource.SETTING_POPUP];
 			//
 						
-			// STAGE_CLEARED_POPUP
+			// CLEARED_POPUP
+			var clearedPopup:ClearedPopup = new ClearedPopup(new Texture(_bitmaps[UIResource.CLEARED_POPUP]));
+			clearedPopup.x = MainStage.stageWidth / 2;
+			clearedPopup.y = MainStage.stageHeight / 2;
+			clearedPopup.width *= 1.2;
+			clearedPopup.height *= 1.2;
+			clearedPopup.initialize(_bitmaps);
 			
+			delete _bitmaps[UIResource.CLEARED_POPUP];
 			//
 			
-			// STAGE_FAILED_POPUP
+			// FAILED_POPUP
+			var failedPopup:FailedPopup = new FailedPopup(new Texture(_bitmaps[UIResource.FAILED_POPUP]));
+			failedPopup.x = MainStage.stageWidth / 2;
+			failedPopup.y = MainStage.stageHeight / 2;
+			failedPopup.width *= 1.2;
+			failedPopup.height *= 1.2;
+			failedPopup.initialize(_bitmaps);
 			
+			delete _bitmaps[UIResource.FAILED_POPUP];
 			//
 			
 			var titleRes:Vector.<Texture> = new Vector.<Texture>();
@@ -313,7 +359,7 @@ package scene.gameScene.ui
 			delete _bitmaps[UIResource.STAGE];
 			/////
 			
-			// Numbers
+			// Numbers & Stars
 			_textures = new Dictionary();
 			for (var name:String in _bitmaps)
 			{
@@ -326,10 +372,9 @@ package scene.gameScene.ui
 			var numFlag:String = _totalFlag.toString();
 			var totalFlagIndex:int = 0;
 			var textMargin:Number = 5;
+			var digit:GameObject;
 			for (i = 0; i < numFlag.length * 2 + 1; i++)
 			{
-				var digit:GameObject;
-				
 				if (i < numFlag.length)
 				{
 					digit = new GameObject();
@@ -356,6 +401,10 @@ package scene.gameScene.ui
 					digit.x = digit.width * i + textMargin * i;
 				}
 				
+				digit.red = 0;
+				digit.green = 0;
+				digit.blue = 0;
+				
 				flag.addChild(digit);
 			}
 			/////
@@ -364,7 +413,7 @@ package scene.gameScene.ui
 			var stageId:String = _stageId.toString();
 			for (i = 0; i < stageId.length; i++)
 			{
-				titleRes.push(_textures[stageId.charAt(i)]);
+				titleRes.push(_textures[stageId.charAt(i) + "orange"]);
 			}
 			
 			title.addSubTitle(MainStage.stageWidth, MainStage.stageHeight, titleRes);
@@ -382,8 +431,8 @@ package scene.gameScene.ui
 //			private const SETTING_BUTTON:int = 4;
 //			private const BACKGROUND:int = 5;
 //			private const SETTING_POPUP:int = 6;
-//			private const STAGE_CLEARED_POPUP:int = 7;
-//			private const STAGE_FAILED_POPUP:int = 8;
+//			private const CLEARED_POPUP:int = 7;
+//			private const FAILED_POPUP:int = 8;
 //			private const TITLE:int = 9;
 			
 			addChild(ingameText);
@@ -393,8 +442,8 @@ package scene.gameScene.ui
 			addChild(settingButton);
 			addChild(background);
 			addChild(settingPopup);
-//			addChild(background);
-//			addChild(background);
+ 			addChild(clearedPopup);
+			addChild(failedPopup);
 			addChild(title);
 		}
 		
@@ -448,7 +497,7 @@ package scene.gameScene.ui
 		
 		private function onEndedSettingButton(event:TrollingEvent):void
 		{
-			var title:Title = getChild(7/*TITLE*/) as Title;
+			var title:Title = getChild(TITLE) as Title;
 			var background:GameObject = getChild(BACKGROUND);
 			var settingPopup:SettingPopup = getChild(SETTING_POPUP) as SettingPopup;
 			

@@ -159,7 +159,8 @@ package scene.gameScene
 			_player.maxLife = _playerMaxLife;
 			_player.setCurrentLifeAtUi = setCurrentLife;
 			_player.setCurrentFlagAtUi = setCurrentFlag;
-			_player.onFailed = onFaild;
+			_player.onCleared = onCleared;
+			_player.onFailed = onFailed;
 		}
 		
 		/**
@@ -612,20 +613,20 @@ package scene.gameScene
 			}
 		}
 		
-		private function onFaild():void
+		private function onFailed():void
 		{
-			// to do
-			
-			
-			
+			if (_ui)
+			{
+				_ui.showPopup(IngameUI.FAILED);
+			}
 		}
 		
 		private function onCleared():void
 		{
-			// to do
-			
-			
-			
+			if (_ui)
+			{
+				_ui.showPopup(IngameUI.CLEARED);
+			}
 		}
 	
 	}

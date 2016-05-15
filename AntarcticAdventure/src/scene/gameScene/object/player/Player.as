@@ -57,12 +57,9 @@ package scene.gameScene.object.player
 		private var _struggleLeftCount:int;
 		private var _struggleRightCount:int;
 		
-		
-		
-		
-		
 		private var _setCurrentLifeAtUi:Function;
 		private var _setCurrentFlagAtUi:Function;
+		private var _onCleared:Function;
 		private var _onFailed:Function;
 		
 		public function get fallFlag():Boolean { return _fallFlag; }
@@ -78,6 +75,7 @@ package scene.gameScene.object.player
 		
 		public function set setCurrentLifeAtUi(value:Function):void{ _setCurrentLifeAtUi = value;}
 		public function set setCurrentFlagAtUi(value:Function):void{ _setCurrentFlagAtUi = value;}
+		public function set onCleared(value:Function):void{ _onCleared = value;}
 		public function set onFailed(value:Function):void{ _onFailed = value;}
 		
 		public function get struggleLeftCount():int	{ return _struggleLeftCount; }		
@@ -103,6 +101,7 @@ package scene.gameScene.object.player
 			
 			_setCurrentLifeAtUi = null;
 			_setCurrentFlagAtUi = null;
+			_onCleared = null;
 			_onFailed = null;
 			
 			_jumpSpeed = 8;
@@ -365,6 +364,12 @@ package scene.gameScene.object.player
 			{
 				_penguin.transition(PlayerState.ARRIVED);
 				_state = PlayerState.ARRIVED;
+				
+				// 일정 시간 후 스테이지 클리어 팝업 호출
+				if (_onCleared)
+				{
+					_onCleared();
+				}
 			}
 			else
 			{				
@@ -472,7 +477,7 @@ package scene.gameScene.object.player
 				
 				if (_currentLife <= 0) // 죽음
 				{
-					//die();
+					die();
 				}
 			}
 			
@@ -553,7 +558,7 @@ package scene.gameScene.object.player
 				
 				if (_currentLife <= 0) // 죽음
 				{
-					//die();
+					die();
 				}
 			}
 			
@@ -592,6 +597,17 @@ package scene.gameScene.object.player
 			
 		}
 		
+		private function die():void
+		{
+			// 입력 처리 및 업데이트 정지
+			// 죽음 애니메이션
+			
+			// 스테이지 실패 팝업 호출
+			if (_onFailed)
+			{
+				_onFailed();
+			}
+		}
 		
 	}
 }

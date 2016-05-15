@@ -85,7 +85,7 @@ package scene.gameScene.ui
 			// preset
 			preset(_bgm, _sound, _control);
 			
-			var check:Bitmap = bitmaps["check"] as Bitmap;
+			var check:Bitmap = bitmaps[UIResource.CHECK] as Bitmap;
 			var bitmapData:BitmapData = new BitmapData(check.width, check.height);
 			var ct:ColorTransform = new ColorTransform();
 			ct.alphaMultiplier = 0; 
@@ -107,14 +107,14 @@ package scene.gameScene.ui
 			sound.isSelected = _sound;
 			sound.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedSound);
 						
-			delete bitmaps["check"];
+			delete bitmaps[UIResource.CHECK];
 			//
 			
 			_controlButtonManager = new RadioButtonManager();
 			var controlButtonScale:Number = 0.5;
 			// SCREEN
 			var screen:RadioButton = new RadioButton(
-				new Texture(bitmaps["screenWhite"]), new Texture(bitmaps["screenOrange"]));
+				new Texture(bitmaps[UIResource.SCREEN_WHITE]), new Texture(bitmaps[UIResource.SCREEN_ORANGE]));
 			screen.width *= controlButtonScale;
 			screen.height *= controlButtonScale;
 			screen.x = bgm.x + screen.width / 3.8;
@@ -123,13 +123,13 @@ package scene.gameScene.ui
 			
 			_controlButtonManager.addButton(screen);
 			
-			delete bitmaps["screenWhite"];
-			delete bitmaps["screenOrange"];
+			delete bitmaps[UIResource.SCREEN_WHITE];
+			delete bitmaps[UIResource.SCREEN_ORANGE];
 			//
 			
 			// BUTTON
 			var button:RadioButton = new RadioButton(
-				new Texture(bitmaps["buttonWhite"]), new Texture(bitmaps["buttonOrange"]));
+				new Texture(bitmaps[UIResource.BUTTON_WHITE]), new Texture(bitmaps[UIResource.BUTTON_ORANGE]));
 			button.x = screen.x + screen.width + 10;
 			button.y = screen.y;
 			button.width *= controlButtonScale;
@@ -139,27 +139,23 @@ package scene.gameScene.ui
 			_controlButtonManager.addButton(button);
 			_controlButtonManager.selectButton(_control);
 			
-			delete bitmaps["buttonWhite"];
-			delete bitmaps["buttonOrange"];
+			delete bitmaps[UIResource.BUTTON_WHITE];
+			delete bitmaps[UIResource.BUTTON_ORANGE];
 			//
 			
 			var stageButtonX:Number = this.width / 10;
 			// REPLAY
-			var replay:Button = new Button(new Texture(bitmaps["replay"]));
+			var replay:Button = new Button(new Texture(bitmaps[UIResource.REPLAY]));
 			replay.x = -stageButtonX;
 			replay.y = this.height / 3.5;
 			replay.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedReplay);
-						
-			delete bitmaps["replay"];
 			//
 			
 			// MENU
-			var menu:Button = new Button(new Texture(bitmaps["menu"]));
+			var menu:Button = new Button(new Texture(bitmaps[UIResource.MENU]));
 			menu.x = stageButtonX;
 			menu.y = replay.y + 3;
 			menu.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedMenu);
-						
-			delete bitmaps["menu"];
 			//
 		
 //			private const BGM:int = 0;
@@ -266,7 +262,7 @@ package scene.gameScene.ui
 		
 		private function onEndedMenu(event:TrollingEvent):void
 		{
-			//SceneManager.switchScene("stageSelect");
+			SceneManager.switchScene("stageSelect");
 		}
 	}
 }
