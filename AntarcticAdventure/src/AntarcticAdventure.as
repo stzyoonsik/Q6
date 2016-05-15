@@ -5,11 +5,8 @@ package
 	import flash.display.StageScaleMode;
 	import flash.geom.Rectangle;
 	
-	import gameScene.MainStage;
-	
-	import selectScene.StageSelectScene;
-	
-	import titleScene.TitleScene;
+	import scene.stageSelectScene.StageSelectScene;
+	import scene.titleScene.TitleScene;
 	
 	import trolling.core.SceneManager;
 	import trolling.core.Trolling;
