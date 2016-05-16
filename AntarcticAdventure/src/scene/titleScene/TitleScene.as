@@ -1,5 +1,6 @@
 package scene.titleScene
 {
+	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
@@ -20,6 +21,9 @@ package scene.titleScene
 	
 	public class TitleScene extends Scene
 	{
+		[Embed(source="ic_launcher.png")]
+		private static const notiImage:Class;
+		
 		private var _imageDic:Dictionary = new Dictionary();
 		private var _imageURLVector:Vector.<String> = new Vector.<String>();
 		private var _soundDic:Dictionary = new Dictionary();
@@ -139,7 +143,12 @@ package scene.titleScene
 		}
 		
 		private function onTouch(event:TrollingEvent):void
-		{			
+		{
+			var image:Bitmap = new notiImage() as Bitmap;
+			trace(image.width);
+			
+			var notification:NotificationExtension = new NotificationExtension();
+			notification.setNotification("돌아와요!!", "Notification", 30);
 			SceneManager.switchScene("stageSelect");
 		}
 	}
