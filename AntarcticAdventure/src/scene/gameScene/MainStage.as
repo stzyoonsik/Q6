@@ -10,7 +10,6 @@ package scene.gameScene
 	
 	import scene.gameScene.background.Background;
 	import scene.gameScene.background.Cloud;
-	import scene.loading.Resource;
 	import scene.gameScene.object.crater.EllipseCrater;
 	import scene.gameScene.object.crater.RectangleCrater;
 	import scene.gameScene.object.enemy.Enemy;
@@ -22,6 +21,7 @@ package scene.gameScene
 	import scene.gameScene.util.FileStreamWithLineReader;
 	import scene.gameScene.util.ObjectName;
 	import scene.gameScene.util.PlayerState;
+	import scene.loading.Resource;
 	
 	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;
@@ -74,7 +74,8 @@ package scene.gameScene
 		private var _playerMaxLife:int;
 		private var _totalNumFlag:int;
 		
-		//private var 
+		private var _control:int;
+		private var _controller:Controller;
 
 		
 		//public static function get coverFaceForFall():GameObject { return _coverFaceForFall; }
@@ -158,6 +159,9 @@ package scene.gameScene
 		 */
 		private function onTouchEnded(event:TrollingEvent):void
 		{
+			if(_control == 1)
+				return;
+			
 			if(_player.state == PlayerState.ARRIVE ||
 				_player.state == PlayerState.CRASHED_LEFT ||
 				_player.state == PlayerState.CRASHED_RIGHT ||
@@ -190,6 +194,9 @@ package scene.gameScene
 		 */
 		private function onTouchHover(event:TrollingEvent):void
 		{
+			if(_control == 1)
+				return;
+			
 			if(_player.state == PlayerState.ARRIVE ||
 				_player.state == PlayerState.CRASHED_LEFT ||
 				_player.state == PlayerState.CRASHED_RIGHT)
@@ -441,6 +448,7 @@ package scene.gameScene
 			_playerMaxLife = 5;
 			//
 			_ui.initialize(_currentStage, _objectArray.length, _playerMaxLife, _totalNumFlag, pause);
+			_ui.addEventListener("control", onEndedControl);
 			//_ui.
 			
 			_player.maxLife = _playerMaxLife;
@@ -453,6 +461,10 @@ package scene.gameScene
 			
 			_background = new Background(_backgroundColor);
 			addChildAt(_background, 0);
+			
+			
+			
+			
 			//			
 			_coverFace.width = _stageWidth;
 			_coverFace.height = _stageHeight;
@@ -461,6 +473,12 @@ package scene.gameScene
 			addChild(_coverFace);
 			
 			_coverFace.addChild(_ui);
+			
+			_controller = new Controller();
+			_controller.visible = false;
+			_coverFace.addChildAt(_controller, 0);
+			
+			
 			
 			//_coverFaceForFall.width = _stageWidth;
 			//_coverFaceForFall.height = _stageHeight * 0.8;
@@ -661,6 +679,21 @@ package scene.gameScene
 			if (_ui)
 			{
 				_ui.showPopup(IngameUI.CLEARED);
+			}
+		}
+		
+		private function onEndedControl(event:TrollingEvent):void
+		{
+			_control = int(event.data);
+			if(_control == 0)
+			{
+				_controller.visible = false;
+				//_coverFace.visible = true;
+			}
+			else
+			{
+				_controller.visible = true;
+				//_coverFace.visible = false;
 			}
 		}
 	
