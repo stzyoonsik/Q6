@@ -1,21 +1,26 @@
 package scene.gameScene.object.home
 {
 	import scene.gameScene.MainStage;
-	import scene.loading.Resource;
 	import scene.gameScene.object.Objects;
 	import scene.gameScene.util.PlayerState;
+	import scene.loading.Resource;
 	
 	import trolling.component.graphic.Image;
 	import trolling.event.TrollingEvent;
+	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 	
 	public class Home extends Objects
 	{		
+		private var _nationFlag:GameObject = new GameObject();
+		
 		public function Home()
 		{
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
+			
+			initNationFlag();
 			
 			this.pivot = PivotType.CENTER;
 			
@@ -32,6 +37,19 @@ package scene.gameScene.object.home
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 		}
 		
+		private function initNationFlag():void
+		{
+			_nationFlag.pivot = PivotType.CENTER;
+			_image = new Image(Resource.spriteSheet.subTextures["penguinArrived1"]);
+			_nationFlag.width = 24;
+			_nationFlag.height = 16;
+			_nationFlag.x = 0;
+			_nationFlag.y = -8;
+			_nationFlag.addComponent(_image);
+			
+			addChild(_nationFlag);
+		}
+		
 		private function onEnterFrame(event:TrollingEvent):void
 		{	
 			this.scaleY += 0.025 * MainStage.speed;
@@ -42,6 +60,7 @@ package scene.gameScene.object.home
 			{
 				removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 				dispatchEvent(new TrollingEvent(PlayerState.ARRIVE));
+				
 			}
 		}
 	}

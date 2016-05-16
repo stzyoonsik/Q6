@@ -168,7 +168,7 @@ package scene.loading
 			SoundManager.addSound("fish", _soundDic["fish.mp3"]);
 			SoundManager.addSound("flag", _soundDic["flag.mp3"]);
 			SoundManager.addSound("fall", _soundDic["fall.mp3"]);
-			SoundManager.addSound("stageFailed", _soundDic["stageFailed.mp3"]);
+			SoundManager.addSound("stageFailed", _soundDic["die.mp3"]);
 			SoundManager.addSound("stageCleared", _soundDic["stageCleared.mp3"]);
 			
 			var sound:Sound = _soundDic["MainBgm.mp3"]; 
