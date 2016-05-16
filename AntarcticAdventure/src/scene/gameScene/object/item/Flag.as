@@ -16,6 +16,7 @@ package scene.gameScene.object.item
 	
 	public class Flag extends Objects
 	{
+		private var _image:Image;
 		public function Flag(direction)
 		{
 			this.tag = ObjectTag.ITEM;
@@ -26,15 +27,15 @@ package scene.gameScene.object.item
 			initRandomColor();
 			
 			var bitmap:Bitmap;		
-			var image:Image = new Image(new Texture(Resource.imageDic["flag0"]));	
+			
+			_image = new Image(Resource.spriteSheet.subTextures["flag0"]);	
 			
 			this.pivot = PivotType.CENTER;
-			addComponent(image);
+			addComponent(_image);
 			
 			_direction = direction;
 			
-			this.x = _stageWidth / 2;
-			this.y = _stageHeight * 0.35;
+			initPosition();
 			
 			this.width = _stageWidth * 0.025;
 			this.height = width;
@@ -48,7 +49,15 @@ package scene.gameScene.object.item
 			addEventListener("collideFlag", onCollidePlayer);
 		}
 		
-		
+		private function initPosition():void
+		{
+			if(_direction == 0)
+				this.x = _stageWidth * 0.475;
+			else
+				this.x = _stageWidth * 0.525;
+			
+			this.y = _stageHeight * 0.4;
+		}
 		
 		private function onEnterFrame(event:TrollingEvent):void
 		{			
@@ -62,7 +71,7 @@ package scene.gameScene.object.item
 			
 			if(MainStage.speed != 0)
 			{
-				this.scaleY += setScale(0.025);
+				this.scaleY += setScale(0.03);
 				this.scaleX = this.scaleY;
 				
 				this._addY += y / 2400;

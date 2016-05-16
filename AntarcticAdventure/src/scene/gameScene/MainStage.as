@@ -1,10 +1,10 @@
 package scene.gameScene
 {
 	import flash.events.Event;
-	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.geom.Point;
+	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
 	
@@ -23,8 +23,6 @@ package scene.gameScene
 	import scene.gameScene.util.PlayerState;
 	
 	import trolling.event.TrollingEvent;
-	import trolling.media.Sound;
-	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
 
@@ -53,7 +51,8 @@ package scene.gameScene
 		
 		private var _intervalBetweenObject:Number = 0;
 		
-		private var _objectArray:Array;
+		private var _objectArray:Array = new Array();
+		private var _backgroundColor:int;
 		
 		private var _curveDistanceVector:Vector.<int> = new Vector.<int>();
 		private var _curveDirectionVector:Vector.<int> = new Vector.<int>();
@@ -119,34 +118,34 @@ package scene.gameScene
 		
 		private function onLoadedAllImages(event:Event):void
 		{
+//			_background = new Background(0);
+//			addChild(_background);
 			
-			
-			_background = new Background();
-			addChild(_background);
 			
 			_ui = new IngameUI();
 			
 			_player = new Player();			
-			addChild(_player); 	
+			addChild(_player);
 			
-			readTXT("stage.txt");
+			//readTXT("stage.txt");
+			loadJSON("stage"+_currentStage+".json");
 			
-			_coverFace.width = _stageWidth;
-			_coverFace.height = _stageHeight;
-			_coverFace.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchHover);		
-			_coverFace.addEventListener(TrollingEvent.TOUCH_ENDED, onTouchEnded);
-			addChild(_coverFace);
-			
-			_coverFace.addChild(_ui);
-			
-			_coverFaceForFall.width = _stageWidth;
-			_coverFaceForFall.height = _stageHeight;
-			_coverFaceForFall.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchCoverFaceForFall);	
-			
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);	
-			
-			pushSoundFiles();
-			loadSound();
+//			_background = new Background(_backgroundColor);
+//			addChildAt(_background, 0);
+////			
+//			_coverFace.width = _stageWidth;
+//			_coverFace.height = _stageHeight;
+//			_coverFace.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchHover);		
+//			_coverFace.addEventListener(TrollingEvent.TOUCH_ENDED, onTouchEnded);
+//			addChild(_coverFace);
+//			
+//			_coverFace.addChild(_ui);
+//			
+//			_coverFaceForFall.width = _stageWidth;
+//			_coverFaceForFall.height = _stageHeight;
+//			_coverFaceForFall.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchCoverFaceForFall);	
+//			
+//			addEventListener(Event.ENTER_FRAME, onEnterFrame);				
 		}
 		
 		private function onCompleteReadTxt():void
@@ -160,85 +159,8 @@ package scene.gameScene
 			_player.setCurrentLifeAtUi = setCurrentLife;
 			_player.setCurrentFlagAtUi = setCurrentFlag;
 			_player.onFailed = onFaild;
-		}
-		
-		/**
-		 * 추가 할 사운드 파일들을 푸쉬하는 메소드 
-		 * 
-		 */
-		private function pushSoundFiles():void
-		{
-			_soundURL.push("MainBgm.mp3");
-			_soundURL.push("jump.mp3");
-			_soundURL.push("crashed0.mp3");
-			_soundURL.push("crashed1.mp3");
-			_soundURL.push("fish.mp3");
-			_soundURL.push("flag.mp3");
-		}
-		
-		/**
-		 * 푸쉬된 사운드 파일들을 로드하는 메소드 
-		 * 
-		 */
-		private function loadSound():void
-		{
-			for(var i:int = 0; i<_soundURL.length; ++i)
-			{
-				var url:URLRequest = new URLRequest(_filePath.resolvePath(_soundURL[i]).url);
-				trace(url.url);
-				var sound:Sound = new Sound();
-				sound.load(url);
-				sound.addEventListener(Event.COMPLETE, onSoundLoaded);
-				sound.addEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFaild);			
-				
-			}
-		}
-		
-		/**
-		 * 로드에 성공한 사운드 파일을 딕셔너리에 추가하는 메소드 
-		 * @param event
-		 * 
-		 */		
-		private function onSoundLoaded(event:Event):void
-		{
-			_soundLoadCount++;
-			_soundDic[event.currentTarget.url.replace(_filePath.url.toString(), "")] = event.currentTarget as Sound;
-			
-			if(_soundLoadCount >= _soundURL.length)
-			{
-				_soundURL.splice(0, _soundURL.length);
-				loadComplete();
-			}
-		}
-		
-		/**
-		 * 모든 사운드가 로드됬을때 매니저에 등록하는 메소드 
-		 * 
-		 */
-		private function loadComplete():void
-		{
-			SoundManager.addSound("MainBgm", _soundDic["MainBgm.mp3"]);
-			SoundManager.addSound("jump", _soundDic["jump.mp3"]);
-			SoundManager.addSound("crashed0", _soundDic["crashed0.mp3"]);
-			SoundManager.addSound("crashed1", _soundDic["crashed1.mp3"]);
-			SoundManager.addSound("fish", _soundDic["fish.mp3"]);
-			SoundManager.addSound("flag", _soundDic["flag.mp3"]);
-			
-			var sound:Sound = _soundDic["MainBgm.mp3"]; 
-			sound.volume = 0.5;
-			sound.loops = Sound.INFINITE;
-			SoundManager.play("MainBgm");
-		}
-		
-		/**
-		 * 사운드 로드에 실패했을때 호출되는 콜백 메소드
-		 * @param event
-		 * 
-		 */
-		private function onSoundLoadFaild(event:IOErrorEvent):void
-		{
-			trace(event.text);
-		}
+		}		
+
 		
 		/**
 		 * 터치 뗏을때 이벤트
@@ -335,8 +257,14 @@ package scene.gameScene
 				var cloud:Cloud = new Cloud();
 				addChildAt(cloud, 1);
 				
-				if(_objectArray.length != 0)
+				if(_objectArray && _objectArray.length != 0)
 				{
+					//var curveIndex:int = ;
+					if(_objectArray.length % 10 == 0 && _curveDirectionVector.length != 0)
+					{
+						_background.changeCurve(_curveDirectionVector[0]);
+						_curveDirectionVector.shift();
+					}
 					//trace(_objectArray[0] + "오브젝트 생성");
 					makeObject();
 					_objectArray.shift();
@@ -350,41 +278,43 @@ package scene.gameScene
 			}
 			
 			
-			if(_curveCount < _maxCurveCount)
+//			if(_curveCount < _maxCurveCount)
+//			{
+//				if( _objectArray.length < _curveDistanceVector[_curveCount])
+//				{
+//					trace("****************커브 변경****************");
+//					_background.changeCurve(_curveDirectionVector[_curveCount]);	
+//					//_curveDistanceArray.shift();
+//					_curveCount++;
+//				}
+//			}
+			
+			if(_background)
 			{
-				if( _objectArray.length < _curveDistanceVector[_curveCount])
+				switch(_background.curve)
 				{
-					trace("****************커브 변경****************");
-					_background.changeCurve(_curveDirectionVector[_curveCount]);	
-					//_curveDistanceArray.shift();
-					_curveCount++;
-				}
+					case -1:
+						break;
+					case 0:
+						if(_player.state == PlayerState.FALL ||
+							_player.state == PlayerState.STRUGGLE)
+						{
+							break;
+						}
+						_player.x += _playerSpeed * 0.5;
+						break;
+					case 1:
+						if(_player.state == PlayerState.FALL ||
+							_player.state == PlayerState.STRUGGLE)
+						{
+							break;
+						}
+						_player.x -= _playerSpeed * 0.5;
+						break;
+					default:
+						break;
+				}	
 			}
-			
-			
-			switch(_background.curve)
-			{
-				case -1:
-					break;
-				case 0:
-					if(_player.state == PlayerState.FALL ||
-						_player.state == PlayerState.STRUGGLE)
-					{
-						break;
-					}
-					_player.x += _playerSpeed * 0.5;
-					break;
-				case 1:
-					if(_player.state == PlayerState.FALL ||
-						_player.state == PlayerState.STRUGGLE)
-					{
-						break;
-					}
-					_player.x -= _playerSpeed * 0.5;
-					break;
-				default:
-					break;
-			}		
 			
 			if(_playerArrive && _player.state == PlayerState.RUN)
 			{
@@ -416,14 +346,14 @@ package scene.gameScene
 			var prevTouch:Point = pointsTemp[0];
 			var currentTouch:Point = pointsTemp[pointsTemp.length-1];
 			
-			trace(currentTouch.x - prevTouch.x);
+			//trace(currentTouch.x - prevTouch.x);
 			if(currentTouch.x - prevTouch.x > _xForStruggle)
 			{				
 				_player.struggleLeftCount++;
 				if(_player.state == PlayerState.FALL)
 					_player.state = PlayerState.STRUGGLE;
 				
-				trace(_player.struggleLeftCount);
+				//trace(_player.struggleLeftCount);
 			}
 			
 			if(currentTouch.x - prevTouch.x < -_xForStruggle)
@@ -432,7 +362,7 @@ package scene.gameScene
 				if(_player.state == PlayerState.FALL)
 					_player.state = PlayerState.STRUGGLE;
 				
-				trace(_player.struggleRightCount);
+				//trace(_player.struggleRightCount);
 			}
 		}
 		/**
@@ -449,87 +379,152 @@ package scene.gameScene
 			event.currentTarget.removeEventListener(PlayerState.ARRIVE, onArrive);
 		}
 		
-		/**
-		 * 데이터를 읽어서 array에 푸쉬하는 메소드 
-		 * @param stageName
-		 * 
-		 */
-		private function readTXT(fileName:String):void
+		private function loadJSON(fileName:String):void
 		{
-			var file:File = new File();
-			var stream:FileStreamWithLineReader = new FileStreamWithLineReader();
-			file = File.applicationDirectory.resolvePath(fileName);
-			var lineCount:int;
-			var findStage:Boolean;
+			var urlRequest:URLRequest  = new URLRequest(fileName);
 			
-			if(file.exists)
+			var urlLoader:URLLoader = new URLLoader();
+			urlLoader.addEventListener(Event.COMPLETE, onCompleteLoadJSON);
+			
+			try
 			{
-				stream.open(file, FileMode.READ);
-				while(stream.bytesAvailable)
-				{
-					var line:String = stream.readUTFLine();
-					
-					if(line != "#"+_currentStage.toString() && !findStage)
-					{
-						continue;
-					}
-					else
-					{
-						//trace(line);
-						findStage = true;
-						switch(lineCount)
-						{
-							case 0:
-								break;	
-							
-							case 1:
-								var tempArray:Array = line.split('/');
-								
-								for(var i:int = 0; i < tempArray.length; ++i)
-								{
-									_curveDistanceVector.push(int(tempArray[i].split(',')[0]));
-									_curveDirectionVector.push(int(tempArray[i].split(',')[1]));
-									_maxCurveCount++;
-								}
-								break;
-							
-							case 2:
-								_objectArray = new Array();
-								_objectArray = line.split(',');
-								
-								// 깃발 개수 카운트
-								_totalNumFlag = 0;
-								if (_objectArray)
-								{
-									for (i = 0; i < _objectArray.length; i++)
-									{
-										if (int(_objectArray[i]) == ObjectName.FLAG_LEFT || int(_objectArray[i]) == ObjectName.FLAG_RIGHT)
-										{
-											_totalNumFlag++;
-										}
-									}
-								}								
-								break;
-							
-							default:
-								break;
-						}
-						lineCount++;
-						if(lineCount >= 3)
-						{
-							break;
-						}
-					}				
-				}
-				stream.close();
-				
-				onCompleteReadTxt();
-			}
-			else
+				urlLoader.load(urlRequest);
+			} 
+			catch (error:Error)
 			{
-				trace(fileName + " open error");
+				trace("Cannot load : " + error.message);
 			}
 		}
+		
+		private function onCompleteLoadJSON(event:Event):void
+		{
+			var loader:URLLoader = URLLoader(event.target);
+			trace("completeHandler: " + loader.data);
+			
+			var data:Object = JSON.parse(loader.data);
+			//trace("The answer is " + data.id+" ; "+data.first_var+" ; "+data.second_var);
+			trace(data.stage);
+			trace(data.backgroundColor);
+			trace(data.curve);
+			trace(data.object);			
+			
+			_backgroundColor = data.backgroundColor;			
+			
+			for(var i:int = 0; i < data.curve.length; ++i)
+			{
+				_curveDirectionVector.push(data.curve[i]);
+			}
+			
+			for(i = 0; i < data.object.length; ++i)
+			{
+				_objectArray.push(data.object[i]);
+				if (data.object[i] == ObjectName.FLAG_LEFT || data.object[i] == ObjectName.FLAG_RIGHT)
+				{
+					_totalNumFlag++;
+				}
+			}
+			
+			onCompleteReadTxt();
+			
+			_background = new Background(_backgroundColor);
+			addChildAt(_background, 0);
+			//			
+			_coverFace.width = _stageWidth;
+			_coverFace.height = _stageHeight;
+			_coverFace.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchHover);		
+			_coverFace.addEventListener(TrollingEvent.TOUCH_ENDED, onTouchEnded);
+			addChild(_coverFace);
+			
+			_coverFace.addChild(_ui);
+			
+			_coverFaceForFall.width = _stageWidth;
+			_coverFaceForFall.height = _stageHeight;
+			_coverFaceForFall.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchCoverFaceForFall);	
+			
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);				
+		}
+		
+//		/**
+//		 * 데이터를 읽어서 array에 푸쉬하는 메소드 
+//		 * @param stageName
+//		 * 
+//		 */
+//		private function readTXT(fileName:String):void
+//		{
+//			var file:File = new File();
+//			var stream:FileStreamWithLineReader = new FileStreamWithLineReader();
+//			file = File.applicationDirectory.resolvePath(fileName);
+//			var lineCount:int;
+//			var findStage:Boolean;
+//			
+//			if(file.exists)
+//			{
+//				stream.open(file, FileMode.READ);
+//				while(stream.bytesAvailable)
+//				{
+//					var line:String = stream.readUTFLine();
+//					
+//					if(line != "#"+_currentStage.toString() && !findStage)
+//					{
+//						continue;
+//					}
+//					else
+//					{
+//						//trace(line);
+//						findStage = true;
+//						switch(lineCount)
+//						{
+//							case 0:
+//								break;	
+//							
+//							case 1:
+//								var tempArray:Array = line.split('/');
+//								
+//								for(var i:int = 0; i < tempArray.length; ++i)
+//								{
+//									_curveDistanceVector.push(int(tempArray[i].split(',')[0]));
+//									_curveDirectionVector.push(int(tempArray[i].split(',')[1]));
+//									_maxCurveCount++;
+//								}
+//								break;
+//							
+//							case 2:
+//								_objectArray = new Array();
+//								_objectArray = line.split(',');
+//								
+//								// 깃발 개수 카운트
+//								_totalNumFlag = 0;
+//								if (_objectArray)
+//								{
+//									for (i = 0; i < _objectArray.length; i++)
+//									{
+//										if (int(_objectArray[i]) == ObjectName.FLAG_LEFT || int(_objectArray[i]) == ObjectName.FLAG_RIGHT)
+//										{
+//											_totalNumFlag++;
+//										}
+//									}
+//								}								
+//								break;
+//							
+//							default:
+//								break;
+//						}
+//						lineCount++;
+//						if(lineCount >= 3)
+//						{
+//							break;
+//						}
+//					}				
+//				}
+//				stream.close();
+//				
+//				onCompleteReadTxt();
+//			}
+//			else
+//			{
+//				trace(fileName + " open error");
+//			}
+//		}
 		
 		/**
 		 * 오브젝트를 생성하는 메소드 

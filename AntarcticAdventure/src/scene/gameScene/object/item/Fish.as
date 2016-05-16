@@ -33,14 +33,16 @@ package scene.gameScene.object.item
 			_jumpSpeed = 6;
 			_jumpHeight = _stageHeight / 30;			
 			
+			//_image = new Image(null);
+			
 			if(direction == 0)
-				_bitmap = Resource.imageDic["leftFish0"];
+				_image = new Image(Resource.spriteSheet.subTextures["leftFish0"]);
 			else
-				_bitmap = Resource.imageDic["rightFish0"];
+				_image = new Image(Resource.spriteSheet.subTextures["rightFish0"]);
 			
 			initRandomColor();			
 			
-			_image = new Image(new Texture(_bitmap));
+			
 			addComponent(_image);
 			
 			this.pivot = PivotType.CENTER;			
@@ -97,11 +99,10 @@ package scene.gameScene.object.item
 				if(_imageIndex == 1)
 				{
 					if(_direction == 0)
-						_bitmap = Resource.imageDic["leftFish1"];
+						_image.texture = Resource.spriteSheet.subTextures["leftFish1"];
 					else
-						_bitmap = Resource.imageDic["rightFish1"];
+						_image.texture = Resource.spriteSheet.subTextures["rightFish1"];
 					
-					_image.texture = new Texture(_bitmap);
 					_imageIndex++;
 				}			
 			}			
@@ -110,11 +111,10 @@ package scene.gameScene.object.item
 				if(_imageIndex == 2)
 				{
 					if(_direction == 0)
-						_bitmap = Resource.imageDic["leftFish2"];
+						_image.texture = Resource.spriteSheet.subTextures["leftFish2"];
 					else
-						_bitmap = Resource.imageDic["rightFish2"];
+						_image.texture = Resource.spriteSheet.subTextures["leftFish2"];
 					
-					_image.texture = new Texture(_bitmap);
 					_imageIndex++;
 				}				
 			}

@@ -132,7 +132,7 @@ package scene.gameScene.object.player
 			_penguin.addComponent(_animator);
 			
 			
-			_image = new Image(new Texture(Resource.imageDic["shadow0"]));				
+			_image = new Image(Resource.spriteSheet.subTextures["shadow0"]);				
 			_grimja.addComponent(_image);
 			
 			_grimja.pivot = PivotType.CENTER;
@@ -165,45 +165,45 @@ package scene.gameScene.object.player
 			_animator = new Animator(); 
 			
 			var state:State = new State(PlayerState.RUN);
-			state.addFrame(new Texture(Resource.imageDic["penguinRun0"]));
-			state.addFrame(new Texture(Resource.imageDic["penguinRun1"]));
-			state.addFrame(new Texture(Resource.imageDic["penguinRun2"]));
-			state.addFrame(new Texture(Resource.imageDic["penguinRun3"]));
+			state.addFrame(Resource.spriteSheet.subTextures["penguinRun0"]);
+			state.addFrame(Resource.spriteSheet.subTextures["penguinRun1"]);
+			state.addFrame(Resource.spriteSheet.subTextures["penguinRun2"]);
+			state.addFrame(Resource.spriteSheet.subTextures["penguinRun3"]);
 			_animator.addState(state);
 			state.interval = 3;
 			
 			state = new State(PlayerState.JUMP);
-			state.addFrame(new Texture(Resource.imageDic["penguinJump0"]));
-			state.addFrame(new Texture(Resource.imageDic["penguinJump1"]));
+			state.addFrame(Resource.spriteSheet.subTextures["penguinJump0"]);
+			state.addFrame(Resource.spriteSheet.subTextures["penguinJump1"]);
 			_animator.addState(state);			
 			state.interval = 2;
 			
 			state = new State(PlayerState.CRASHED_LEFT);
-			state.addFrame(new Texture(Resource.imageDic["penguinCrashedLeft0"]));	
+			state.addFrame(Resource.spriteSheet.subTextures["penguinCrashedLeft0"]);	
 			state.interval = 60;
 			_animator.addState(state);	
 			
 			state = new State(PlayerState.CRASHED_RIGHT);
-			state.addFrame(new Texture(Resource.imageDic["penguinCrashedRight0"]));	
+			state.addFrame(Resource.spriteSheet.subTextures["penguinCrashedRight0"]);	
 			state.interval = 60;
 			_animator.addState(state);		
 			
 			state = new State(PlayerState.FALL);
-			state.addFrame(new Texture(Resource.imageDic["penguinFall0"]));	
+			state.addFrame(Resource.spriteSheet.subTextures["penguinCrashedFall0"]);	
 			state.interval = 60;
 			_animator.addState(state);
 			
 			state = new State(PlayerState.STRUGGLE);
-			state.addFrame(new Texture(Resource.imageDic["penguinStruggle0"]));
-			state.addFrame(new Texture(Resource.imageDic["penguinStruggle1"]));
-			state.addFrame(new Texture(Resource.imageDic["penguinStruggle2"]));
-			state.addFrame(new Texture(Resource.imageDic["penguinStruggle3"]));
+			state.addFrame(Resource.spriteSheet.subTextures["penguinStruggle0"]);
+			state.addFrame(Resource.spriteSheet.subTextures["penguinStruggle1"]);
+			state.addFrame(Resource.spriteSheet.subTextures["penguinStruggle2"]);
+			state.addFrame(Resource.spriteSheet.subTextures["penguinStruggle3"]);
 			state.interval = 4;
 			_animator.addState(state);
 			
 			state = new State(PlayerState.ARRIVED);
-			state.addFrame(new Texture(Resource.imageDic["penguinArrived0"]));
-			state.addFrame(new Texture(Resource.imageDic["penguinArrived1"]));
+			state.addFrame(Resource.spriteSheet.subTextures["penguinArrived0"]);
+			state.addFrame(Resource.spriteSheet.subTextures["penguinArrived1"]);
 			state.interval = 5;
 			_animator.addState(state);
 			
@@ -457,6 +457,7 @@ package scene.gameScene.object.player
 					_penguin.transition(PlayerState.CRASHED_RIGHT);
 				_crashFlag = true;
 				
+				SoundManager.play("crashed0");
 				// Life 감소 처리
 				_currentLife--;
 				if (_currentLife <= 0)
@@ -496,10 +497,8 @@ package scene.gameScene.object.player
 				_crashTheta = 0;
 				_crashHeight *= 0.75;			
 				_crashSpeed *= 1.25;				
-				if(_hoppingCount == 0)
-					SoundManager.play("crashed0");
-				else
-					SoundManager.play("crashed1");
+				
+				SoundManager.play("crashed1");
 				
 				_hoppingCount++;
 			}
@@ -530,6 +529,7 @@ package scene.gameScene.object.player
 			if(!_fallFlag)
 			{
 				_penguin.transition(PlayerState.FALL);
+				SoundManager.play("fall");	
 				
 				this.y = _fallY;
 				_penguin.scaleY = _fallScaleY;

@@ -30,8 +30,8 @@ package scene.gameScene.object.crater
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
 			
-			var image:Image = new Image(new Texture(Resource.imageDic["rectCrater0"]));
-			
+			var image:Image = new Image(Resource.spriteSheet.subTextures["rectCrater0"]);
+			//var image:Image = new Image(new Texture(Resource.spriteSheet.subTextures["rectCrater0"]));
 			this.pivot = PivotType.CENTER;
 			addComponent(image);
 			
@@ -41,12 +41,7 @@ package scene.gameScene.object.crater
 			_right.pivot = PivotType.CENTER;
 			_middle.pivot = PivotType.CENTER;
 			
-			if(_direction == 0)
-				this.x = _stageWidth * 0.475;
-			else
-				this.x = _stageWidth * 0.525;
-			this.y = _stageHeight * 0.35;
-			
+			initPosition();			
 			
 			this.width = _stageWidth * 0.025;
 			this.height = this.width;
@@ -63,6 +58,16 @@ package scene.gameScene.object.crater
 			
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			addEventListener("fall", onFall);
+		}
+		
+		private function initPosition():void
+		{
+			if(_direction == 0)
+				this.x = _stageWidth * 0.475;
+			else
+				this.x = _stageWidth * 0.525;
+			
+			this.y = _stageHeight * 0.4;
 		}
 		
 		private function initCollider():void

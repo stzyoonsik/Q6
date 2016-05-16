@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="SpriteSheet_0.png">
+   <SubTexture name="bottomBackground0" x="0" y="11" width="498" height="185" />
+   <SubTexture name="bottomBackground1" x="0" y="197" width="498" height="185" />
+   <SubTexture name="bottomBackgroundLeft0" x="499" y="11" width="498" height="185" />
+   <SubTexture name="bottomBackgroundLeft1" x="499" y="197" width="498" height="185" />
+   <SubTexture name="bottomBackgroundLeft2" x="0" y="383" width="498" height="185" />
+   <SubTexture name="bottomBackgroundRight0" x="0" y="569" width="498" height="185" />
+   <SubTexture name="bottomBackgroundRight1" x="0" y="755" width="498" height="185" />
+   <SubTexture name="bottomBackgroundRight2" x="499" y="383" width="498" height="185" />
+   <SubTexture name="cloud0" x="0" y="941" width="32" height="32" />
+   <SubTexture name="ellipseCrater0" x="628" y="663" width="64" height="64" />
+   <SubTexture name="enemy0" x="628" y="728" width="64" height="64" />
+   <SubTexture name="enemy1" x="693" y="663" width="64" height="64" />
+   <SubTexture name="enemy2" x="499" y="921" width="64" height="64" />
+   <SubTexture name="flag0" x="693" y="728" width="64" height="64" />
+   <SubTexture name="home0" x="499" y="663" width="128" height="128" />
+   <SubTexture name="leftFish0" x="33" y="941" width="32" height="32" />
+   <SubTexture name="leftFish1" x="66" y="941" width="32" height="32" />
+   <SubTexture name="leftFish2" x="99" y="941" width="32" height="32" />
+   <SubTexture name="penguinArrived0" x="628" y="793" width="64" height="64" />
+   <SubTexture name="penguinArrived1" x="758" y="663" width="64" height="64" />
+   <SubTexture name="penguinCrashedLeft0" x="564" y="921" width="64" height="64" />
+   <SubTexture name="penguinCrashedRight0" x="823" y="663" width="64" height="64" />
+   <SubTexture name="penguinFall0" x="758" y="728" width="64" height="64" />
+   <SubTexture name="penguinJump0" x="693" y="793" width="64" height="64" />
+   <SubTexture name="penguinJump1" x="629" y="858" width="64" height="64" />
+   <SubTexture name="penguinRun0" x="823" y="728" width="64" height="64" />
+   <SubTexture name="penguinRun1" x="758" y="793" width="64" height="64" />
+   <SubTexture name="penguinRun2" x="888" y="663" width="64" height="64" />
+   <SubTexture name="penguinRun3" x="629" y="923" width="64" height="64" />
+   <SubTexture name="penguinStruggle0" x="694" y="858" width="64" height="64" />
+   <SubTexture name="penguinStruggle1" x="888" y="728" width="64" height="64" />
+   <SubTexture name="penguinStruggle2" x="823" y="793" width="64" height="64" />
+   <SubTexture name="penguinStruggle3" x="759" y="858" width="64" height="64" />
+   <SubTexture name="rectCrater0" x="499" y="792" width="128" height="128" />
+   <SubTexture name="rightFish0" x="132" y="941" width="32" height="32" />
+   <SubTexture name="rightFish1" x="165" y="941" width="32" height="32" />
+   <SubTexture name="rightFish2" x="198" y="941" width="32" height="32" />
+   <SubTexture name="shadow0" x="694" y="923" width="64" height="64" />
+   <SubTexture name="topBackground0" x="499" y="569" width="498" height="93" />
+   <SubTexture name="topBackgroundMountain0" x="0" y="0" width="950" height="10" />
+</TextureAtlas>

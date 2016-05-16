@@ -24,7 +24,7 @@ package scene.gameScene.object.crater
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
 			
-			var image:Image = new Image(new Texture(Resource.imageDic["ellipseCrater0"]));		
+			var image:Image = new Image(Resource.spriteSheet.subTextures["ellipseCrater0"]);		
 			
 			this.pivot = PivotType.CENTER;
 			addComponent(image);
@@ -54,7 +54,7 @@ package scene.gameScene.object.crater
 				this.x = _stageWidth * 0.525
 			
 			
-			this.y = _stageHeight * 0.35;
+			this.y = _stageHeight * 0.4;
 		}
 		
 		private function onEnterFrame(event:TrollingEvent):void

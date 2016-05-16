@@ -25,7 +25,7 @@ package scene.gameScene.object.home
 			this.width = _stageWidth * 0.1;
 			this.height = this.width;
 			
-			_image = new Image(new Texture(Resource.imageDic["home0"]));
+			_image = new Image(Resource.spriteSheet.subTextures["home0"]);
 			
 			addComponent(_image);
 			

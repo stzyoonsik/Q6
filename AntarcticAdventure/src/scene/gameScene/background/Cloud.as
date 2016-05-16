@@ -26,7 +26,7 @@ package scene.gameScene.background
 			
 			pivot = PivotType.CENTER;
 			
-			var image:Image = new Image(new Texture(Resource.imageDic["cloud0"]));	
+			var image:Image = new Image(Resource.spriteSheet.subTextures["cloud0"]);	
 			addComponent(image);
 			
 			var point:Point = initRandomPosition();

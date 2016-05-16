@@ -31,23 +31,26 @@ package scene.gameScene.background
 		
 		public function get curve():int	{ return _curve; }		
 		
-		public function Background()
+		public function Background(color:int)
 		{
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
 			
-			_image = new Image(new Texture(Resource.imageDic["topBackground0"]));			
-			_topBackground.addComponent(_image);
+			//_image = new Image(new Texture(Resource.imageDic["topBackground0"]));	
+			_image = new Image(Resource.spriteSheet.subTextures["topBackground0"]);	
+			
+			_topBackground.addComponent(_image); 
 			
 			_topBackground.width = _stageWidth;
 			_topBackground.height = _stageHeight / 10 * 3.33;
 			
-			_topBackground.blendColor(0, 1, 1);
+			initColor(color);
 			
 			addChild(_topBackground);	
 			
 			_topBackgroundMountain.pivot = PivotType.CENTER;
-			_image = new Image(new Texture(Resource.imageDic["topBackgroundMountain0"]));			
+			//_image = new Image(new Texture(Resource.imageDic["topBackgroundMountain0"]));	
+			_image = new Image(Resource.spriteSheet.subTextures["topBackgroundMountain0"]);	
 			_topBackgroundMountain.addComponent(_image);
 			
 			_topBackgroundMountain.width = _stageWidth * 2;
@@ -67,27 +70,35 @@ package scene.gameScene.background
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);			
 		}
 		
+		private function initColor(color:int):void
+		{
+			if(color == 0)
+				_topBackground.blendColor(0, 1, 1);
+			else
+				_topBackground.blendColor(1, 0.5, 0.25);
+		}
+		
 		private function initAnimator():void
 		{
 			_animator = new Animator();
 			
 			var state:State = new State("curve_none"); 			
-			state.addFrame(new Texture(Resource.imageDic["bottomBackground0"]));
-			state.addFrame(new Texture(Resource.imageDic["bottomBackground1"]));
+			state.addFrame(Resource.spriteSheet.subTextures["bottomBackground0"]);
+			state.addFrame(Resource.spriteSheet.subTextures["bottomBackground1"]);
 			_animator.addState(state);
 			state.interval= ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;			
 			
 			state = new State("curve_left"); 						
-			state.addFrame(new Texture(Resource.imageDic["bottomBackgroundLeft0"]));
-			state.addFrame(new Texture(Resource.imageDic["bottomBackgroundLeft1"]));
-			state.addFrame(new Texture(Resource.imageDic["bottomBackgroundLeft2"]));	
+			state.addFrame(Resource.spriteSheet.subTextures["bottomBackgroundLeft0"]);
+			state.addFrame(Resource.spriteSheet.subTextures["bottomBackgroundLeft1"]);
+			state.addFrame(Resource.spriteSheet.subTextures["bottomBackgroundLeft2"]);	
 			_animator.addState(state);
 			state.interval= ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;			
 			
 			state = new State("curve_right"); 						
-			state.addFrame(new Texture(Resource.imageDic["bottomBackgroundRight0"]));
-			state.addFrame(new Texture(Resource.imageDic["bottomBackgroundRight1"]));
-			state.addFrame(new Texture(Resource.imageDic["bottomBackgroundRight2"]));	
+			state.addFrame(Resource.spriteSheet.subTextures["bottomBackgroundRight0"]);
+			state.addFrame(Resource.spriteSheet.subTextures["bottomBackgroundRight1"]);
+			state.addFrame(Resource.spriteSheet.subTextures["bottomBackgroundRight2"]);	
 			_animator.addState(state);
 			state.interval= ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;
 			

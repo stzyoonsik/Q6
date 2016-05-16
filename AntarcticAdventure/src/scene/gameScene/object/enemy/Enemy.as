@@ -22,7 +22,7 @@ package scene.gameScene.object.enemy
 			_stageWidth = MainStage.stageWidth; 
 			_stageHeight = MainStage.stageHeight;
 			
-			_image = new Image(new Texture(Resource.imageDic["enemy0"]));
+			_image = new Image(Resource.spriteSheet.subTextures["enemy0"]);
 			addComponent(_image);
 			
 			this.pivot = PivotType.CENTER;			
@@ -56,7 +56,8 @@ package scene.gameScene.object.enemy
 			{				
 				if(_imageIndex == 1)
 				{
-					_image.texture = new Texture(Resource.imageDic["enemy1"]);
+					trace("ENEMY1111111111111111111111111111111111111111");
+					_image.texture = Resource.spriteSheet.subTextures["enemy1"];
 					_imageIndex++;
 				}			
 			}			
@@ -64,7 +65,7 @@ package scene.gameScene.object.enemy
 			{
 				if(_imageIndex == 2)
 				{
-					_image.texture = new Texture(Resource.imageDic["enemy2"]);
+					_image.texture = Resource.spriteSheet.subTextures["enemy2"];
 					_imageIndex++;
 				}				
 			}
