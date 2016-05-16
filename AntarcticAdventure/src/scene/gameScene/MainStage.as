@@ -2,7 +2,6 @@ package scene.gameScene
 {
 	import flash.events.Event;
 	import flash.filesystem.File;
-	import flash.filesystem.FileMode;
 	import flash.geom.Point;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
@@ -19,7 +18,6 @@ package scene.gameScene
 	import scene.gameScene.object.item.Flag;
 	import scene.gameScene.object.player.Player;
 	import scene.gameScene.ui.IngameUI;
-	import scene.gameScene.util.FileStreamWithLineReader;
 	import scene.gameScene.util.ObjectName;
 	import scene.gameScene.util.PlayerState;
 	
