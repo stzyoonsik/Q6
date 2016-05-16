@@ -5,6 +5,9 @@ package Asset
 		[Embed(source="ellipseCrater0.png")]
 		public static const CraterEllipse:Class;
 		
+		[Embed(source="doubleEllipseCrater0.png")]
+		public static const DoubleCraterEllipse:Class;
+		
 		[Embed(source="flag0.png")]
 		public static const Flag:Class;
 		
@@ -58,5 +61,14 @@ package Asset
 		
 		[Embed(source="next.png")]
 		public static const Next:Class;
+		
+		[Embed(source="save.png")]
+		public static const Save:Class;
+		
+		[Embed(source="stageUp.png")]
+		public static const StageUp:Class;
+		
+		[Embed(source="stageDown.png")]
+		public static const StageDown:Class;
 	}
 }
