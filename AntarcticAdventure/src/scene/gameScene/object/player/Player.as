@@ -621,32 +621,32 @@ package scene.gameScene.object.player
 			
 			_dashCount++;
 			
-			if(_dashCount < 12)
+			if(0 <= _dashCount && _dashCount < 12)
 			{
 				this.scaleX += 0.05;
 				this.scaleY += 0.05;
 			}
-			else if(_dashCount > 36)
+			else if(36 <= _dashCount && _dashCount < 48)
 			{
 				this.scaleX -= 0.05;
 				this.scaleY -= 0.05;
-			}
+			}			
 			
-			
-			if(_dashCount > 48)
-			{
-				_dashCount = 0;
+			else if(48 <= _dashCount && _dashCount < 60)
+			{				
 				MainStage.speed = MainStage.maxSpeed;
 				this.scaleX = 1;
 				this.scaleY = 1;
 				_grimjaCollider.isActive = true;
-				_animator.getState(PlayerState.RUN).interval = 3;
-				_dashFlag = false;
-				
+				_animator.getState(PlayerState.RUN).interval = 3;				
+			}
+			
+			else if(60 <= _dashCount)
+			{
+				_dashCount = 0;
+				_dashFlag = false;				
 				_state = PlayerState.RUN;
 			}
 		}
-		
-		
 	}
 }
