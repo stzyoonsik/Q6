@@ -4,7 +4,7 @@ package
 	
 	import starling.core.Starling;
 	
-	[SWF(width = "1024", height = "768", backgroundColor = "0xffffcc")]	
+	[SWF(width = "1280", height = "1024", backgroundColor = "0xffffcc")]	
 	public class AAMapTool extends Sprite
 	{
 		public function AAMapTool()

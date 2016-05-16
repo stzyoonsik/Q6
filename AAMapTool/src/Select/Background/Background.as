@@ -4,6 +4,7 @@ package Select.Background
 	
 	import starling.display.Button;
 	import starling.display.Sprite;
+	import starling.events.Event;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
@@ -11,8 +12,6 @@ package Select.Background
 
 	public class Background extends Sprite
 	{
-		
-		
 		private var _leftCurveButton:Button;
 		private var _normalCurveButton:Button;
 		private var _rightCurveButton:Button;
@@ -63,9 +62,6 @@ package Select.Background
 			_orangeBG.width = 64;
 			_orangeBG.height = 64;			
 			addChild(_orangeBG);
-			
-			
-			
 		}
 		
 		private function pushEvent():void
@@ -83,6 +79,7 @@ package Select.Background
 			if(touch)
 			{
 				trace("leftCurveButton");
+				dispatchEvent(new Event("curve", false, 0));
 			}	
 		}
 		
@@ -92,6 +89,7 @@ package Select.Background
 			if(touch)
 			{
 				trace("normalCurveButton");
+				dispatchEvent(new Event("curve", false, -1));
 			}	
 		}
 		
@@ -101,6 +99,7 @@ package Select.Background
 			if(touch)
 			{
 				trace("rightCurveButton");
+				dispatchEvent(new Event("curve", false, 1));
 			}	
 		}
 		
@@ -110,6 +109,7 @@ package Select.Background
 			if(touch)
 			{
 				trace("cyanBG");
+				dispatchEvent(new Event("color", false, 0));
 			}	
 		}
 		
@@ -119,6 +119,7 @@ package Select.Background
 			if(touch)
 			{
 				trace("orangeBG");
+				dispatchEvent(new Event("color", false, 1));
 			}	
 		}
 	}

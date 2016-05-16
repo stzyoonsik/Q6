@@ -9,6 +9,7 @@ package Select.Objects
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
+	import starling.events.Event;
 
 	public class Objects extends Sprite
 	{
@@ -165,6 +166,7 @@ package Select.Objects
 			if(touch)
 			{
 				trace("home");
+				dispatchEvent(new Event("object", false, -1));
 			}			
 		}
 		
@@ -174,6 +176,7 @@ package Select.Objects
 			if(touch)
 			{
 				trace("empty");
+				dispatchEvent(new Event("object", false, 0));
 			}			
 		}
 		
@@ -183,6 +186,7 @@ package Select.Objects
 			if(touch)
 			{
 				trace("leftEllipse");
+				dispatchEvent(new Event("object", false, 2));
 			}			
 		}
 		
@@ -192,6 +196,7 @@ package Select.Objects
 			if(touch)
 			{
 				trace("centerEllipse");
+				dispatchEvent(new Event("object", false, 1));
 			}			
 		}
 		
@@ -201,6 +206,7 @@ package Select.Objects
 			if(touch)
 			{
 				trace("rightEllipse");
+				dispatchEvent(new Event("object", false, 3));
 			}			
 		}
 		
@@ -210,6 +216,7 @@ package Select.Objects
 			if(touch)
 			{
 				trace("leftRightEllipse");
+				dispatchEvent(new Event("object", false, 4));
 			}			
 		}
 		
@@ -219,6 +226,7 @@ package Select.Objects
 			if(touch)
 			{
 				trace("leftRectButton");
+				dispatchEvent(new Event("object", false, 5));
 			}	
 		}
 		
@@ -228,6 +236,7 @@ package Select.Objects
 			if(touch)
 			{
 				trace("rightRectButton");
+				dispatchEvent(new Event("object", false, 6));
 			}	
 		}
 		
@@ -237,6 +246,7 @@ package Select.Objects
 			if(touch)
 			{
 				trace("leftFlagButton");
+				dispatchEvent(new Event("object", false, 7));
 			}	
 		}
 		
@@ -246,6 +256,7 @@ package Select.Objects
 			if(touch)
 			{
 				trace("rightFlagButton");
+				dispatchEvent(new Event("object", false, 8));
 			}	
 		}
 	}
