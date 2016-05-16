@@ -406,7 +406,7 @@ package scene.gameScene
 			trace(data.stage);
 			trace(data.backgroundColor);
 			trace(data.curve);
-			trace(data.object);			
+			trace(data.object);
 			
 			_backgroundColor = data.backgroundColor;			
 			

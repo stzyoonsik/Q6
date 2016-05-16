@@ -132,7 +132,7 @@ package scene.gameScene.object.player
 			_penguin.addComponent(_animator);
 			
 			
-			_image = new Image(Resource.spriteSheet.subTextures["shadow0"]);				
+			_image = new Image(Resource.spriteSheet.subTextures["shadow0"]);			
 			_grimja.addComponent(_image);
 			
 			_grimja.pivot = PivotType.CENTER;
@@ -141,7 +141,7 @@ package scene.gameScene.object.player
 			_grimja.height = _grimja.width	
 			_grimja.y = _stageHeight * 0.08;
 			
-			_grimjaCollider = new Collider();			
+			_grimjaCollider = new Collider();
 			_grimjaCollider.setRect(0.33, 0.0625);
 			_grimjaCollider.addIgnoreTag(ObjectTag.ITEM);
 			
@@ -419,7 +419,7 @@ package scene.gameScene.object.player
 				_jumpFlag = true;
 			}
 			var degree:Number = _jumpTheta * Math.PI / 180;
-			trace(degree);
+//			trace(degree);
 			_penguin.y = -(Math.sin(degree) * _jumpHeight);
 			
 			_jumpTheta += _jumpSpeed;
