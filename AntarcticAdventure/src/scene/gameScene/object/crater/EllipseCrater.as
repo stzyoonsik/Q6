@@ -2,7 +2,7 @@ package scene.gameScene.object.crater
 {
 	import scene.gameScene.MainStage;
 	import scene.gameScene.ObjectTag;
-	import scene.gameScene.loading.Resource;
+	import scene.loading.Resource;
 	import scene.gameScene.object.Objects;
 	import scene.gameScene.object.enemy.Enemy;
 	import scene.gameScene.object.item.Fish;
@@ -37,7 +37,7 @@ package scene.gameScene.object.crater
 			
 			_collider = new Collider();			
 			_collider.setRect(0.75, 0.125);
-			//colliderRender = true;
+			colliderRender = true;
 			addComponent(_collider);
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 		}		

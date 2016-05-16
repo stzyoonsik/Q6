@@ -5,7 +5,7 @@ package scene.gameScene.object.item
 	
 	import scene.gameScene.MainStage;
 	import scene.gameScene.ObjectTag;
-	import scene.gameScene.loading.Resource;
+	import scene.loading.Resource;
 	import scene.gameScene.object.Objects;
 	
 	import trolling.component.graphic.Image;

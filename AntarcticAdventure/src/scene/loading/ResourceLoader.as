@@ -1,4 +1,4 @@
-package scene.gameScene.loading
+package scene.loading
 {
 	import flash.display.Bitmap;
 	import flash.display.Loader;
@@ -45,10 +45,10 @@ package scene.gameScene.loading
 		public function ResourceLoader(cFunc:Function)
 		{
 			_completeFunc = cFunc;
-			_imageDirectory = File.applicationDirectory.resolvePath("scene").resolvePath("gameScene").resolvePath("loading").resolvePath("image");
+			_imageDirectory = File.applicationDirectory.resolvePath("scene").resolvePath("gameScene").resolvePath("image");
 			_imageArray = _imageDirectory.getDirectoryListing();
 			
-			_soundDirectory = File.applicationDirectory.resolvePath("scene").resolvePath("gameScene").resolvePath("loading").resolvePath("sound");
+			_soundDirectory = File.applicationDirectory.resolvePath("scene").resolvePath("gameScene").resolvePath("sound");
 			_soundArray = _soundDirectory.getDirectoryListing();
 			
 			//trace("asdfasdfasdf" + _soundArray[0].url);
@@ -168,11 +168,19 @@ package scene.gameScene.loading
 			SoundManager.addSound("fish", _soundDic["fish.mp3"]);
 			SoundManager.addSound("flag", _soundDic["flag.mp3"]);
 			SoundManager.addSound("fall", _soundDic["fall.mp3"]);
+			SoundManager.addSound("stageFailed", _soundDic["stageFailed.mp3"]);
+			SoundManager.addSound("stageCleared", _soundDic["stageCleared.mp3"]);
 			
 			var sound:Sound = _soundDic["MainBgm.mp3"]; 
 			sound.volume = 0.5;
 			sound.loops = Sound.INFINITE;
 			SoundManager.play("MainBgm");
+			
+			sound = _soundDic["stageFailed.mp3"]; 
+			sound.loops = Sound.INFINITE;
+			
+			sound = _soundDic["stageCleared.mp3"]; 
+			sound.loops = Sound.INFINITE;
 			
 			_isLoadedSoundAll = true;
 		}

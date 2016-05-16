@@ -4,7 +4,7 @@ package scene.gameScene.object.crater
 	
 	import scene.gameScene.MainStage;
 	import scene.gameScene.ObjectTag;
-	import scene.gameScene.loading.Resource;
+	import scene.loading.Resource;
 	import scene.gameScene.object.Objects;
 	
 	import trolling.component.graphic.Image;
@@ -96,9 +96,10 @@ package scene.gameScene.object.crater
 			_right.y = 0;
 			_rightCollider.setRect(1,1);
 			
-			_left.colliderRender = false; 
-			_middle.colliderRender = false;
-			_right.colliderRender = false;
+			_left.colliderRender = true; 
+			_middle.colliderRender = true;
+			_right.colliderRender = true;
+			colliderRender = true;
 		}
 		
 		private function onEnterFrame(event:TrollingEvent):void
