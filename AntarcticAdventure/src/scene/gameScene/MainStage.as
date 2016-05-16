@@ -63,13 +63,13 @@ package scene.gameScene
 		private static var _coverFaceForFall:GameObject = new GameObject();
 		private var _fallFlag:Boolean;
 		
-		
 		private var _soundDic:Dictionary = new Dictionary();
 		private var _soundURL:Vector.<String> = new Vector.<String>();
 		private var _soundLoadCount:uint = 0;
 		private var _filePath:File = File.applicationDirectory;
 		
 		private var _playerArrive:Boolean;
+		private static var _stageEnded:Boolean = false;
 		
 		private var _playerMaxLife:int;
 		private var _totalNumFlag:int;
@@ -79,6 +79,7 @@ package scene.gameScene
 		public static function set coverFaceForFall(value:GameObject):void { _coverFaceForFall = value; }
 		
 		public static function get currentStage():int { return _currentStage; }
+		public static function set stageEnded(value:Boolean):void { _stageEnded = value; }
 		
 		public static function get stageHeight():int { return _stageHeight; }
 		public static function get stageWidth():int { return _stageWidth; }
@@ -101,6 +102,7 @@ package scene.gameScene
 		private function oninit(event:Event):void
 		{
 			_currentStage = this.data as int;
+			_stageEnded = false;
 			
 			_resource = new Resource();
 			_resource.addEventListener("loadedAllImages", onLoadedAllImages);
@@ -175,6 +177,8 @@ package scene.gameScene
 			_soundURL.push("crashed1.mp3");
 			_soundURL.push("fish.mp3");
 			_soundURL.push("flag.mp3");
+			_soundURL.push("stageCleared.mp3");
+			_soundURL.push("stageFailed.mp3");
 		}
 		
 		/**
@@ -224,11 +228,19 @@ package scene.gameScene
 			SoundManager.addSound("crashed1", _soundDic["crashed1.mp3"]);
 			SoundManager.addSound("fish", _soundDic["fish.mp3"]);
 			SoundManager.addSound("flag", _soundDic["flag.mp3"]);
+			SoundManager.addSound("stageCleared", _soundDic["stageCleared.mp3"]);
+			SoundManager.addSound("stageFailed", _soundDic["stageFailed.mp3"]);
 			
 			var sound:Sound = _soundDic["MainBgm.mp3"]; 
 			sound.volume = 0.5;
 			sound.loops = Sound.INFINITE;
 			SoundManager.play("MainBgm");
+			
+			sound = _soundDic["stageCleared.mp3"];
+			sound.loops = Sound.INFINITE;
+			
+			sound = _soundDic["stageFailed.mp3"];
+			sound.loops = Sound.INFINITE;
 		}
 		
 		/**
@@ -315,7 +327,7 @@ package scene.gameScene
 			
 			//trace("메인클래스 state = " + _player.state); 
 		
-			if (!this.active)
+			if (!this.active || _stageEnded)
 			{
 				return;
 			}

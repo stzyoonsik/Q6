@@ -65,7 +65,7 @@ package scene.gameScene.ui
 		
 		private function onEndedMenu(event:TrollingEvent):void
 		{
-			SceneManager.switchScene("stageSelect");
+			SceneManager.outScene(MainStage.currentStage);
 		}
 	}
 }

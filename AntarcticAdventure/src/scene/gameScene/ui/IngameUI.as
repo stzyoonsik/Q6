@@ -105,22 +105,22 @@ package scene.gameScene.ui
 				trace(TAG + " showPopup : The type of Popup must be set.");
 				return;
 			}
-			
-			if (_runGame)
-			{
-				_runGame(false);
-			}
-			
-			var background:GameObject = getChild(BACKGROUND);
-			if (background)
-			{
-				background.visible = true;
-			}
-			
+
 			switch (type)
 			{
 				case CLEARED:
 				{
+					if (_runGame)
+					{
+						_runGame(false);
+					}
+					
+					var background:GameObject = getChild(BACKGROUND);
+					if (background)
+					{
+						background.visible = true;
+					}
+					
 					var clearedPopup:ClearedPopup = getChild(CLEARED_POPUP) as ClearedPopup;
 					if (clearedPopup)
 					{
@@ -131,12 +131,14 @@ package scene.gameScene.ui
 					break;
 				
 				case FAILED:
-				{
-					var failedPopup:FailedPopup = getChild(FAILED_POPUP) as FailedPopup;
-					if (failedPopup)
+				{	
+					background = getChild(BACKGROUND);
+					if (background)
 					{
-						failedPopup.show();
+						background.alpha = 0;
+						background.visible = true;
 					}
+					addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 				}
 					break;
 				
@@ -493,6 +495,30 @@ package scene.gameScene.ui
 			LoaderInfo(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onCatchError);
 			
 			_loadCount++;
+		}
+		
+		private function onEnterFrame(event:TrollingEvent):void
+		{
+			var background:GameObject = getChild(BACKGROUND);
+			if (background)
+			{
+				background.alpha += 0.015;
+				
+				if (background.alpha >= 1)
+				{
+					if (_runGame)
+					{
+						_runGame(false);
+					}
+					removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
+					
+					var failedPopup:FailedPopup = getChild(FAILED_POPUP) as FailedPopup;
+					if (failedPopup)
+					{
+						failedPopup.show();
+					}
+				}
+			}
 		}
 		
 		private function onEndedSettingButton(event:TrollingEvent):void
