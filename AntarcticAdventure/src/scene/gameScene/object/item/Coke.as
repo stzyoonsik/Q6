@@ -11,25 +11,23 @@ package scene.gameScene.object.item
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
-	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
-	
-	public class Flag extends Objects
+
+	public class Coke extends Objects
 	{
 		private var _image:Image;
 		
-		public function Flag(direction)
+		public function Coke(direction)
 		{
 			this.tag = ObjectTag.ITEM;
 			
 			_stageWidth = MainStage.stageWidth;
-			_stageHeight = MainStage.stageHeight;
+			_stageHeight = MainStage.stageHeight;			
 			
-			initRandomColor();
 			
 			var bitmap:Bitmap;		
 			
-			_image = new Image(Resource.spriteSheet.subTextures["flag0"]);	
+			_image = new Image(Resource.spriteSheet.subTextures["coke0"]);	
 			
 			this.pivot = PivotType.CENTER;
 			addComponent(_image);
@@ -38,29 +36,24 @@ package scene.gameScene.object.item
 			
 			initPosition();
 			
-			this.width = _stageWidth * 0.025;
+			this.width = _stageWidth * 0.01;
 			this.height = width;
 			
 			_collider = new Collider();
-			_collider.setRect(1, 1);
+			_collider.setRect(0.25, 0.33);
 			//colliderRender = true;
 			addComponent(_collider);
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 			
-			addEventListener("collideFlag", onCollidePlayer);
+			addEventListener("collideCoke", onCollidePlayer);
 		}
 		
 		private function initPosition():void
 		{
 			if(_direction == 0)
 				this.x = _stageWidth * 0.475;
-				
-			else if(_direction == -1)
-				this.x = _stageWidth * 0.5;
-				
 			else
-				this.x = _stageWidth * 0.525
-			
+				this.x = _stageWidth * 0.525;
 			
 			this.y = _stageHeight * 0.4;
 		}
@@ -71,7 +64,7 @@ package scene.gameScene.object.item
 			{
 				dispose();
 				removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
-				removeEventListener("collideFlag", onCollidePlayer);
+				removeEventListener("collideCoke", onCollidePlayer);
 			}
 			
 			
@@ -85,17 +78,15 @@ package scene.gameScene.object.item
 				
 				switch(_direction)
 				{
-					//가운데
-					case -1:					
-						break;
 					//왼쪽
 					case 0:
-						this.x -= (MainStage.speed + this._addY);
+						this.x -= (MainStage.speed + this._addY) * 0.75;
 						break;
 					//오른쪽
 					case 1:
-						this.x += (MainStage.speed + this._addY);
+						this.x += (MainStage.speed + this._addY) * 0.75;
 						break;
+					
 					default:
 						break;
 				}
@@ -112,7 +103,7 @@ package scene.gameScene.object.item
 		{
 			dispose();
 			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			removeEventListener("collideFlag", onCollidePlayer);
+			removeEventListener("collideCoke", onCollidePlayer);
 			
 		}
 	}

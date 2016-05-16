@@ -13,7 +13,7 @@ package scene.gameScene.loading
 		private static var _imageDic:Dictionary;
 		
 		private static var _spriteSheet:SpriteSheet;
-		private var _sprite:File = File.applicationDirectory.resolvePath("scene").resolvePath("gameScene").resolvePath("loading").resolvePath("sprite").resolvePath("MainStageSheet.png");
+		private var _sprite:File = File.applicationDirectory.resolvePath("scene").resolvePath("gameScene").resolvePath("loading").resolvePath("sprite").resolvePath("MainStageSprite0.png");
 		
 		public static function get imageDic():Dictionary { return _imageDic; }
 		
@@ -21,7 +21,7 @@ package scene.gameScene.loading
 		public function Resource()
 		{
 			_resourceLoader = new ResourceLoader(onLoadImageComplete);
-			loadFromSprite(_sprite.url, "MainStageSheet");
+			loadFromSprite(_sprite.url, "MainStageSprite0");
 		}		
 
 		private function clone(original:Dictionary):Dictionary

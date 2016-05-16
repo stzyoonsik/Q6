@@ -12,5 +12,8 @@ package scene.gameScene.util
 		public static const RECT_RIGHT:int = 6;
 		public static const FLAG_LEFT:int = 7;
 		public static const FLAG_RIGHT:int = 8;
+		public static const COKE_NORMAL:int = 9;
+		public static const COKE_LEFT:int = 10;
+		public static const COKE_RIGHT:int = 11;
 	}
 }
