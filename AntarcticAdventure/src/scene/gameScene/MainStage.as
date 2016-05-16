@@ -15,6 +15,7 @@ package scene.gameScene
 	import scene.gameScene.object.crater.RectangleCrater;
 	import scene.gameScene.object.enemy.Enemy;
 	import scene.gameScene.object.home.Home;
+	import scene.gameScene.object.item.Coke;
 	import scene.gameScene.object.item.Flag;
 	import scene.gameScene.object.player.Player;
 	import scene.gameScene.ui.IngameUI;
@@ -187,7 +188,10 @@ package scene.gameScene
 			if(currentTouch.y - prevTouch.y > _yForJump)
 			{
 				//trace("JUMPJUMPJUMP");
-				_player.state = PlayerState.JUMP;
+				if(_player.state != PlayerState.DASH)
+				{
+					_player.state = PlayerState.JUMP;
+				}					
 			}
 		}
 		
@@ -584,6 +588,21 @@ package scene.gameScene
 				case ObjectName.FLAG_RIGHT:
 					flag = new Flag(1);
 					addChildAt(flag, 1);
+					break;
+				//콜라 가운데
+				case ObjectName.COKE_NORMAL:
+					var coke:Coke = new Coke(-1);
+					addChildAt(coke, 1);
+					break;
+				//콜라 왼쪽
+				case ObjectName.COKE_LEFT:
+					coke = new Coke(0);
+					addChildAt(coke, 1);
+					break;
+				//콜라 오른쪽
+				case ObjectName.COKE_RIGHT:
+					coke = new Coke(1);
+					addChildAt(coke, 1);
 					break;
 				default:
 					break;

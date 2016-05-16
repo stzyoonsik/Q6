@@ -9,6 +9,7 @@ package scene.gameScene.object.player
 	import scene.gameScene.object.crater.EllipseCrater;
 	import scene.gameScene.object.crater.RectangleCrater;
 	import scene.gameScene.object.enemy.Enemy;
+	import scene.gameScene.object.item.Coke;
 	import scene.gameScene.object.item.Fish;
 	import scene.gameScene.object.item.Flag;
 	import scene.gameScene.util.PlayerState;
@@ -57,7 +58,9 @@ package scene.gameScene.object.player
 		private var _struggleLeftCount:int;
 		private var _struggleRightCount:int;
 		
-		
+		private var _dashFlag:Boolean;
+		//private var _dashSpeed:Number = 0;
+		private var _dashCount:int;
 		
 		
 		
@@ -189,7 +192,7 @@ package scene.gameScene.object.player
 			_animator.addState(state);		
 			
 			state = new State(PlayerState.FALL);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinCrashedFall0"]);	
+			state.addFrame(Resource.spriteSheet.subTextures["penguinFall0"]);	
 			state.interval = 60;
 			_animator.addState(state);
 			
@@ -235,7 +238,7 @@ package scene.gameScene.object.player
 				}
 			}
 			
-			if(event.data is Flag)
+			else if(event.data is Flag)
 			{
 				trace("깃발 먹음");
 				SoundManager.play("flag");			
@@ -247,6 +250,15 @@ package scene.gameScene.object.player
 				{
 					_setCurrentFlagAtUi(_currentFlag);
 				}
+			}	
+			
+			else if(event.data is Coke)
+			{
+				trace("콜라 먹음");
+				SoundManager.play("flag");			
+				event.data.dispatchEvent(new Event("collideCoke"));						
+				
+				_state = PlayerState.DASH;
 			}	
 			
 		}
@@ -331,7 +343,7 @@ package scene.gameScene.object.player
 			
 			switch(_state)
 			{
-				case PlayerState.JUMP:
+				case PlayerState.JUMP: 
 					jump();
 					break;
 				case PlayerState.CRASHED_LEFT:
@@ -345,6 +357,11 @@ package scene.gameScene.object.player
 					break;
 				case PlayerState.STRUGGLE:
 					struggle();
+					break;
+				case PlayerState.DASH:
+					dash();
+					break;
+				case PlayerState.DEAD:
 					break;
 				case PlayerState.ARRIVE:
 					arrived();
@@ -592,6 +609,44 @@ package scene.gameScene.object.player
 			
 		}
 		
-		
+		private function dash():void
+		{
+			if(!_dashFlag)
+			{
+				_grimjaCollider.isActive = false;
+				_animator.getState(PlayerState.RUN).interval = 1;
+				_dashFlag = true;
+				MainStage.speed = MainStage.maxSpeed * 3;
+			}
+			
+			_dashCount++;
+			
+			if(0 <= _dashCount && _dashCount < 12)
+			{
+				this.scaleX += 0.05;
+				this.scaleY += 0.05;
+			}
+			else if(36 <= _dashCount && _dashCount < 48)
+			{
+				this.scaleX -= 0.05;
+				this.scaleY -= 0.05;
+			}			
+			
+			else if(48 <= _dashCount && _dashCount < 60)
+			{				
+				MainStage.speed = MainStage.maxSpeed;
+				this.scaleX = 1;
+				this.scaleY = 1;
+				_grimjaCollider.isActive = true;
+				_animator.getState(PlayerState.RUN).interval = 3;				
+			}
+			
+			else if(60 <= _dashCount)
+			{
+				_dashCount = 0;
+				_dashFlag = false;				
+				_state = PlayerState.RUN;
+			}
+		}
 	}
 }
