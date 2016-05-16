@@ -63,13 +63,13 @@ package scene.gameScene
 		private static var _coverFaceForFall:GameObject = new GameObject();
 		private var _fallFlag:Boolean;
 		
-		
 		private var _soundDic:Dictionary = new Dictionary();
 		private var _soundURL:Vector.<String> = new Vector.<String>();
 		private var _soundLoadCount:uint = 0;
 		private var _filePath:File = File.applicationDirectory;
 		
 		private var _playerArrive:Boolean;
+		private static var _stageEnded:Boolean = false;
 		
 		private var _playerMaxLife:int;
 		private var _totalNumFlag:int;
@@ -79,6 +79,7 @@ package scene.gameScene
 		public static function set coverFaceForFall(value:GameObject):void { _coverFaceForFall = value; }
 		
 		public static function get currentStage():int { return _currentStage; }
+		public static function set stageEnded(value:Boolean):void { _stageEnded = value; }
 		
 		public static function get stageHeight():int { return _stageHeight; }
 		public static function get stageWidth():int { return _stageWidth; }
@@ -101,6 +102,7 @@ package scene.gameScene
 		private function oninit(event:Event):void
 		{
 			_currentStage = this.data as int;
+			_stageEnded = false;
 			
 			_resource = new Resource();
 			_resource.addEventListener("loadedAllImages", onLoadedAllImages);
@@ -129,7 +131,7 @@ package scene.gameScene
 			addChild(_player);
 			
 			//readTXT("stage.txt");
-			loadJSON("stage"+_currentStage+".json");
+			loadJSON("stage"+_currentStage+".json"); 
 			
 //			_background = new Background(_backgroundColor);
 //			addChildAt(_background, 0);
@@ -159,9 +161,99 @@ package scene.gameScene
 			_player.maxLife = _playerMaxLife;
 			_player.setCurrentLifeAtUi = setCurrentLife;
 			_player.setCurrentFlagAtUi = setCurrentFlag;
-			_player.onFailed = onFaild;
-		}		
-
+				
+ 
+			_player.onCleared = onCleared;
+			_player.onFailed = onFailed;
+		}
+		
+//		/**
+//		 * 추가 할 사운드 파일들을 푸쉬하는 메소드 
+//		 * 
+//		 */
+//		private function pushSoundFiles():void
+//		{
+//			_soundURL.push("MainBgm.mp3");
+//			_soundURL.push("jump.mp3");
+//			_soundURL.push("crashed0.mp3");
+//			_soundURL.push("crashed1.mp3");
+//			_soundURL.push("fish.mp3");
+//			_soundURL.push("flag.mp3");
+//			_soundURL.push("stageCleared.mp3");
+//			_soundURL.push("stageFailed.mp3");
+//		}
+//		
+//		/**
+//		 * 푸쉬된 사운드 파일들을 로드하는 메소드 
+//		 * 
+//		 */
+//		private function loadSound():void
+//		{
+//			for(var i:int = 0; i<_soundURL.length; ++i)
+//			{
+//				var url:URLRequest = new URLRequest(_filePath.resolvePath(_soundURL[i]).url);
+//				trace(url.url);
+//				var sound:Sound = new Sound();
+//				sound.load(url);
+//				sound.addEventListener(Event.COMPLETE, onSoundLoaded);
+//				sound.addEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFaild);			
+//				
+//			}
+//		}
+//		
+//		/**
+//		 * 로드에 성공한 사운드 파일을 딕셔너리에 추가하는 메소드 
+//		 * @param event
+//		 * 
+//		 */		
+//		private function onSoundLoaded(event:Event):void
+//		{
+//			_soundLoadCount++;
+//			_soundDic[event.currentTarget.url.replace(_filePath.url.toString(), "")] = event.currentTarget as Sound;
+//			
+//			if(_soundLoadCount >= _soundURL.length)
+//			{
+//				_soundURL.splice(0, _soundURL.length);
+//				loadComplete();
+//			}
+//		}
+//		
+//		/**
+//		 * 모든 사운드가 로드됬을때 매니저에 등록하는 메소드 
+//		 * 
+//		 */
+//		private function loadComplete():void
+//		{
+//			SoundManager.addSound("MainBgm", _soundDic["MainBgm.mp3"]);
+//			SoundManager.addSound("jump", _soundDic["jump.mp3"]);
+//			SoundManager.addSound("crashed0", _soundDic["crashed0.mp3"]);
+//			SoundManager.addSound("crashed1", _soundDic["crashed1.mp3"]);
+//			SoundManager.addSound("fish", _soundDic["fish.mp3"]);
+//			SoundManager.addSound("flag", _soundDic["flag.mp3"]);
+//			SoundManager.addSound("stageCleared", _soundDic["stageCleared.mp3"]);
+//			SoundManager.addSound("stageFailed", _soundDic["stageFailed.mp3"]);
+//			
+//			var sound:Sound = _soundDic["MainBgm.mp3"]; 
+//			sound.volume = 0.5;
+//			sound.loops = Sound.INFINITE;
+//			SoundManager.play("MainBgm");
+//			
+//			sound = _soundDic["stageCleared.mp3"];
+//			sound.loops = Sound.INFINITE;
+//			
+//			sound = _soundDic["stageFailed.mp3"];
+//			sound.loops = Sound.INFINITE;
+//		}
+//		
+//		/**
+//		 * 사운드 로드에 실패했을때 호출되는 콜백 메소드
+//		 * @param event
+//		 * 
+//		 */
+//		private function onSoundLoadFaild(event:IOErrorEvent):void
+//		{
+//			trace(event.text);
+//		}
 		
 		/**
 		 * 터치 뗏을때 이벤트
@@ -240,7 +332,7 @@ package scene.gameScene
 			
 			//trace("메인클래스 state = " + _player.state); 
 		
-			if (!this.active)
+			if (!this.active || _stageEnded)
 			{
 				return;
 			}
@@ -368,7 +460,7 @@ package scene.gameScene
 				
 				//trace(_player.struggleRightCount);
 			}
-		}
+		} 
 		/**
 		 * 도착 
 		 * @param event
@@ -626,20 +718,20 @@ package scene.gameScene
 			}
 		}
 		
-		private function onFaild():void
+		private function onFailed():void
 		{
-			// to do
-			
-			
-			
+			if (_ui)
+			{
+				_ui.showPopup(IngameUI.FAILED);
+			}
 		}
 		
 		private function onCleared():void
 		{
-			// to do
-			
-			
-			
+			if (_ui)
+			{
+				_ui.showPopup(IngameUI.CLEARED);
+			}
 		}
 	
 	}

@@ -19,6 +19,7 @@ package scene.gameScene.object.player
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
+	import trolling.media.Sound;
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
@@ -63,9 +64,13 @@ package scene.gameScene.object.player
 		private var _dashCount:int;
 		
 		
+		private const END_DELAY:uint = 120;
+		private var _endFrameCounter:uint;
+		private var _arrived:Boolean;
 		
 		private var _setCurrentLifeAtUi:Function;
 		private var _setCurrentFlagAtUi:Function;
+		private var _onCleared:Function;
 		private var _onFailed:Function;
 		
 		public function get fallFlag():Boolean { return _fallFlag; }
@@ -81,6 +86,7 @@ package scene.gameScene.object.player
 		
 		public function set setCurrentLifeAtUi(value:Function):void{ _setCurrentLifeAtUi = value;}
 		public function set setCurrentFlagAtUi(value:Function):void{ _setCurrentFlagAtUi = value;}
+		public function set onCleared(value:Function):void{ _onCleared = value;}
 		public function set onFailed(value:Function):void{ _onFailed = value;}
 		
 		public function get struggleLeftCount():int	{ return _struggleLeftCount; }		
@@ -104,8 +110,12 @@ package scene.gameScene.object.player
 			_currentLife = 0;
 			_currentFlag = 0;
 			
+			_endFrameCounter = 0;
+			_arrived = false;
+			
 			_setCurrentLifeAtUi = null;
 			_setCurrentFlagAtUi = null;
+			_onCleared = null;
 			_onFailed = null;
 			
 			_jumpSpeed = 8;
@@ -366,6 +376,11 @@ package scene.gameScene.object.player
 				case PlayerState.ARRIVE:
 					arrived();
 					break;
+				case PlayerState.ARRIVED:
+					cleared();
+					break;
+				case PlayerState.DEAD:
+					break;
 				default:
 					break;
 			}
@@ -378,6 +393,12 @@ package scene.gameScene.object.player
 		 */
 		private function arrived():void
 		{
+			if (!_arrived)
+			{
+				SoundManager.play("stageCleared");
+				_arrived = true;
+			}
+			
 			if(this.y <= (_stageHeight * 0.8) - 20)
 			{
 				_penguin.transition(PlayerState.ARRIVED);
@@ -399,6 +420,21 @@ package scene.gameScene.object.player
 				{
 					this.x -= 3;
 				}
+			}
+		}
+		
+		private function cleared():void
+		{
+			_endFrameCounter++;
+
+			// 일정 시간 후 스테이지 클리어 팝업 호출
+			if (_endFrameCounter >= END_DELAY)
+			{
+				if (_onCleared)
+				{
+					_onCleared();
+				}
+				_endFrameCounter = 0;
 			}
 		}
 		
@@ -490,7 +526,7 @@ package scene.gameScene.object.player
 				
 				if (_currentLife <= 0) // 죽음
 				{
-					//die();
+					die();
 				}
 			}
 			
@@ -570,11 +606,9 @@ package scene.gameScene.object.player
 				
 				if (_currentLife <= 0) // 죽음
 				{
-					//die();
+					die();
 				}
 			}
-			
-			
 		}
 		
 		private function struggle():void
@@ -648,5 +682,17 @@ package scene.gameScene.object.player
 				_state = PlayerState.RUN;
 			}
 		}
+		private function die():void
+		{
+			_state = PlayerState.DEAD;
+			this.active = false;
+			MainStage.stageEnded = true;
+			SoundManager.play("stageFailed");
+			
+			if (_onFailed)
+			{
+				_onFailed();
+			}
+		}		
 	}
 }
