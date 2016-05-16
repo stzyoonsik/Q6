@@ -10,7 +10,7 @@ package scene.gameScene
 	
 	import scene.gameScene.background.Background;
 	import scene.gameScene.background.Cloud;
-	import scene.gameScene.loading.Resource;
+	import scene.loading.Resource;
 	import scene.gameScene.object.crater.EllipseCrater;
 	import scene.gameScene.object.crater.RectangleCrater;
 	import scene.gameScene.object.enemy.Enemy;

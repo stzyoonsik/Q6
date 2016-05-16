@@ -20,7 +20,7 @@ package scene.gameScene.ui
 	import ui.Title;
 	import ui.button.Button;
 	import ui.gauge.CursorGauge;
-
+	
 	public class IngameUI extends GameObject
 	{
 		public static const CLEARED:String = "cleared";
@@ -105,7 +105,7 @@ package scene.gameScene.ui
 				trace(TAG + " showPopup : The type of Popup must be set.");
 				return;
 			}
-
+			
 			switch (type)
 			{
 				case CLEARED:
@@ -207,7 +207,7 @@ package scene.gameScene.ui
 				return;
 			}
 			
- 			var totalFlag:String = _totalFlag.toString();
+			var totalFlag:String = _totalFlag.toString();
 			var currentFlag:String = numFlag.toString();
 			var currentFlagIndex:int = currentFlag.length - 1;
 			
@@ -219,7 +219,7 @@ package scene.gameScene.ui
 				{
 					break;
 				}
-					
+				
 				digit = flag.getChild(i);	
 				
 				if (digit)
@@ -249,7 +249,7 @@ package scene.gameScene.ui
 			
 			delete _bitmaps[UIResource.INGAME_TEXT];
 			/////
-		
+			
 			var gaugeWidth:Number = ingameText.width * ingameText.scaleX * 1.5;
 			var gaugeHeight:Number = gaugeWidth * 0.19;
 			var horizontalMargin:Number = gaugeWidth / 8;
@@ -279,7 +279,7 @@ package scene.gameScene.ui
 				scale = gaugeHeight / heart.height; 
 				heart.width *= scale;
 				heart.height *= scale;  
-					
+				
 				if (i != 0)
 				{
 					heart.x = heart.width * i;
@@ -287,7 +287,7 @@ package scene.gameScene.ui
 				
 				life.addChild(heart);
 			}
-						
+			
 			delete _bitmaps[UIResource.HEART];
 			/////
 			
@@ -308,7 +308,7 @@ package scene.gameScene.ui
 			
 			delete _bitmaps[UIResource.SETTING_ICON];
 			/////
-
+			
 			// BACKGROUND
 			var background:GameObject = new GameObject();
 			background.addComponent(new Image(new Texture(_bitmaps[UIResource.BACKGROUND])));
@@ -329,7 +329,7 @@ package scene.gameScene.ui
 			
 			delete _bitmaps[UIResource.SETTING_POPUP];
 			//
-						
+			
 			// CLEARED_POPUP
 			var clearedPopup:ClearedPopup = new ClearedPopup(new Texture(_bitmaps[UIResource.CLEARED_POPUP]));
 			clearedPopup.x = MainStage.stageWidth / 2;
@@ -393,7 +393,7 @@ package scene.gameScene.ui
 				{
 					digit = slash;
 				}
-				 
+				
 				scale = gaugeHeight / digit.height;
 				digit.width *= scale;
 				digit.height *= scale;  
@@ -426,16 +426,16 @@ package scene.gameScene.ui
 			titleRes = null;
 			/////
 			
-//			private const FIELDS:int = 0;
-//			private const REST:int = 1;
-//			private const LIFE:int = 2;
-//			private const FLAG:int = 3;
-//			private const SETTING_BUTTON:int = 4;
-//			private const BACKGROUND:int = 5;
-//			private const SETTING_POPUP:int = 6;
-//			private const CLEARED_POPUP:int = 7;
-//			private const FAILED_POPUP:int = 8;
-//			private const TITLE:int = 9;
+			//			private const FIELDS:int = 0;
+			//			private const REST:int = 1;
+			//			private const LIFE:int = 2;
+			//			private const FLAG:int = 3;
+			//			private const SETTING_BUTTON:int = 4;
+			//			private const BACKGROUND:int = 5;
+			//			private const SETTING_POPUP:int = 6;
+			//			private const CLEARED_POPUP:int = 7;
+			//			private const FAILED_POPUP:int = 8;
+			//			private const TITLE:int = 9;
 			
 			addChild(ingameText);
 			addChild(restGauge);
@@ -444,7 +444,7 @@ package scene.gameScene.ui
 			addChild(settingButton);
 			addChild(background);
 			addChild(settingPopup);
- 			addChild(clearedPopup);
+			addChild(clearedPopup);
 			addChild(failedPopup);
 			addChild(title);
 		}
