@@ -21,13 +21,13 @@ package Select
 			addChild(_objects);
 			_objects.addEventListener("object", onClickObject);
 			
-			_background.y = 400;
+			_background.y = 500;
 			addChild(_background);
 			_background.addEventListener("curve", onClickCurve);
 			_background.addEventListener("color", onClickColor);
 			
 			_save.x = 128;
-			_save.y = 600;
+			_save.y = 700;
 			addChild(_save);
 			_save.addEventListener("save", onClickSave);
 		}
