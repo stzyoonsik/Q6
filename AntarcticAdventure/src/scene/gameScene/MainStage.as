@@ -73,6 +73,8 @@ package scene.gameScene
 		
 		private var _playerMaxLife:int;
 		private var _totalNumFlag:int;
+		
+		//private var 
 
 		
 		//public static function get coverFaceForFall():GameObject { return _coverFaceForFall; }
@@ -439,6 +441,7 @@ package scene.gameScene
 			_playerMaxLife = 5;
 			//
 			_ui.initialize(_currentStage, _objectArray.length, _playerMaxLife, _totalNumFlag, pause);
+			//_ui.
 			
 			_player.maxLife = _playerMaxLife;
 			_player.setCurrentLifeAtUi = setCurrentLife;

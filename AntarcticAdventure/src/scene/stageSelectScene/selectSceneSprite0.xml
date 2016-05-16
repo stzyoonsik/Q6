@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="selectSceneSprite0.png">
+   <SubTexture name="0_number" x="512" y="1202" width="52" height="105" />
+   <SubTexture name="1_number" x="378" y="1375" width="52" height="105" />
+   <SubTexture name="2_number" x="322" y="1375" width="54" height="105" />
+   <SubTexture name="3_number" x="391" y="1264" width="57" height="105" />
+   <SubTexture name="4_number" x="258" y="1309" width="62" height="105" />
+   <SubTexture name="5_number" x="453" y="1202" width="57" height="105" />
+   <SubTexture name="6_number" x="258" y="1202" width="65" height="105" />
+   <SubTexture name="7_number" x="450" y="1309" width="52" height="105" />
+   <SubTexture name="8_number" x="566" y="1202" width="52" height="105" />
+   <SubTexture name="9_number" x="325" y="1268" width="62" height="105" />
+   <SubTexture name="buttonImage" x="0" y="1202" width="256" height="256" />
+   <SubTexture name="nextButton" x="325" y="1202" width="64" height="64" />
+   <SubTexture name="prevButton" x="391" y="1202" width="60" height="60" />
+   <SubTexture name="sea1" x="0" y="0" width="1920" height="1200" />
+</TextureAtlas>

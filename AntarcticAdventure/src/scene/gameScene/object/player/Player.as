@@ -395,6 +395,7 @@ package scene.gameScene.object.player
 		{
 			if (!_arrived)
 			{
+				SoundManager.stopAll();
 				SoundManager.play("stageCleared");
 				_arrived = true;
 			}

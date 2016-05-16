@@ -40,11 +40,11 @@ package scene.gameScene.object.home
 		private function initNationFlag():void
 		{
 			_nationFlag.pivot = PivotType.CENTER;
-			_image = new Image(Resource.spriteSheet.subTextures["penguinArrived1"]);
-			_nationFlag.width = 24;
-			_nationFlag.height = 16;
-			_nationFlag.x = 0;
-			_nationFlag.y = -8;
+			_image = new Image(Resource.spriteSheet.subTextures["nationFlag0"]);
+			_nationFlag.width = 16;
+			_nationFlag.height = 12;
+			_nationFlag.x = 9;
+			_nationFlag.y = -15;
 			_nationFlag.addComponent(_image);
 			
 			addChild(_nationFlag);
@@ -58,8 +58,12 @@ package scene.gameScene.object.home
 			
 			if(this.y > _stageHeight * 0.475)
 			{
-				removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
+				//removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 				dispatchEvent(new TrollingEvent(PlayerState.ARRIVE));
+				if(_nationFlag.y > -20)
+				{
+					_nationFlag.y -= 0.05;
+				}
 				
 			}
 		}
