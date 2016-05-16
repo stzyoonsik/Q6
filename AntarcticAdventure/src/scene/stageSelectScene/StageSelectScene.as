@@ -101,9 +101,12 @@ package scene.stageSelectScene
 			//			this.width = 800;
 			//			this.height = 600;
 			
-			if(this.data == null)
-			{
+			
+//			if(this.data == null)
+//			{
 				_stageIndex = 0;
+				if(this.data != null)
+					_stageIndex = this.data as uint;
 				
 				_backGround = new GameObject();
 				_backGroundImage = new Image(new Texture(_imageDic["sea1.png"]));
@@ -168,9 +171,8 @@ package scene.stageSelectScene
 				_prevButton.y = 440;
 				_prevButton.pivot = PivotType.CENTER;
 				_prevButton.addEventListener(TrollingEvent.TOUCH_ENDED, onPrevClick);
-			}
-			else
-				_stageIndex = this.data as uint;
+//			}
+//			else
 			
 			setStageNumber();
 			
