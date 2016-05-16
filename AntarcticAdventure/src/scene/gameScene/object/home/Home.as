@@ -1,7 +1,7 @@
 package scene.gameScene.object.home
 {
 	import scene.gameScene.MainStage;
-	import scene.gameScene.loading.Resource;
+	import scene.loading.Resource;
 	import scene.gameScene.object.Objects;
 	import scene.gameScene.util.PlayerState;
 	

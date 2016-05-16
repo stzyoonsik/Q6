@@ -4,7 +4,7 @@ package scene.gameScene.background
 	import flash.geom.Point;
 	
 	import scene.gameScene.MainStage;
-	import scene.gameScene.loading.Resource;
+	import scene.loading.Resource;
 	
 	import trolling.component.graphic.Image;
 	import trolling.event.TrollingEvent;

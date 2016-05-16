@@ -4,7 +4,7 @@ package scene.gameScene.object.player
 	
 	import scene.gameScene.MainStage;
 	import scene.gameScene.ObjectTag;
-	import scene.gameScene.loading.Resource;
+	import scene.loading.Resource;
 	import scene.gameScene.object.Objects;
 	import scene.gameScene.object.crater.EllipseCrater;
 	import scene.gameScene.object.crater.RectangleCrater;
@@ -638,7 +638,7 @@ package scene.gameScene.object.player
 				_state = PlayerState.RUN;
 				_penguin.transition(PlayerState.RUN);
 				
-				MainStage.coverFaceForFall.removeFromParent();
+				//MainStage.coverFaceForFall.removeFromParent();
 			}
 			
 		}

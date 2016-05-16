@@ -1,4 +1,4 @@
-package scene.gameScene.loading
+package scene.loading
 {
 	public class ImageInfo
 	{

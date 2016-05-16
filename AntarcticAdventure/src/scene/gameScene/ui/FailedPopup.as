@@ -60,6 +60,7 @@ package scene.gameScene.ui
 		
 		private function onEndedReplay(event:TrollingEvent):void
 		{
+			trace("다시하긔");
 			SceneManager.restartScene(MainStage, "Game", MainStage.currentStage);
 		}
 		

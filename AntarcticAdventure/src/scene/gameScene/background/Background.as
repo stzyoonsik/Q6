@@ -3,7 +3,7 @@ package scene.gameScene.background
 	import flash.display.Bitmap;
 	
 	import scene.gameScene.MainStage;
-	import scene.gameScene.loading.Resource;
+	import scene.loading.Resource;
 	
 	import trolling.component.animation.Animator;
 	import trolling.component.animation.State;
