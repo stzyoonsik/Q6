@@ -149,7 +149,8 @@ package scene.gameScene.ui
 		
 		private function onEndedMenu(event:TrollingEvent):void
 		{
-			SceneManager.outScene(MainStage.currentStage);
+			SceneManager.switchScene("stageSelect", MainStage.currentStage);
+			SceneManager.deleteScene("Game");
 		}
 		
 		private function onEndedNext(event:TrollingEvent):void

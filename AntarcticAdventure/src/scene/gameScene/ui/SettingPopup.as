@@ -7,6 +7,7 @@ package scene.gameScene.ui
 	import flash.utils.Dictionary;
 	
 	import scene.gameScene.MainStage;
+	import scene.stageSelectScene.StageSelectScene;
 	
 	import trolling.core.SceneManager;
 	import trolling.event.TrollingEvent;
@@ -262,7 +263,8 @@ package scene.gameScene.ui
 		
 		private function onEndedMenu(event:TrollingEvent):void
 		{
-			SceneManager.outScene(MainStage.currentStage);
+			SceneManager.switchScene("stageSelect", MainStage.currentStage);
+			SceneManager.deleteScene("Game");
 		}
 	}
 }
