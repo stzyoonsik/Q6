@@ -31,8 +31,8 @@ package scene.gameScene.ui
 		private const REPLAY:int = 4;
 		private const MENU:int = 5;
 		
-		private var _controlButtonManager:RadioButtonManager;
 		private var _settingData:SettingData;
+		private var _controlButtonManager:RadioButtonManager;
 		
 		private var _temp:Vector.<GameObject>;
 				
