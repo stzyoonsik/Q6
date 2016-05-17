@@ -11,6 +11,10 @@ package scene.loading
 	import trolling.media.SoundManager;
 	import trolling.rendering.Texture;
 
+	import flash.media.Sound;
+	import flash.net.URLRequest;
+	import flash.utils.Dictionary;
+	
 	public class ResourceLoad
 	{	
 		private var _spriteSheetDic:Dictionary;
@@ -88,6 +92,9 @@ package scene.loading
 			
 			SoundManager.addSound(soundFileName.replace(".mp3", ""), _soundDic[soundFileName]);
 			
+			_soundDic[Sound(event.currentTarget).url.replace(_soundDir.url.toString()+"/", "")] = event.currentTarget as Sound;
+			Sound(event.currentTarget).removeEventListener(Event.COMPLETE, onSoundLoaded);
+			Sound(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFaild);
 			_loadedCount++;
 			checkLoadComplete();
 		}

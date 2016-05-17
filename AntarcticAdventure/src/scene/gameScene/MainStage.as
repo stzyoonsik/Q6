@@ -23,7 +23,10 @@ package scene.gameScene
 	import scene.gameScene.util.ObjectName;
 	import scene.gameScene.util.PlayerState;
 	import scene.loading.Resource;
+<<<<<<< HEAD
 	import scene.loading.ResourceLoad;
+=======
+>>>>>>> develop(YoonSik)
 	
 	import trolling.event.TrollingEvent;
 	import trolling.media.Sound;
@@ -59,13 +62,13 @@ package scene.gameScene
 		private var _objectArray:Array = new Array();
 		private var _backgroundColor:int;
 		
-		private var _curveDistanceVector:Vector.<int> = new Vector.<int>();
+		//private var _curveDistanceVector:Vector.<int> = new Vector.<int>();
 		private var _curveDirectionVector:Vector.<int> = new Vector.<int>();
-		private var _maxCurveCount:int;
-		private var _curveCount:int
+		//private var _maxCurveCount:int;
+		//private var _curveCount:int
 		
-		private static var _coverFaceForFall:GameObject = new GameObject();
-		private var _fallFlag:Boolean;
+		//private static var _coverFaceForFall:GameObject = new GameObject();
+		//private var _fallFlag:Boolean;
 		
 		private var _soundDic:Dictionary = new Dictionary();
 		private var _soundURL:Vector.<String> = new Vector.<String>();
@@ -81,10 +84,16 @@ package scene.gameScene
 		private var _playerMaxLife:int;
 		private var _totalNumFlag:int;
 		
+<<<<<<< HEAD
 		private var _resources:ResourceLoad;
+=======
+		private var _control:int;
+		private var _controller:Controller;
+
+>>>>>>> develop(YoonSik)
 		
-		public static function get coverFaceForFall():GameObject { return _coverFaceForFall; }
-		public static function set coverFaceForFall(value:GameObject):void { _coverFaceForFall = value; }
+		//public static function get coverFaceForFall():GameObject { return _coverFaceForFall; }
+		//public static function set coverFaceForFall(value:GameObject):void { _coverFaceForFall = value; }
 		
 		public static function get currentStage():int { return _currentStage; }
 		public static function set stageEnded(value:Boolean):void { _stageEnded = value; }
@@ -191,6 +200,9 @@ package scene.gameScene
 		 */
 		private function onTouchEnded(event:TrollingEvent):void
 		{
+			if(_control == 1)
+				return;
+			
 			if(_player.state == PlayerState.ARRIVE ||
 				_player.state == PlayerState.CRASHED_LEFT ||
 				_player.state == PlayerState.CRASHED_RIGHT ||
@@ -223,13 +235,46 @@ package scene.gameScene
 		 */
 		private function onTouchHover(event:TrollingEvent):void
 		{
+			if(_control == 1)
+				return;
+			
 			if(_player.state == PlayerState.ARRIVE ||
 				_player.state == PlayerState.CRASHED_LEFT ||
-				_player.state == PlayerState.CRASHED_RIGHT ||
-				_player.state == PlayerState.FALL)
+				_player.state == PlayerState.CRASHED_RIGHT)
 			{
 				return;
-			}				
+			}	
+			
+			if(_player.state == PlayerState.FALL ||
+				_player.state == PlayerState.STRUGGLE)
+			{
+				var pointsTemp:Vector.<Point> = event.data as Vector.<Point>;
+				if(pointsTemp.length <= 1)
+					return;
+				var prevTouch:Point = pointsTemp[0];
+				var currentTouch:Point = pointsTemp[pointsTemp.length-1];
+				
+				//trace(currentTouch.x - prevTouch.x);
+				if(currentTouch.x - prevTouch.x > _xForStruggle)
+				{				
+					_player.struggleLeftCount++;
+					if(_player.state == PlayerState.FALL)
+						_player.state = PlayerState.STRUGGLE;
+					
+					//trace(_player.struggleLeftCount);
+				}
+				
+				if(currentTouch.x - prevTouch.x < -_xForStruggle)
+				{
+					_player.struggleRightCount++;
+					if(_player.state == PlayerState.FALL)
+						_player.state = PlayerState.STRUGGLE;
+					
+					//trace(_player.struggleRightCount);
+				}
+				
+				return;
+			}
 			
 			var point:Point = Point(event.data[0]).clone();			
 			
@@ -341,45 +386,45 @@ package scene.gameScene
 				if(!_player.fallFlag)
 				{
 					trace("빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐");			
-					addChild(_coverFaceForFall);
+					//_coverFace.addChildAt(_coverFaceForFall, 0);
 					_player.fallFlag = true;
 				}
 				
 			}
 		}
 		
-		/**
-		 * 
-		 * @param event
-		 * 빠짐 상태 전용 커버 페이스 터치 이벤트 리스너
-		 */
-		private function onTouchCoverFaceForFall(event:TrollingEvent):void
-		{
-			var pointsTemp:Vector.<Point> = event.data as Vector.<Point>;
-			if(pointsTemp.length <= 1)
-				return;
-			var prevTouch:Point = pointsTemp[0];
-			var currentTouch:Point = pointsTemp[pointsTemp.length-1];
-			
-			//trace(currentTouch.x - prevTouch.x);
-			if(currentTouch.x - prevTouch.x > _xForStruggle)
-			{				
-				_player.struggleLeftCount++;
-				if(_player.state == PlayerState.FALL)
-					_player.state = PlayerState.STRUGGLE;
-				
-				//trace(_player.struggleLeftCount);
-			}
-			
-			if(currentTouch.x - prevTouch.x < -_xForStruggle)
-			{
-				_player.struggleRightCount++;
-				if(_player.state == PlayerState.FALL)
-					_player.state = PlayerState.STRUGGLE;
-				
-				//trace(_player.struggleRightCount);
-			}
-		} 
+//		/**
+//		 * 
+//		 * @param event
+//		 * 빠짐 상태 전용 커버 페이스 터치 이벤트 리스너
+//		 */
+//		private function onTouchCoverFaceForFall(event:TrollingEvent):void
+//		{
+//			var pointsTemp:Vector.<Point> = event.data as Vector.<Point>;
+//			if(pointsTemp.length <= 1)
+//				return;
+//			var prevTouch:Point = pointsTemp[0];
+//			var currentTouch:Point = pointsTemp[pointsTemp.length-1];
+//			
+//			//trace(currentTouch.x - prevTouch.x);
+//			if(currentTouch.x - prevTouch.x > _xForStruggle)
+//			{				
+//				_player.struggleLeftCount++;
+//				if(_player.state == PlayerState.FALL)
+//					_player.state = PlayerState.STRUGGLE;
+//				
+//				//trace(_player.struggleLeftCount);
+//			}
+//			
+//			if(currentTouch.x - prevTouch.x < -_xForStruggle)
+//			{
+//				_player.struggleRightCount++;
+//				if(_player.state == PlayerState.FALL)
+//					_player.state = PlayerState.STRUGGLE;
+//				
+//				//trace(_player.struggleRightCount);
+//			}
+//		} 
 		/**
 		 * 도착 
 		 * @param event
@@ -444,6 +489,8 @@ package scene.gameScene
 			_playerMaxLife = 5;
 			//
 			_ui.initialize(_currentStage, _objectArray.length, _playerMaxLife, _totalNumFlag, pause);
+			_ui.addEventListener("control", onEndedControl);
+			//_ui.
 			
 			_player.maxLife = _playerMaxLife;
 			_player.setCurrentLifeAtUi = setCurrentLife;
@@ -455,6 +502,10 @@ package scene.gameScene
 			
 			_background = new Background(_resources, _backgroundColor);
 			addChildAt(_background, 0);
+			
+			
+			
+			
 			//			
 			_coverFace.width = _stageWidth;
 			_coverFace.height = _stageHeight;
@@ -464,9 +515,16 @@ package scene.gameScene
 			
 			_coverFace.addChild(_ui);
 			
-			_coverFaceForFall.width = _stageWidth;
-			_coverFaceForFall.height = _stageHeight;
-			_coverFaceForFall.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchCoverFaceForFall);	
+			_controller = new Controller();
+			_controller.visible = false;
+			_coverFace.addChildAt(_controller, 0);
+			
+			
+			
+			//_coverFaceForFall.width = _stageWidth;
+			//_coverFaceForFall.height = _stageHeight * 0.8;
+			//_coverFaceForFall.y = _stageHeight * 0.2;
+			//_coverFaceForFall.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchCoverFaceForFall);	
 			
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);				
 		}
@@ -662,6 +720,21 @@ package scene.gameScene
 			if (_ui)
 			{
 				_ui.showPopup(IngameUI.CLEARED);
+			}
+		}
+		
+		private function onEndedControl(event:TrollingEvent):void
+		{
+			_control = int(event.data);
+			if(_control == 0)
+			{
+				_controller.visible = false;
+				//_coverFace.visible = true;
+			}
+			else
+			{
+				_controller.visible = true;
+				//_coverFace.visible = false;
 			}
 		}
 	
