@@ -1,6 +1,5 @@
 package scene.titleScene
 {
-	import flash.display.Bitmap;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
@@ -32,7 +31,7 @@ package scene.titleScene
 		private var _soundLoadCount:uint = 0;
 		private var _backGround:GameObject;
 		private var _backGroundAnimator:Animator;
-		private var _filePath:File = File.applicationDirectory;
+		private var _filePath:File = File.applicationDirectory.resolvePath("scene/titleScene");
 		
 		public function TitleScene()
 		{
@@ -73,7 +72,7 @@ package scene.titleScene
 			_soundLoadCount++;
 			trace("*******************************");
 			trace(event.currentTarget.url);
-			_soundDic[event.currentTarget.url.replace(_filePath.url.toString(), "")] = event.currentTarget as Sound;
+			_soundDic[event.currentTarget.url.replace(_filePath.url.toString()+"/", "")] = event.currentTarget as Sound;
 			
 			if(_soundLoadCount >= _soundURLVector.length)
 			{
@@ -90,7 +89,7 @@ package scene.titleScene
 			sound.volume = 0.5;
 			sound.loops = Sound.INFINITE;
 			
-			SoundManager.play("Opening.mp3");
+			SoundManager.play("Opening");
 		}
 		
 		private function onSoundLoadFaild(event:IOErrorEvent):void
@@ -109,7 +108,7 @@ package scene.titleScene
 		private function onCompleteLoad(event:Event):void
 		{
 			trace("ddd = " + LoaderInfo(event.currentTarget).url);
-			_imageDic[LoaderInfo(event.currentTarget).url.replace(_filePath.url.toString(), "")] = LoaderInfo(event.currentTarget).loader.content;
+			_imageDic[LoaderInfo(event.currentTarget).url.replace(_filePath.url.toString()+"/", "")] = LoaderInfo(event.currentTarget).loader.content;
 			
 			LoaderInfo(event.currentTarget).removeEventListener(Event.COMPLETE, onCompleteLoad);
 			LoaderInfo(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, uncaughtError);
@@ -143,12 +142,7 @@ package scene.titleScene
 		}
 		
 		private function onTouch(event:TrollingEvent):void
-		{
-			//var image:Bitmap = new notiImage() as Bitmap;
-			//trace(image.width);
-			
-			//var notification:NotificationExtension = new NotificationExtension();
-			//notification.setNotification("돌아와요!!", "Notification", 30);
+		{			
 			SceneManager.switchScene("stageSelect");
 		}
 	}

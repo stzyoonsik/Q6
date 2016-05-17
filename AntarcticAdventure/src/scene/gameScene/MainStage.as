@@ -127,7 +127,6 @@ package scene.gameScene
 			_resource.addSoundName("flag.mp3");
 			_resource.addSoundName("jump.mp3");
 			_resource.addSoundName("MainBgm.mp3");
-			_resource.addSoundName("Opening.mp3");
 			_resource.addSoundName("stageCleared.mp3");
 			_resource.addSoundName("stageFailed.mp3");
 			
