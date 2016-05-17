@@ -1,8 +1,10 @@
 package
 {
+	import flash.desktop.NativeApplication;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
+	import flash.events.Event;
 	import flash.geom.Rectangle;
 	
 	import scene.stageSelectScene.StageSelectScene;
@@ -27,7 +29,16 @@ package
 			SceneManager.addScene(TitleScene, "Title");
 			SceneManager.addScene(StageSelectScene, "stageSelect");
 			
+			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
+			
 			trolling.start();
+		}
+		
+		private function onExit(event:Event):void
+		{
+			NativeApplication.nativeApplication.removeEventListener(Event.EXITING, onExit);
+			
+			SceneManager.dispose();
 		}
 	}
 }

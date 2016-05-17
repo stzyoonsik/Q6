@@ -19,10 +19,8 @@ package scene.gameScene.object.player
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
-	import trolling.media.Sound;
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
-	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 	
 	public class Player extends Objects
