@@ -511,10 +511,6 @@ package scene.gameScene
 			_coverFace.addChild(_ui);
 			
 			_controller = new Controller(_resource);
-			_controller.visible = false;
-			_coverFace.addChildAt(_controller, 0);
-			
-			_controller = new Controller();			
 			_coverFace.addChild(_controller);
 			_controller.addEventListener("move", onMove);
 			_controller.addEventListener("jump", onJump);
