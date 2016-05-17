@@ -199,11 +199,7 @@ package scene.gameScene.ui
 				SoundManager.stopSoundEffect();
 			}
 			
-			if (control == SettingData.CONTROL_BUTTON)
-			{
-				// to do
-												
-			}
+			dispatchEvent(new TrollingEvent("initControlMode", control));			
 		}
 		
 		private function onCompleteLoadData():void
