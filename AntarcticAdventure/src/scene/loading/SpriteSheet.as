@@ -51,6 +51,17 @@ package scene.loading
 			return _name;
 		}
 		
+		public function removeSubTexture(name:String):void
+		{
+			if (!_subTextures || !_subTextures[name])
+			{
+				return;
+			}
+			
+			_subTextures[name] = null;
+			delete _subTextures[name];
+		}
+		
 		/**
 		 *SpriteSheet의 xml로 생성된 ImageInfo들로 SubTexture를 생성합니다. 
 		 * 

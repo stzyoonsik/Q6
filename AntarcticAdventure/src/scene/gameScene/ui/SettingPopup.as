@@ -2,14 +2,14 @@ package scene.gameScene.ui
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.events.Event;
 	import flash.filesystem.File;
 	import flash.geom.ColorTransform;
 	import flash.geom.Rectangle;
-	import flash.utils.Dictionary;
 	
 	import scene.data.SettingData;
 	import scene.gameScene.MainStage;
+	import scene.loading.Resources;
+	import scene.loading.SpriteSheet;
 	
 	import trolling.core.SceneManager;
 	import trolling.event.TrollingEvent;
@@ -79,7 +79,7 @@ package scene.gameScene.ui
 			super.dispose();
 		}
 		
-		public function initialize(bitmaps:Dictionary):void
+		public function initialize(resources:Resources):void
 		{
 			// load setting data
 			_settingData = new SettingData("settingData", File.applicationStorageDirectory.resolvePath("data"));
@@ -88,13 +88,13 @@ package scene.gameScene.ui
 			
 			_temp = new Vector.<GameObject>();
 			
-			var check:Bitmap = bitmaps[UIResource.CHECK] as Bitmap;
+			var check:Texture = resources.getSubTexture(UIResource.SPRITE, UIResource.CHECK);
 			var bitmapData:BitmapData = new BitmapData(check.width, check.height);
 			var ct:ColorTransform = new ColorTransform();
 			ct.alphaMultiplier = 0; 
 			bitmapData.colorTransform(new Rectangle(0, 0, bitmapData.width, bitmapData.height), ct);
 			// BGM
-			var bgm:SelectButton = new SelectButton(new Texture(new Bitmap(bitmapData)), new Texture(check));
+			var bgm:SelectButton = new SelectButton(new Texture(new Bitmap(bitmapData)), check);
 			bgm.x = -(this.width / 10.7);
 			bgm.y = -(this.height / 9.5);
 			bgm.isSelected = true;
@@ -103,7 +103,7 @@ package scene.gameScene.ui
 			//
 			
 			// SOUND
-			var sound:SelectButton = new SelectButton(new Texture(new Bitmap(bitmapData)), new Texture(check));
+			var sound:SelectButton = new SelectButton(new Texture(new Bitmap(bitmapData)), check);
 			sound.x = bgm.x + this.width / 2.96;
 			sound.y = bgm.y;
 			sound.width = check.width;
@@ -111,15 +111,14 @@ package scene.gameScene.ui
 			sound.isSelected = true;
 			sound.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedSound);
 			_temp.push(sound);
-						
-			delete bitmaps[UIResource.CHECK];
 			//
 			
 			_controlButtonManager = new RadioButtonManager();
 			var controlButtonScale:Number = 0.5;
 			// SCREEN
 			var screen:RadioButton = new RadioButton(
-				new Texture(bitmaps[UIResource.SCREEN_WHITE]), new Texture(bitmaps[UIResource.SCREEN_ORANGE]));
+				resources.getSubTexture(UIResource.SPRITE, UIResource.SCREEN_WHITE),
+				resources.getSubTexture(UIResource.SPRITE, UIResource.SCREEN_ORANGE));
 			screen.width *= controlButtonScale;
 			screen.height *= controlButtonScale;
 			screen.x = bgm.x + screen.width / 3.8;
@@ -127,14 +126,12 @@ package scene.gameScene.ui
 			screen.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedScreen);
 			
 			_controlButtonManager.addButton(screen);
-			
-			delete bitmaps[UIResource.SCREEN_WHITE];
-			delete bitmaps[UIResource.SCREEN_ORANGE];
 			//
 			
 			// BUTTON
 			var button:RadioButton = new RadioButton(
-				new Texture(bitmaps[UIResource.BUTTON_WHITE]), new Texture(bitmaps[UIResource.BUTTON_ORANGE]));
+				resources.getSubTexture(UIResource.SPRITE, UIResource.BUTTON_WHITE),
+				resources.getSubTexture(UIResource.SPRITE, UIResource.BUTTON_ORANGE));
 			button.x = screen.x + screen.width + 10;
 			button.y = screen.y;
 			button.width *= controlButtonScale;
@@ -142,39 +139,38 @@ package scene.gameScene.ui
 			button.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedButton);
 						
 			_controlButtonManager.addButton(button);
-			
-			delete bitmaps[UIResource.BUTTON_WHITE];
-			delete bitmaps[UIResource.BUTTON_ORANGE];
 			//
 			
 			var stageButtonX:Number = this.width / 10;
 			// REPLAY
-			var replay:Button = new Button(new Texture(bitmaps[UIResource.REPLAY]));
+			var replay:Button = new Button(
+				resources.getSubTexture(UIResource.SPRITE, UIResource.REPLAY));
 			replay.x = -stageButtonX;
 			replay.y = this.height / 3.5;
 			replay.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedReplay);
 			//
 			
 			// MENU
-			var menu:Button = new Button(new Texture(bitmaps[UIResource.MENU]));
+			var menu:Button = new Button(
+				resources.getSubTexture(UIResource.SPRITE, UIResource.MENU));
 			menu.x = stageButtonX;
 			menu.y = replay.y + 3;
 			menu.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedMenu);
 			//
-			
-//			private const BGM:int = 0;
-//			private const SOUND:int = 1;
-//			private const SCREEN:int = 2;
-//			private const BUTTON:int = 3;
-//			private const REPLAY:int = 4;
-//			private const MENU:int = 5;
-			
+
 			addChild(bgm);
 			addChild(sound);
 			addChild(screen);
 			addChild(button);
 			addChild(replay);
 			addChild(menu);
+			
+			var spriteSheet:SpriteSheet = resources.getSpriteSheet(UIResource.SPRITE);
+			spriteSheet.removeSubTexture(UIResource.CHECK);
+			spriteSheet.removeSubTexture(UIResource.SCREEN_WHITE);
+			spriteSheet.removeSubTexture(UIResource.SCREEN_ORANGE);
+			spriteSheet.removeSubTexture(UIResource.BUTTON_WHITE);
+			spriteSheet.removeSubTexture(UIResource.BUTTON_ORANGE);
 		}
 		
 		private function saveSetting():void
@@ -294,7 +290,6 @@ package scene.gameScene.ui
 		private function onEndedMenu(event:TrollingEvent):void
 		{
 			SceneManager.outScene(MainStage.currentStage);
-//			SceneManager.deleteScene("Game");
 			SceneManager.deleteScene("Game");
 		}
 	}

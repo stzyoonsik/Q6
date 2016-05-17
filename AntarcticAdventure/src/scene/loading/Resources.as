@@ -46,8 +46,8 @@ package scene.loading
 			_callbackFunc = callbackFunction;
 			_faildFunc = faildFunction;
 			
-			trace(_spriteDir.url);
-			trace(_soundDir.url);
+			if (_spriteDir) trace(_spriteDir.url);
+			if (_soundDir)	trace(_soundDir.url);
 			
 			if(_spriteDir != null)
 			{

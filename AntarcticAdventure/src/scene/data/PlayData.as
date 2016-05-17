@@ -15,8 +15,6 @@ package scene.data
 		
 		private var _starData:Dictionary; // key: int(Stage ID), value: int(Number of Stars)
 		
-		private var _onReadyToPreset:Function;
-		
 		public function PlayData(name:String, path:File)
 		{
 			super(name, path);
@@ -95,11 +93,6 @@ package scene.data
 			{
 				addData(data.starData[i], data.starData[i + 1]); 
 			}
-			
-			if (_onReadyToPreset)
-			{
-				_onReadyToPreset();
-			}
 		}
 		
 		public function addData(stageId:int, numStar:int):void
@@ -167,11 +160,5 @@ package scene.data
 		{
 			_starData = value;
 		}
-
-		public function set onReadyToPreset(value:Function):void
-		{
-			_onReadyToPreset = value;
-		}
-
 	}
 }
