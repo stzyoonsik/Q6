@@ -454,7 +454,7 @@ package scene.gameScene
 		private function onCompleteLoadJSON(event:Event):void
 		{
 			var loader:URLLoader = URLLoader(event.target);
-			trace("completeHandler: " + loader.data);
+			//trace("completeHandler: " + loader.data);
 			
 			var data:Object = JSON.parse(loader.data);
 			//trace("The answer is " + data.id+" ; "+data.first_var+" ; "+data.second_var);

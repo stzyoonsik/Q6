@@ -65,6 +65,9 @@ package Asset
 		[Embed(source="save.png")]
 		public static const Save:Class;
 		
+		[Embed(source="load.png")]
+		public static const Load:Class;
+		
 		[Embed(source="stageUp.png")]
 		public static const StageUp:Class;
 		

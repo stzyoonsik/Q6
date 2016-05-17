@@ -1,9 +1,5 @@
-package
-{
-	
-	import flash.events.Event;
-	import flash.filesystem.File;
-	
+package 
+{	
 	import Select.Select;
 	
 	import View.View;
@@ -25,6 +21,7 @@ package
 			
 			_select.addEventListener("object", onClickObject);
 			_select.addEventListener("save", onClickSave);
+			_select.addEventListener("load", onClickLoad);
 			_select.addEventListener("curve", onClickCurve);
 			_select.addEventListener("color", onClickColor);
 		}
@@ -37,6 +34,11 @@ package
 		private function onClickSave(event:starling.events.Event):void
 		{				
 			_select.exportJSON(_view.stageNum, _view.color, _view.curveDataVector, _view.objectDataVector);			
+		}
+		
+		private function onClickLoad(event:starling.events.Event):void			
+		{				
+			_view.dispatchEvent(new starling.events.Event("load", false, event.data));		
 		}
 		
 		private function onClickCurve(event:starling.events.Event):void

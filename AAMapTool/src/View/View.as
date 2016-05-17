@@ -1,5 +1,7 @@
 package View
 {
+	import flash.net.URLLoader;
+	
 	import Asset.Assets;
 	
 	import starling.display.Button;
@@ -185,6 +187,7 @@ package View
 			addEventListener("object", onClickObject);
 			addEventListener("curve", onClickCurve);
 			addEventListener("color", onClickColor);
+			addEventListener("load", onClickLoad);
 		}
 		
 		private function onClickStageUp(event:TouchEvent):void
@@ -220,71 +223,57 @@ package View
 				case -1:
 					var texture:Texture = Texture.fromEmbeddedAsset(Assets.Home);			
 					changeObject(texture, 228, 64, 64, 1, true);
-					_objectDataVector[_currentObject] = -1;
 					break;
 				case 0:
 					changeObject(null, 228, 64, 64, 1, false);
-					_objectDataVector[_currentObject] = 0;
 					break;
 				case 1:
 					texture = Texture.fromEmbeddedAsset(Assets.CraterEllipse);	
 					changeObject(texture, 228, 64, 64, 1, true);
-					_objectDataVector[_currentObject] = 1;
 					break;
 				case 2:
 					texture = Texture.fromEmbeddedAsset(Assets.CraterEllipse);	
 					changeObject(texture, 146, 64, 64, 1, true);
-					_objectDataVector[_currentObject] = 2;
 					break;
 				case 3:
 					texture = Texture.fromEmbeddedAsset(Assets.CraterEllipse);	
 					changeObject(texture, 310, 64, 64, 1, true);
-					_objectDataVector[_currentObject] = 3;
 					break;
 				case 4:
 					texture = Texture.fromEmbeddedAsset(Assets.DoubleCraterEllipse);	
 					changeObject(texture, 228, 256, 64, 1, true);
-					_objectDataVector[_currentObject] = 4;
 					break;
 				case 5:
 					texture = Texture.fromEmbeddedAsset(Assets.CraterRect);	
 					changeObject(texture, 180, 64, 64, 1, true);
-					_objectDataVector[_currentObject] = 5;
 					break;
 				case 6:
 					texture = Texture.fromEmbeddedAsset(Assets.CraterRect);	
 					changeObject(texture, 276, 64, 64, 1, true);
-					_objectDataVector[_currentObject] = 6;
 					break;
 				case 7:
 					texture = Texture.fromEmbeddedAsset(Assets.Flag);	
 					changeObject(texture, 180, 64, 64, 1, true);
-					_objectDataVector[_currentObject] = 7;
 					break;
 				case 8:
 					texture = Texture.fromEmbeddedAsset(Assets.Flag);	
 					changeObject(texture, 276, 64, 64, 1, true);
-					_objectDataVector[_currentObject] = 8;
 					break;	
 				case 9:
 					texture = Texture.fromEmbeddedAsset(Assets.Coke);	
 					changeObject(texture, 228, 32, 32, 1, true);
-					_objectDataVector[_currentObject] = 9;
 					break;	
 				case 10:
 					texture = Texture.fromEmbeddedAsset(Assets.Coke);	
 					changeObject(texture, 146, 32, 32, 1, true);
-					_objectDataVector[_currentObject] = 10;
 					break;	
 				case 11:
 					texture = Texture.fromEmbeddedAsset(Assets.Coke);	
 					changeObject(texture, 310, 32, 32, 1, true);
-					_objectDataVector[_currentObject] = 11;
-					break;	
-				
+					break;					
 				
 			}	
-			
+			_objectDataVector[_currentObject] = event.data;
 			printData();
 		}
 		
@@ -349,12 +338,9 @@ package View
 				addMap();
 				//trace(_mapVector.length);
 				_currentPage = _mapVector.length - 1;
-				_page.text = _currentPage.toString();				
-				
-				
+				_page.text = _currentPage.toString();
 				
 				viewCurrentMap();	
-				//changeCurve(-1);
 			}
 		}
 		
@@ -369,7 +355,6 @@ package View
 				if(_mapVector.length <= 1)
 					return;
 				
-				//trace("_mapVector[_currentPage].numChildren = " + _mapVector[_currentPage].numChildren);
 								
 				for(var i:int = 0; i < 10; ++i)
 				{
@@ -466,11 +451,211 @@ package View
 					texture = Texture.fromEmbeddedAsset(Assets.RightCurve);
 					break;
 			}
-			
-			
 			_curveVector[_currentPage].texture = texture;
 			_curveVector[_currentPage].visible = true;
 			//addChild(image);
+		}
+		
+		private function onClickLoad(event:Event):void
+		{
+			release();
+			
+			_stageNum = event.data.stage;
+			_stageTextField.text = "STAGE : " + _stageNum.toString();
+			buildColor(event.data.backgroundColor);
+			
+			buildMap(event.data);
+			
+			viewCurrentMap();
+		}
+		
+		private function initObject(object:Image, texture:Texture, x:int, width:int, height:int, alpha:Number, visible:Boolean):void
+		{
+			object.texture = texture;
+			object.x = x;
+			object.width = width;
+			object.height = height;
+			object.alpha = alpha;
+			object.visible = visible;
+		}
+		
+		private function buildObject(object:Image, value:int):void
+		{
+			var texture:Texture;
+			
+			switch(value)
+			{
+				case -1:
+					texture = Texture.fromEmbeddedAsset(Assets.Home);			
+					initObject(object, texture, 228, 64, 64, 0.5, true);
+					break;
+				case 0:
+					initObject(object, null, 228, 64, 64, 0.5, false);
+					break;
+				case 1:
+					texture = Texture.fromEmbeddedAsset(Assets.CraterEllipse);	
+					initObject(object, texture, 228, 64, 64, 0.5, true);
+					break;
+				case 2:
+					texture = Texture.fromEmbeddedAsset(Assets.CraterEllipse);	
+					initObject(object, texture, 146, 64, 64, 0.5, true);
+					break;
+				case 3:
+					texture = Texture.fromEmbeddedAsset(Assets.CraterEllipse);	
+					initObject(object, texture, 310, 64, 64, 0.5, true);
+					break;
+				case 4:
+					texture = Texture.fromEmbeddedAsset(Assets.DoubleCraterEllipse);	
+					initObject(object, texture, 228, 256, 64, 0.5, true);
+					break;
+				case 5:
+					texture = Texture.fromEmbeddedAsset(Assets.CraterRect);	
+					initObject(object, texture, 180, 64, 64, 0.5, true);
+					break;
+				case 6:
+					texture = Texture.fromEmbeddedAsset(Assets.CraterRect);	
+					initObject(object, texture, 276, 64, 64, 0.5, true);
+					break;
+				case 7:
+					texture = Texture.fromEmbeddedAsset(Assets.Flag);	
+					initObject(object, texture, 180, 64, 64, 0.5, true);
+					break;
+				case 8:
+					texture = Texture.fromEmbeddedAsset(Assets.Flag);	
+					initObject(object, texture, 276, 64, 64, 0.5, true);
+					break;	
+				case 9:
+					texture = Texture.fromEmbeddedAsset(Assets.Coke);	
+					initObject(object, texture, 228, 32, 32, 0.5, true);
+					break;	
+				case 10:
+					texture = Texture.fromEmbeddedAsset(Assets.Coke);	
+					initObject(object, texture, 146, 32, 32, 0.5, true);
+					break;	
+				case 11:
+					texture = Texture.fromEmbeddedAsset(Assets.Coke);	
+					initObject(object, texture, 310, 32, 32, 0.5, true);
+					break;			
+			}
+			
+			object.texture = texture;
+		}
+		
+		private function release():void
+		{
+			
+			for(var i:int = 0; i < _objectBGVector.length; ++i)
+			{
+				_objectBGVector[i].dispose();
+				_objectBGVector[i] = null;
+				_objectVector[i].dispose();
+				_objectVector[i] = null;
+			}
+			
+			for(i = 0; i < _mapVector.length; ++i)
+			{
+				_mapVector[i].removeEventListener(TouchEvent.TOUCH, onClickMap);
+				_mapVector[i].dispose();				
+				_mapVector[i].removeChildren();		
+				_mapVector[i] = null;
+				
+				_curveVector[i].removeFromParent();
+				_curveVector[i].dispose();
+				_curveVector[i] = null;
+			}
+			
+			_curveVector.splice(0, _curveVector.length);			
+			_curveDataVector.splice(0, _curveDataVector.length);
+			
+			_mapVector.splice(0, _mapVector.length);
+			
+			_objectDataVector.splice(0, _objectDataVector.length);
+			
+			_objectBGVector.splice(0, _objectBGVector.length);
+			_objectVector.splice(0, _objectVector.length);
+		}
+		
+		private function buildMap(data:Object):void
+		{
+			var texture:Texture = Texture.fromEmbeddedAsset(Assets.ObjectBG);
+			
+			for(var i:int = 0; i < data.object.length; ++i)
+			{
+				_objectDataVector.push(data.object[i]);
+				
+				if(i % 10 == 0)
+				{
+					trace("맵벡터 푸쉬");
+					_map = new Sprite();
+					_stageSprite.addChild(_map);
+					_mapVector.push(_map);
+					_map.addEventListener(TouchEvent.TOUCH, onClickMap);
+					
+					_curveDataVector.push(data.curve[i]);
+					buildCurveVector(data.curve[int(i/10)]);
+				}
+				
+				var objectBG:Image = new Image(texture);
+				objectBG.alignPivot("center", "center");
+				objectBG.x = 228;
+				objectBG.y = (-i % 10) * 50 + 532; 
+				objectBG.alpha = 0.5;
+				_objectBGVector.push(objectBG);
+				
+				var object:Image = new Image(null);
+				buildObject(object, data.object[i]);
+				object.alignPivot("center", "center");
+				object.touchable = false;
+				object.y = (-i % 10) * 50 + 532; 
+				
+				_objectVector.push(object);
+				
+				_mapVector[int(i / 10)].addChild(objectBG);
+				_mapVector[int(i / 10)].addChild(object);
+				
+				_currentPage = int(i / 10);
+				_page.text = _currentPage.toString();
+			}
+		}
+		
+		private function buildCurveVector(direction:int):void
+		{
+			var texture:Texture;
+			
+			switch(direction)
+			{
+				case -1:
+					texture = Texture.fromEmbeddedAsset(Assets.NormalCurve);					
+					break;
+				case 0:
+					texture = Texture.fromEmbeddedAsset(Assets.LeftCurve);
+					break;
+				case 1:
+					texture = Texture.fromEmbeddedAsset(Assets.RightCurve);
+					break;
+			}
+			var image:Image = new Image(texture);	
+			image.width = 64;
+			image.height = 64;
+			_curveVector.push(image);	
+			_stageSprite.addChild(image);			
+		}
+		
+		private function buildColor(value:int):void
+		{
+			_color = value;
+			
+			var texture:Texture;
+			
+			if(value == 0)
+			{
+				texture = Texture.fromEmbeddedAsset(Assets.CyanBG);				
+			}
+			else
+			{
+				texture = Texture.fromEmbeddedAsset(Assets.OrangeBG);	
+			}
+			_colorImage.texture = texture;
 		}
 	}
 }
