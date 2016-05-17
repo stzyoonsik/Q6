@@ -37,6 +37,11 @@ package Select.Save
 			_saveButton.addEventListener(TouchEvent.TOUCH, onClickSave);
 		}
 		
+		/**
+		 * 
+		 * @param event 터치이벤트
+		 * 세이브 버튼을 클릭했을때 호출되는 콜백 메소드 
+		 */
 		private function onClickSave(event:TouchEvent):void
 		{
 			var touch:Touch = event.getTouch(_saveButton, TouchPhase.ENDED);
@@ -47,6 +52,14 @@ package Select.Save
 			}	
 		}
 		
+		/**
+		 * 
+		 * @param stageNum 스테이지 번호
+		 * @param backgroundColor 배경 색
+		 * @param curve 커브길
+		 * @param object 오브젝트
+		 * 입력 데이터들을 JSON 포맷에 맞게 인코딩 하여 저장하는 메소드
+		 */
 		public function exportJSON(stageNum:int, backgroundColor:int, curve:Vector.<int>, object:Vector.<int>):void
 		{
 			var file:File = File.applicationDirectory.resolvePath("stage" + stageNum + ".json");
@@ -79,9 +92,14 @@ package Select.Save
 			file.save(str);
 		}
 		
+		/**
+		 *  
+		 * @param event
+		 * 세이브의 성공을 알리는 콜백메소드
+		 */
 		private function fileSaved(event:flash.events.Event):void 
 		{ 
-			trace("Done."); 
+			trace("Saved."); 
 		}
 	}
 }

@@ -14,6 +14,7 @@ package Select.Load
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
+	import flash.net.FileFilter;
 
 	public class Load extends Sprite
 	{
@@ -39,6 +40,11 @@ package Select.Load
 			_loadButton.addEventListener(TouchEvent.TOUCH, onClickLoad);
 		}
 		
+		/**
+		 * 
+		 * @param event 터치이벤트
+		 * 로드 버튼을 클릭하면 호출되는 콜백 메소드
+		 */
 		private function onClickLoad(event:TouchEvent):void
 		{
 			var touch:Touch = event.getTouch(_loadButton, TouchPhase.ENDED);
@@ -49,13 +55,23 @@ package Select.Load
 			}	
 		}
 		
+		/**
+		 * 
+		 * json 파일을 선택하여 열도록 하는 메소드
+		 */
 		private function loadJSON():void
 		{
 			var file:File = File.documentsDirectory;
-			file.browseForOpen("");//("select json file");
+			var filter:FileFilter = new FileFilter("JSON", "*.json"); 
+			file.browseForOpen("select json file", [filter]);
 			file.addEventListener(flash.events.Event.SELECT, onFileSelected);	
 		}
 		
+		/**
+		 * 
+		 * @param event
+		 * 선택된 파일을 로딩하는 콜백 메소드
+		 */
 		private function onFileSelected(event:flash.events.Event):void
 		{
 			trace(event.target.url);
@@ -74,6 +90,11 @@ package Select.Load
 			}
 		}
 		
+		/**
+		 * 
+		 * @param event
+		 * 선택된 JSON파일의 로딩이 끝났을때 호출되는 콜백 메소드
+		 */
 		private function onCompleteLoadJSON(event:flash.events.Event):void
 		{
 			var loader:URLLoader = URLLoader(event.target);			

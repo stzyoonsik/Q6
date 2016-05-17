@@ -1,7 +1,5 @@
 package View
 {
-	import flash.net.URLLoader;
-	
 	import Asset.Assets;
 	
 	import starling.display.Button;
@@ -175,6 +173,10 @@ package View
 			_stageSprite.addChild(_colorImage);
 		}
 		
+		/**
+		 * 
+		 * 
+		 */
 		private function addEvent():void
 		{			
 			_addButton.addEventListener(TouchEvent.TOUCH, onClickAdd);
@@ -190,6 +192,11 @@ package View
 			addEventListener("load", onClickLoad);
 		}
 		
+		/**
+		 * 
+		 * @param event 터치이벤트
+		 * 스테이지 업 버튼을 클릭했을때, 현재 스테이지 번호를 올려주는 콜백 메소드
+		 */
 		private function onClickStageUp(event:TouchEvent):void
 		{
 			var touch:Touch = event.getTouch(_stageUpButton, TouchPhase.ENDED);
@@ -197,10 +204,14 @@ package View
 			{
 				_stageNum++;
 				_stageTextField.text = "STAGE : " + _stageNum.toString();
-			}
-			
+			}			
 		}
 		
+		/**
+		 *  
+		 * @param event 터치이벤트
+		 * 스테이지 다운 버튼을 클릭했을때, 현재 스테이지 번호를 내려주는 콜백 메소드
+		 */
 		private function onClickStageDown(event:TouchEvent):void
 		{
 			var touch:Touch = event.getTouch(_stageDownButton, TouchPhase.ENDED);
@@ -214,10 +225,14 @@ package View
 			
 		}
 		
+		/**
+		 * 
+		 * @param event 
+		 * 오브젝트를 클릭했을때, Objects 클래스로부터 디스패치 받는 콟백 메소드.
+		 * 선택된 오브젝트를 맵에 뿌려준다.
+		 */
 		private function onClickObject(event:Event):void
 		{
-			//trace(event.data);
-			
 			switch(event.data)
 			{
 				case -1:
@@ -277,12 +292,22 @@ package View
 			printData();
 		}
 		
+		/**
+		 *  
+		 * @param event 터치이벤트
+		 * 커브를 클릭했을때, 선택된 값으로 데이터를 바꿔주는 메소드
+		 */
 		private function onClickCurve(event:Event):void
 		{
 			_curveDataVector[_currentPage] = event.data;
 			changeCurve(int(event.data));
 		}
 		
+		/**
+		 * 
+		 * @param event 터치이벤트
+		 * 배경색을 클릭했을때, 내부에 값을 저장하고 화면에 선택된 배경색을 보여주는 콜백 메소드 
+		 */
 		private function onClickColor(event:Event):void
 		{
 			_color = int(event.data);
@@ -298,6 +323,16 @@ package View
 			_colorImage.texture = texture;
 		}
 		
+		/**
+		 * 
+		 * @param texture 텍스쳐
+		 * @param x 좌표
+		 * @param width 가로 길이
+		 * @param height 세로 길이
+		 * @param alpha 투명도
+		 * @param visible 활성화
+		 * 현재의 오브젝트를 선택된 오브젝트로 바꿔주는 메소드
+		 */
 		private function changeObject(texture:Texture, x:int, width:int, height:int, alpha:Number, visible:Boolean):void
 		{
 			_objectVector[_currentObject].texture = texture;
@@ -308,6 +343,11 @@ package View
 			_objectVector[_currentObject].visible = visible;			
 		}
 		
+		/**
+		 * 
+		 * @param event 터치이벤트
+		 * 맵을 클릭했을때, 현재 선택된 영역의 투명도를 1로 하고 나머지를 0.5로 해주는 메소드
+		 */
 		private function onClickMap(event:TouchEvent):void
 		{
 			
@@ -329,6 +369,11 @@ package View
 			}
 		}
 		
+		/**
+		 * 
+		 * @param event 터치이벤트
+		 * 애드 버튼을 눌렀을때, 새로운 맵을 추가해주는 메소드
+		 */
 		private function onClickAdd(event:TouchEvent):void
 		{
 			var touch:Touch = event.getTouch(_addButton, TouchPhase.ENDED);
@@ -336,7 +381,6 @@ package View
 			{
 				trace("addButton");
 				addMap();
-				//trace(_mapVector.length);
 				_currentPage = _mapVector.length - 1;
 				_page.text = _currentPage.toString();
 				
@@ -344,6 +388,11 @@ package View
 			}
 		}
 		
+		/**
+		 * 
+		 * @param event 터치이벤트
+		 * 딜리트 버튼을 눌렀을때, 현재 보여지는 맵과 그 안의 데이터들을 삭제하는 콜백 메소드
+		 */
 		private function onClickDelete(event:TouchEvent):void
 		{
 			var touch:Touch = event.getTouch(_deleteButton, TouchPhase.ENDED);
@@ -383,6 +432,11 @@ package View
 			}
 		}
 		
+		/**
+		 * 
+		 * @param event 터치이벤트
+		 * 이전 버튼을 눌렀을때, 이전 페이지를 보여주도록 하는 콜백 메소드
+		 */
 		private function onClickPrev(event:TouchEvent):void
 		{
 			var touch:Touch = event.getTouch(_prevButton, TouchPhase.ENDED);
@@ -397,6 +451,11 @@ package View
 			}
 		}
 		
+		/**
+		 * 
+		 * @param event 터치이벤트
+		 * 넥스트 버튼을 눌렀을때, 다음 페이지를 보여주도록 하는 콜백 메소드
+		 */
 		private function onClickNext(event:TouchEvent):void
 		{
 			var touch:Touch = event.getTouch(_nextButton, TouchPhase.ENDED);
@@ -411,6 +470,10 @@ package View
 			}
 		}
 		
+		/**
+		 * 현재 페이지의 맵만 보여주고 나머지 맵들의 활성화를 끄는 메소드 
+		 * 
+		 */
 		private function viewCurrentMap():void
 		{
 			for(var i:int = 0; i < _mapVector.length; ++i)
@@ -428,6 +491,10 @@ package View
 			}
 		}
 		
+		/**
+		 * 오브젝트를 클릭할때마다 호출되는 메소드. 
+		 * objectDataVector 의 내용을 trace함.
+		 */
 		private function printData():void
 		{
 			for(var i:int = 0; i < _objectDataVector.length; ++i)
@@ -436,6 +503,11 @@ package View
 			}
 		}
 		
+		/**
+		 * 
+		 * @param direction 방향 (-1 = 직선, 0 = 왼쪽, 1 = 오른쪽)
+		 * 현재 보여지는 맵의 커브 이미지를 바꿔주는 메소드 
+		 */
 		private function changeCurve(direction:int):void
 		{
 			var texture:Texture;
@@ -453,9 +525,13 @@ package View
 			}
 			_curveVector[_currentPage].texture = texture;
 			_curveVector[_currentPage].visible = true;
-			//addChild(image);
 		}
 		
+		/**
+		 *  
+		 * @param event event.data 안에 JSON 파일의 내용이 Object 형태로 담겨있음
+		 * 로드 버튼을 클릭했을때 Load 클래스로부터 디스패치 받는 메소드
+		 */
 		private function onClickLoad(event:Event):void
 		{
 			release();
@@ -469,6 +545,17 @@ package View
 			viewCurrentMap();
 		}
 		
+		/**
+		 * 
+		 * @param object 이미지
+		 * @param texture 텍스쳐
+		 * @param x 좌표
+		 * @param width 가로 길이
+		 * @param height 세로 길이
+		 * @param alpha 투명도
+		 * @param visible 활성화
+		 * 
+		 */
 		private function initObject(object:Image, texture:Texture, x:int, width:int, height:int, alpha:Number, visible:Boolean):void
 		{
 			object.texture = texture;
@@ -479,6 +566,12 @@ package View
 			object.visible = visible;
 		}
 		
+		/**
+		 * 
+		 * @param object 이미지
+		 * @param value 오브젝트
+		 * 오브젝트 번호에 해당되는 오브젝트들을 시각화하여 맵에 보여주는 메소드
+		 */
 		private function buildObject(object:Image, value:int):void
 		{
 			var texture:Texture;
@@ -541,6 +634,10 @@ package View
 			object.texture = texture;
 		}
 		
+		/**
+		 * 새로운 스테이지(JSON)을 로딩할 시 기존의 데이터들을 모두 지워주는 메소드  
+		 * 
+		 */
 		private function release():void
 		{
 			
@@ -575,6 +672,11 @@ package View
 			_objectVector.splice(0, _objectVector.length);
 		}
 		
+		/**
+		 *  
+		 * @param data JSON파일의 데이터
+		 * JSON 로딩이 완료된 후, 데이터들을 시각화하여 맵에 뿌려주는 메소드
+		 */
 		private function buildMap(data:Object):void
 		{
 			var texture:Texture = Texture.fromEmbeddedAsset(Assets.ObjectBG);
@@ -618,6 +720,11 @@ package View
 			}
 		}
 		
+		/**
+		 * 
+		 * @param direction 방향 (-1 = 직선, 0 = 왼쪽, 1 = 오른쪽)
+		 * JSON 로딩이 완료된 후, 내부에 값을 저장하고 화면에 커브 이미지를 보여주는 메소드
+		 */
 		private function buildCurveVector(direction:int):void
 		{
 			var texture:Texture;
@@ -641,6 +748,11 @@ package View
 			_stageSprite.addChild(image);			
 		}
 		
+		/**
+		 * 
+		 * @param value 로딩된 데이터의 배경색 값
+		 * JSON 로딩이 완료된 후, 내부에 값을 저장하고 화면에 나타나는 현재 배경색 이미지를 바꿔주는 메소드 
+		 */
 		private function buildColor(value:int):void
 		{
 			_color = value;
