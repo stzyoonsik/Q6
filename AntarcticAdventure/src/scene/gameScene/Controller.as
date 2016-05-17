@@ -1,6 +1,6 @@
 package scene.gameScene
 {
-	import scene.loading.Resource;
+	import scene.loading.Resources;
 	
 	import trolling.object.GameObject;
 	import trolling.utils.PivotType;
@@ -16,13 +16,13 @@ package scene.gameScene
 		private var _right:Button;
 		private var _jump:Button;
 		
-		public function Controller()
+		public function Controller(resource:Resources)
 		{
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
 			
 		
-			_left = new Button(Resource.spriteSheet.subTextures["left"]);
+			_left = new Button(resource.getSubTexture("MainStageSprite0.png", "left"));
 			_left.pivot = PivotType.CENTER;
 			_left.x = _stageWidth * 0.1;
 			_left.y = _stageHeight * 0.8;
@@ -31,7 +31,7 @@ package scene.gameScene
 			
 			
 			
-			_right = new Button(Resource.spriteSheet.subTextures["right"]);		
+			_right = new Button(resource.getSubTexture("MainStageSprite0.png", "right"));		
 			_right.pivot = PivotType.CENTER;
 			_right.x = _stageWidth * 0.3;
 			_right.y = _stageHeight * 0.8;
@@ -40,7 +40,7 @@ package scene.gameScene
 			
 			
 				
-			_jump = new Button(Resource.spriteSheet.subTextures["jump"]);
+			_jump = new Button(resource.getSubTexture("MainStageSprite0.png", "jump"));
 			_jump.pivot = PivotType.CENTER;
 			_jump.x = _stageWidth * 0.85;
 			_jump.y = _stageHeight * 0.8;

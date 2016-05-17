@@ -3,7 +3,7 @@ package scene.gameScene.object.enemy
 	import scene.gameScene.MainStage;
 	import scene.gameScene.ObjectTag;
 	import scene.gameScene.object.Objects;
-	import scene.loading.ResourceLoad;
+	import scene.loading.Resources;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
@@ -13,9 +13,9 @@ package scene.gameScene.object.enemy
 	public class Enemy extends Objects
 	{		
 		private var _imageIndex:int;
-		private var _resource:ResourceLoad;
+		private var _resource:Resources;
 		
-		public function Enemy(resource:ResourceLoad)
+		public function Enemy(resource:Resources)
 		{
 			this.tag = ObjectTag.ENEMY;
 			

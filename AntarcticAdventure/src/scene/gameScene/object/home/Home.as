@@ -3,25 +3,22 @@ package scene.gameScene.object.home
 	import scene.gameScene.MainStage;
 	import scene.gameScene.object.Objects;
 	import scene.gameScene.util.PlayerState;
-	import scene.loading.ResourceLoad;
-	
-	import trolling.component.graphic.Image;
-	import trolling.event.TrollingEvent;
-	import scene.loading.Resource;
+	import scene.loading.Resources;
 	
 	import trolling.component.graphic.Image;
 	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;
-	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 	
 	public class Home extends Objects
 	{		
-		public function Home(resource:ResourceLoad)
 		private var _nationFlag:GameObject = new GameObject();
+		private var _resource:Resources;
 		
-		public function Home()
+		public function Home(resource:Resources)
 		{
+			_resource = resource;
+			
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
 			
@@ -35,7 +32,7 @@ package scene.gameScene.object.home
 			this.width = _stageWidth * 0.1;
 			this.height = this.width;
 			
-			_image = new Image(resource.getSubTexture("MainStageSprite0.png", "home0"));
+			_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "home0"));
 			
 			addComponent(_image);
 			
@@ -45,7 +42,7 @@ package scene.gameScene.object.home
 		private function initNationFlag():void
 		{
 			_nationFlag.pivot = PivotType.CENTER;
-			_image = new Image(Resource.spriteSheet.subTextures["nationFlag0"]);
+			_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "nationFlag0"));
 			_nationFlag.width = 16;
 			_nationFlag.height = 12;
 			_nationFlag.x = 9;

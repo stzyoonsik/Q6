@@ -5,7 +5,7 @@ package scene.gameScene.object.crater
 	import scene.gameScene.MainStage;
 	import scene.gameScene.ObjectTag;
 	import scene.gameScene.object.Objects;
-	import scene.loading.ResourceLoad;
+	import scene.loading.Resources;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
@@ -24,7 +24,7 @@ package scene.gameScene.object.crater
 		private var _rightCollider:Collider = new Collider();
 		private var _middleCollider:Collider = new Collider();		
 		
-		public function RectangleCrater(resource:ResourceLoad, direction)
+		public function RectangleCrater(resource:Resources, direction)
 		{
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;

@@ -3,7 +3,7 @@ package scene.gameScene.background
 	import flash.display.Bitmap;
 	
 	import scene.gameScene.MainStage;
-	import scene.loading.ResourceLoad;
+	import scene.loading.Resources;
 	
 	import trolling.component.animation.Animator;
 	import trolling.component.animation.State;
@@ -30,7 +30,7 @@ package scene.gameScene.background
 		
 		public function get curve():int	{ return _curve; }		
 		
-		public function Background(resource:ResourceLoad, color:int)
+		public function Background(resource:Resources, color:int)
 		{
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
@@ -77,7 +77,7 @@ package scene.gameScene.background
 				_topBackground.blendColor(1, 0.5, 0.25);
 		}
 		
-		private function initAnimator(resource:ResourceLoad):void
+		private function initAnimator(resource:Resources):void
 		{
 			_animator = new Animator();
 			

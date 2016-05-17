@@ -5,8 +5,8 @@ package scene.gameScene.object.item
 	import scene.gameScene.MainStage;
 	import scene.gameScene.ObjectTag;
 	import scene.gameScene.object.Objects;
-	import scene.loading.Resource;
-	import scene.loading.ResourceLoad;
+	import scene.loading.Resources;
+	import scene.loading.Resources;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
@@ -22,9 +22,9 @@ package scene.gameScene.object.item
 		private var _jumpHeight:int;
 		private var _jumpTheta:Number = 0;
 		
-		private var _resource:ResourceLoad;
+		private var _resource:scene.loading.Resources;
 		
-		public function Fish(resource:ResourceLoad, direction:int)
+		public function Fish(resource:scene.loading.Resources, direction:int)
 		{
 			this.tag = ObjectTag.ITEM;
 			

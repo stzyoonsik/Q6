@@ -12,7 +12,7 @@ package scene.gameScene.object.player
 	import scene.gameScene.object.item.Fish;
 	import scene.gameScene.object.item.Flag;
 	import scene.gameScene.util.PlayerState;
-	import scene.loading.ResourceLoad;
+	import scene.loading.Resources;
 	
 	import trolling.component.animation.Animator;
 	import trolling.component.animation.State;
@@ -63,7 +63,7 @@ package scene.gameScene.object.player
 		//private var _dashSpeed:Number = 0;
 		private var _dashCount:int;
 		
-		private var _resource:ResourceLoad;
+		private var _resource:Resources;
 		
 		private const END_DELAY:uint = 120;
 		private var _endFrameCounter:uint;
@@ -96,7 +96,7 @@ package scene.gameScene.object.player
 		public function get struggleRightCount():int { return _struggleRightCount; }		
 		public function set struggleRightCount(value:int):void { _struggleRightCount = value; }
 		
-		public function Player(resource:ResourceLoad)
+		public function Player(resource:Resources)
 		{
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;

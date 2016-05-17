@@ -10,12 +10,8 @@ package scene.loading
 	import trolling.media.Sound;
 	import trolling.media.SoundManager;
 	import trolling.rendering.Texture;
-
-	import flash.media.Sound;
-	import flash.net.URLRequest;
-	import flash.utils.Dictionary;
 	
-	public class ResourceLoad
+	public class Resources
 	{	
 		private var _spriteSheetDic:Dictionary;
 		private var _soundDic:Dictionary;
@@ -31,7 +27,7 @@ package scene.loading
 		
 		private var _loadedCount:uint;
 		
-		public function ResourceLoad(spriteDirectory:File = null, soundDirectory:File = null)
+		public function Resources(spriteDirectory:File = null, soundDirectory:File = null)
 		{
 			_spriteSheetDic = new Dictionary();
 			_soundDic = new Dictionary();
@@ -86,15 +82,11 @@ package scene.loading
 			trace(Sound(event.currentTarget).url.replace(_soundDir.url.toString()+"/", ""));
 			var soundFileName:String = Sound(event.currentTarget).url.replace(_soundDir.url.toString()+"/", "");
 			_soundDic[soundFileName] = event.currentTarget as Sound;
-//			var loadSound:Sound = event.currentTarget as Sound;
 			Sound(event.currentTarget).removeEventListener(Event.COMPLETE, onSoundLoaded);
 			Sound(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFaild);
 			
 			SoundManager.addSound(soundFileName.replace(".mp3", ""), _soundDic[soundFileName]);
 			
-			_soundDic[Sound(event.currentTarget).url.replace(_soundDir.url.toString()+"/", "")] = event.currentTarget as Sound;
-			Sound(event.currentTarget).removeEventListener(Event.COMPLETE, onSoundLoaded);
-			Sound(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFaild);
 			_loadedCount++;
 			checkLoadComplete();
 		}

@@ -1,9 +1,7 @@
 package scene.gameScene
 {
-	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	import flash.filesystem.File;
-	import flash.filesystem.FileMode;
 	import flash.geom.Point;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
@@ -19,20 +17,16 @@ package scene.gameScene
 	import scene.gameScene.object.item.Flag;
 	import scene.gameScene.object.player.Player;
 	import scene.gameScene.ui.IngameUI;
-	import scene.gameScene.util.FileStreamWithLineReader;
 	import scene.gameScene.util.ObjectName;
 	import scene.gameScene.util.PlayerState;
-	import scene.loading.Resource;
-<<<<<<< HEAD
-	import scene.loading.ResourceLoad;
-=======
->>>>>>> develop(YoonSik)
+	import scene.loading.Resources;
 	
 	import trolling.event.TrollingEvent;
 	import trolling.media.Sound;
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
+	import scene.loading.Resources;
 
 	public class MainStage extends Scene
 	{
@@ -84,13 +78,9 @@ package scene.gameScene
 		private var _playerMaxLife:int;
 		private var _totalNumFlag:int;
 		
-<<<<<<< HEAD
-		private var _resources:ResourceLoad;
-=======
+		private var _resources:Resources;
 		private var _control:int;
 		private var _controller:Controller;
-
->>>>>>> develop(YoonSik)
 		
 		//public static function get coverFaceForFall():GameObject { return _coverFaceForFall; }
 		//public static function set coverFaceForFall(value:GameObject):void { _coverFaceForFall = value; }
@@ -124,7 +114,7 @@ package scene.gameScene
 //			_resource = new Resource();
 //			_resource.addEventListener("loadedAllImages", onLoadedAllImages);
 			
-			_resources = new ResourceLoad(_spriteDir, _soundDir);
+			_resources = new Resources(_spriteDir, _soundDir);
 			_resources.addSpriteName("MainStageSprite0.png");
 			_resources.addSoundName("crashed0.mp3");
 			_resources.addSoundName("crashed1.mp3");
@@ -515,9 +505,9 @@ package scene.gameScene
 			
 			_coverFace.addChild(_ui);
 			
-			_controller = new Controller();
-			_controller.visible = false;
-			_coverFace.addChildAt(_controller, 0);
+//			_controller = new Controller();
+//			_controller.visible = false;
+//			_coverFace.addChildAt(_controller, 0);
 			
 			
 			

@@ -5,7 +5,7 @@ package scene.stageSelectScene
 	import flash.utils.Dictionary;
 	
 	import scene.gameScene.MainStage;
-	import scene.loading.ResourceLoad;
+	import scene.loading.Resources;
 	import scene.loading.SpriteSheet;
 	
 	import trolling.component.ComponentType;
@@ -39,7 +39,7 @@ package scene.stageSelectScene
 		
 		private var _stageIndex:uint;
 		
-		private var _resource:ResourceLoad;
+		private var _resource:Resources;
 		private var _spriteSheet:SpriteSheet;
 		
 		public function StageSelectScene()
@@ -51,7 +51,7 @@ package scene.stageSelectScene
 		{
 			if(this.data == null)
 			{
-				_resource = new ResourceLoad(_spriteDir, _soundDir);
+				_resource = new Resources(_spriteDir, _soundDir);
 				_resource.addSpriteName("selectSceneSprite0.png");
 				_resource.addSoundName("stageSelect.mp3");
 				_resource.loadResource(onCompleteLoad, onFaildLoad);
