@@ -99,7 +99,7 @@ package scene.gameScene.object.crater
 			//_right.colliderRender = true;
 			//colliderRender = true;
 		}
-		
+		 
 		private function onEnterFrame(event:TrollingEvent):void
 		{           
 			if(this.y > _stageHeight)
@@ -112,7 +112,7 @@ package scene.gameScene.object.crater
 			//trace(_addY);
 			if(MainStage.speed != 0)
 			{
-				this.scaleY += setScale(0.06);
+				this.scaleY += setScale(0.07);
 				this.scaleX = this.scaleY;
 				
 				this._addY += y / 2400;
@@ -122,11 +122,11 @@ package scene.gameScene.object.crater
 				{
 					//왼쪽
 					case 0:
-						this.x -= (MainStage.speed + this._addY) * 0.5;
+						this.x -= (MainStage.speed + this._addY) * 0.6;
 						break;
 					//오른쪽
 					case 1:
-						this.x += (MainStage.speed + this._addY) * 0.5;
+						this.x += (MainStage.speed + this._addY) * 0.6;
 						break;
 					
 					default:

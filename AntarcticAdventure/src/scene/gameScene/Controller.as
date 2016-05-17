@@ -22,6 +22,8 @@ package scene.gameScene
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
 			
+			this.alpha = 0.5;
+			
 		
 			_left = new Button(resource.getSubTexture("MainStageSprite0.png", "left"));
 			_left.pivot = PivotType.CENTER;
