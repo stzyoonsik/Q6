@@ -4,6 +4,7 @@ package scene.stageSelectScene
 	import flash.filesystem.File;
 	import flash.utils.Dictionary;
 	
+	import scene.data.PlayData;
 	import scene.gameScene.MainStage;
 	import scene.loading.Resources;
 	import scene.loading.SpriteSheet;
@@ -21,6 +22,9 @@ package scene.stageSelectScene
 	
 	public class StageSelectScene extends Scene
 	{	
+		public static const LAST_STAGE_ID:int = 10;
+		private static var _playData:PlayData;
+		
 		private var _imageDic:Dictionary = new Dictionary();
 		private var _imageURLVector:Vector.<String> = new Vector.<String>();
 		private var _imageLoadCount:uint = 0;
@@ -47,10 +51,27 @@ package scene.stageSelectScene
 			addEventListener(TrollingEvent.START_SCENE, onInit);
 		}
 		
+		public override function dispose():void
+		{
+			// output play data
+			if (_playData)
+			{
+				_playData.write();
+				_playData.dispose();
+			}
+			_playData = null;
+			
+			super.dispose();
+		}
+		
 		private function onInit(event:Event):void
 		{
 			if(this.data == null)
 			{
+				_playData = new PlayData("playData", File.applicationStorageDirectory.resolvePath("data"));
+				_playData.onReadyToPreset = onCompleteLoadData;
+				_playData.read();
+				
 				_resource = new Resources(_spriteDir, _soundDir);
 				_resource.addSpriteName("selectSceneSprite0.png");
 				_resource.addSoundName("stageSelect.mp3");
@@ -169,6 +190,8 @@ package scene.stageSelectScene
 					_numberVector[i*2].x = 0;
 				}
 			}
+			
+			setStars();
 		}
 		
 		private function onPrevClick(event:TrollingEvent):void
@@ -198,6 +221,23 @@ package scene.stageSelectScene
 		{
 			SceneManager.addScene(MainStage, "Game");
 			SceneManager.goScene("Game", (_stageIndex*5)+int(event.currentTarget.name));
+		}
+		
+		private function onCompleteLoadData():void
+		{
+			setStars();
+		}
+		
+		private function setStars():void
+		{
+			// 별점 세팅
+			
+			
+		}
+		
+		public static function get playData():PlayData
+		{
+			return _playData;
 		}
 	}
 }

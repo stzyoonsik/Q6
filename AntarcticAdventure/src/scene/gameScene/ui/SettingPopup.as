@@ -2,13 +2,14 @@ package scene.gameScene.ui
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.events.Event;
 	import flash.filesystem.File;
 	import flash.geom.ColorTransform;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
-	import scene.gameScene.MainStage;
 	import scene.data.SettingData;
+	import scene.gameScene.MainStage;
 	
 	import trolling.core.SceneManager;
 	import trolling.event.TrollingEvent;
@@ -21,7 +22,6 @@ package scene.gameScene.ui
 	import ui.button.RadioButton;
 	import ui.button.RadioButtonManager;
 	import ui.button.SelectButton;
-	import flash.events.Event;
 
 	public class SettingPopup extends Popup
 	{
@@ -279,14 +279,14 @@ package scene.gameScene.ui
 		private function onEndedScreen(event:TrollingEvent):void
 		{
 			// switch control type	
-			dispatchEvent(new TrollingEvent("control", CONTROL_SCREEN));
+			dispatchEvent(new TrollingEvent("control", SettingData.CONTROL_SCREEN));
 			_settingData.control = SettingData.CONTROL_SCREEN;
 		}
 		
 		private function onEndedButton(event:TrollingEvent):void
 		{
 			// switch control type
-			dispatchEvent(new TrollingEvent("control", CONTROL_BUTTON));
+			dispatchEvent(new TrollingEvent("control", SettingData.CONTROL_BUTTON));
 			_settingData.control = SettingData.CONTROL_BUTTON;
 		}
 		
