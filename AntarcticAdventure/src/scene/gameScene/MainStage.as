@@ -141,8 +141,6 @@ package scene.gameScene
 			
 			_speed = 0; 
 			_playerSpeed = _stageWidth / 100;			 
-			
-//			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
 		}
 		
 		private function onFailImageLoad(message:String):void

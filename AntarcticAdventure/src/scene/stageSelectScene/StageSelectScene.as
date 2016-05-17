@@ -39,7 +39,8 @@ package scene.stageSelectScene
 		private var _prevButton:Button;
 		
 		private var _numberVector:Vector.<GameObject> = new Vector.<GameObject>();
-		private var _buttomVector:Vector.<Button> = new Vector.<Button>();
+		private var _buttonVector:Vector.<Button> = new Vector.<Button>();
+		private var _starVector:Vector.<GameObject> = new Vector.<GameObject>();
 		
 		private var _stageIndex:uint;
 		
@@ -69,8 +70,7 @@ package scene.stageSelectScene
 			if(this.data == null)
 			{
 				_playData = new PlayData("playData", File.applicationStorageDirectory.resolvePath("data"));
-				_playData.onReadyToPreset = onCompleteLoadData;
-//				_playData.read();
+				//_playData.read();
 				
 				_resource = new Resources(_spriteDir, _soundDir);
 				_resource.addSpriteName("selectSceneSprite0.png");
@@ -117,7 +117,7 @@ package scene.stageSelectScene
 					stageButton.pivot = PivotType.CENTER;
 					stageButton.addEventListener(TrollingEvent.TOUCH_ENDED, onButtonClick);
 					_backGround.addChild(stageButton);
-					_buttomVector.push(stageButton);
+					_buttonVector.push(stageButton);
 					
 					var stageNumber:GameObject = new GameObject();
 					var numberImage:Image = new Image();
@@ -159,6 +159,51 @@ package scene.stageSelectScene
 				_prevButton.y = 440;
 				_prevButton.pivot = PivotType.CENTER;
 				_prevButton.addEventListener(TrollingEvent.TOUCH_ENDED, onPrevClick);
+				
+				// stars
+				var root:GameObject;
+				var star:GameObject;
+				var scale:Number = 0.5;
+				for (i = 0; i < 5; i++)
+				{
+					root = new GameObject();
+					root.pivot = PivotType.CENTER;
+					root.x = _buttonVector[i].width * 0.75;
+					root.y = -(_buttonVector[i].height * 0.05);
+					
+					for (var j:int = 0; j < 3; j++)
+					{
+						star = new GameObject();
+						star.pivot = PivotType.CENTER;
+						star.addComponent(new Image(_resource.getSubTexture("selectSceneSprite0.png", "star")));
+						star.width *= scale;
+						star.height *= scale;
+						
+						var starX:Number = star.width * 0.25;
+						var starY:Number = star.height * 0.7;
+						if (j == 0)
+						{
+							star.x = -starX;
+							star.y = -starY;
+						}
+						else if (j == 2)
+						{
+							star.x = -starX;
+							star.y = starY;
+						}
+						
+						root.addChild(star);
+					}
+					
+					_buttonVector[i].addChild(root);
+					_starVector.push(root);
+				}
+				
+				// test
+//				_playData.addData(1, 3);
+//				_playData.addData(2, 2);
+//				_playData.addData(3, 3);
+//				_playData.addData(4, 1);
 			}
 			
 			setStageNumber();
@@ -175,7 +220,7 @@ package scene.stageSelectScene
 				var stageCount:uint = (_stageIndex*5)+i+1;
 				var countString:String = stageCount.toString();
 				
-				_buttomVector[i].name = countString;
+				_buttonVector[i].name = countString;
 				
 				_numberVector[i*2].components[ComponentType.IMAGE].texture = _resource.getSubTexture("selectSceneSprite0.png", countString.charAt(0)+"_number");
 				if(countString.length >= 2)
@@ -191,7 +236,45 @@ package scene.stageSelectScene
 				}
 			}
 			
-			setStars();
+			setStar();
+		}
+		
+		private function setStar():void
+		{
+			if (!_playData)
+			{
+				return;
+			}
+			
+			var numStar:int;
+			var star:GameObject;
+			var image:Image;
+			for (var i:int = 0; i < _starVector.length; i++)
+			{
+				numStar = _playData.getData(int(_buttonVector[i].name));
+				
+				for (var j:int = 0; j < 3; j++)
+				{
+					star = _starVector[i].getChild(j);
+					if (!star)
+					{
+						break;
+					}
+					
+					image = star.components[ComponentType.IMAGE];
+					if (image)
+					{
+						if (j + 1 <= numStar)
+						{
+							image.texture = _resource.getSubTexture("selectSceneSprite0.png", "star_filled");
+						}
+						else
+						{
+							image.texture = _resource.getSubTexture("selectSceneSprite0.png", "star");
+						}
+					}
+				}
+			}
 		}
 		
 		private function onPrevClick(event:TrollingEvent):void
@@ -222,19 +305,7 @@ package scene.stageSelectScene
 			SceneManager.addScene(MainStage, "Game");
 			SceneManager.goScene("Game", (_stageIndex*5)+int(event.currentTarget.name));
 		}
-		
-		private function onCompleteLoadData():void
-		{
-			setStars();
-		}
-		
-		private function setStars():void
-		{
-			// 별점 세팅
-			
-			
-		}
-		
+				
 		public static function get playData():PlayData
 		{
 			return _playData;
