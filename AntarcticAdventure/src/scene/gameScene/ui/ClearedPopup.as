@@ -3,6 +3,7 @@ package scene.gameScene.ui
 	import flash.utils.Dictionary;
 	
 	import scene.gameScene.MainStage;
+	import scene.stageSelectScene.StageSelectScene;
 	
 	import trolling.component.graphic.Image;
 	import trolling.core.SceneManager;
@@ -76,6 +77,13 @@ package scene.gameScene.ui
 			if (ratio <= 50)		numStar = 1;
 			else if (ratio <= 80)	numStar = 2;
 			else					numStar = 3;
+			
+			// 클리어 데이터 저장
+			var prevStar:int = StageSelectScene.playData.getData(MainStage.currentStage);
+			if (numStar > prevStar)
+			{
+				StageSelectScene.playData.addData(MainStage.currentStage, numStar);
+			}
 			
 			var child:GameObject;
 			var childX:Number = -(this.width / 4.19);
@@ -155,7 +163,10 @@ package scene.gameScene.ui
 		
 		private function onEndedNext(event:TrollingEvent):void
 		{
-			SceneManager.restartScene(MainStage, "Game", MainStage.currentStage + 1); // need to check if this stage is the last stage
+			// need to check if this stage is the last stage
+			// StageSelectScene.LAST_STAGE_ID
+			
+			SceneManager.restartScene(MainStage, "Game", MainStage.currentStage + 1); 
 		}
 	}
 }

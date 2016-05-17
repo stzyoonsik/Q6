@@ -2,12 +2,13 @@ package scene.gameScene.ui
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.filesystem.File;
 	import flash.geom.ColorTransform;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
 	
 	import scene.gameScene.MainStage;
-	import scene.stageSelectScene.StageSelectScene;
+	import scene.data.SettingData;
 	
 	import trolling.core.SceneManager;
 	import trolling.event.TrollingEvent;
@@ -30,30 +31,29 @@ package scene.gameScene.ui
 		private const REPLAY:int = 4;
 		private const MENU:int = 5;
 		
-		private const CONTROL_SCREEN:int = 0;
-		private const CONTROL_BUTTON:int = 1;
-
 		private var _controlButtonManager:RadioButtonManager;
+		private var _settingData:SettingData;
 		
-		private var _bgm:Boolean;
-		private var _sound:Boolean;
-		private var _control:int;
-		
+		private var _temp:Vector.<GameObject>;
+				
 		public function SettingPopup(canvas:Texture)
 		{
 			super(canvas);
 			
 			_controlButtonManager = null;
-			
-			_bgm = true;
-			_sound = true;
-			_control = CONTROL_SCREEN;
+			_settingData = null;
+			_temp = null;
 		}
 		
 		public override function dispose():void
 		{
 			// output user setting
-			saveSetting();
+			if (_settingData)
+			{
+				_settingData.write();
+				_settingData.dispose();
+			}
+			_settingData = null;
 			
 			var child:GameObject = getChild(BGM);
 			if (child) child.removeEventListener(TrollingEvent.TOUCH_ENDED, onEndedBgm);
@@ -80,11 +80,12 @@ package scene.gameScene.ui
 		
 		public function initialize(bitmaps:Dictionary):void
 		{
-			// preset load
-			loadSetting();
+			// load setting data
+			_settingData = new SettingData("settingData", File.applicationStorageDirectory.resolvePath("data"));
+			_settingData.onReadyToPreset = onCompleteLoadData;
+			_settingData.read();
 			
-			// preset
-			preset(_bgm, _sound, _control);
+			_temp = new Vector.<GameObject>();
 			
 			var check:Bitmap = bitmaps[UIResource.CHECK] as Bitmap;
 			var bitmapData:BitmapData = new BitmapData(check.width, check.height);
@@ -95,8 +96,9 @@ package scene.gameScene.ui
 			var bgm:SelectButton = new SelectButton(new Texture(new Bitmap(bitmapData)), new Texture(check));
 			bgm.x = -(this.width / 10.7);
 			bgm.y = -(this.height / 9.5);
-			bgm.isSelected = _bgm;
+			bgm.isSelected = true;
 			bgm.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedBgm);
+			_temp.push(bgm);
 			//
 			
 			// SOUND
@@ -105,8 +107,9 @@ package scene.gameScene.ui
 			sound.y = bgm.y;
 			sound.width = check.width;
 			sound.height = check.height;
-			sound.isSelected = _sound;
+			sound.isSelected = true;
 			sound.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedSound);
+			_temp.push(sound);
 						
 			delete bitmaps[UIResource.CHECK];
 			//
@@ -138,7 +141,6 @@ package scene.gameScene.ui
 			button.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedButton);
 						
 			_controlButtonManager.addButton(button);
-			_controlButtonManager.selectButton(_control);
 			
 			delete bitmaps[UIResource.BUTTON_WHITE];
 			delete bitmaps[UIResource.BUTTON_ORANGE];
@@ -158,7 +160,7 @@ package scene.gameScene.ui
 			menu.y = replay.y + 3;
 			menu.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedMenu);
 			//
-		
+			
 //			private const BGM:int = 0;
 //			private const SOUND:int = 1;
 //			private const SCREEN:int = 2;
@@ -200,10 +202,34 @@ package scene.gameScene.ui
 				SoundManager.stopSoundEffect();
 			}
 			
-			if (control == CONTROL_BUTTON)
+			if (control == SettingData.CONTROL_BUTTON)
 			{
 				// to do
 												
+			}
+		}
+		
+		private function onCompleteLoadData():void
+		{
+			// preset
+			preset(_settingData.bgm, _settingData.sound, _settingData.control);
+			
+			if (_controlButtonManager)
+			{
+				_controlButtonManager.selectButton(_settingData.control);
+			}
+
+			if (_temp)
+			{
+				var button:SelectButton;
+				button = _temp[0] as SelectButton;
+				button.isSelected = _settingData.bgm;
+				
+				button = _temp[1] as SelectButton;
+				button.isSelected = _settingData.sound;
+				
+				_temp.splice(0, _temp.length);
+				_temp = null;
 			}
 		}
 		
@@ -218,12 +244,14 @@ package scene.gameScene.ui
 				{
 					SoundManager.isBgmActive = true;
 					SoundManager.wakeBgm();
+					
 				}
 				else
 				{
 					SoundManager.isBgmActive = false;
 					SoundManager.stopBgm();
 				}
+				_settingData.bgm = bgm.isSelected;
 			}
 		}
 		
@@ -243,17 +271,20 @@ package scene.gameScene.ui
 					SoundManager.isSoundEffectActive = false;
 					SoundManager.stopSoundEffect();
 				}
+				_settingData.sound = sound.isSelected;
 			}
 		}
 		
 		private function onEndedScreen(event:TrollingEvent):void
 		{
 			// switch control type	
+			_settingData.control = SettingData.CONTROL_SCREEN;
 		}
 		
 		private function onEndedButton(event:TrollingEvent):void
 		{
 			// switch control type
+			_settingData.control = SettingData.CONTROL_BUTTON;
 		}
 		
 		private function onEndedReplay(event:TrollingEvent):void
@@ -263,7 +294,7 @@ package scene.gameScene.ui
 		
 		private function onEndedMenu(event:TrollingEvent):void
 		{
-			SceneManager.switchScene("stageSelect", MainStage.currentStage);
+			SceneManager.outScene(MainStage.currentStage);
 			SceneManager.deleteScene("Game");
 		}
 	}
