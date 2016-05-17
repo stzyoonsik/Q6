@@ -70,7 +70,7 @@ package scene.stageSelectScene
 			{
 				_playData = new PlayData("playData", File.applicationStorageDirectory.resolvePath("data"));
 				_playData.onReadyToPreset = onCompleteLoadData;
-				_playData.read();
+//				_playData.read();
 				
 				_resource = new Resources(_spriteDir, _soundDir);
 				_resource.addSpriteName("selectSceneSprite0.png");
