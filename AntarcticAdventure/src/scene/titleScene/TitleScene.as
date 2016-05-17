@@ -90,7 +90,7 @@ package scene.titleScene
 			sound.volume = 0.5;
 			sound.loops = Sound.INFINITE;
 			
-			SoundManager.play("Opening");
+			SoundManager.play("Opening.mp3");
 		}
 		
 		private function onSoundLoadFaild(event:IOErrorEvent):void

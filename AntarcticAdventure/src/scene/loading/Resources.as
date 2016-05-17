@@ -85,7 +85,7 @@ package scene.loading
 			Sound(event.currentTarget).removeEventListener(Event.COMPLETE, onSoundLoaded);
 			Sound(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFaild);
 			
-			SoundManager.addSound(soundFileName.replace(".mp3", ""), _soundDic[soundFileName]);
+			SoundManager.addSound(soundFileName, _soundDic[soundFileName]);
 			
 			_loadedCount++;
 			checkLoadComplete();
