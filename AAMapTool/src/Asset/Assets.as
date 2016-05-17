@@ -70,5 +70,8 @@ package Asset
 		
 		[Embed(source="stageDown.png")]
 		public static const StageDown:Class;
+		
+		[Embed(source="coke0.png")]
+		public static const Coke:Class;
 	}
 }

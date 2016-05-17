@@ -20,6 +20,7 @@ package scene.gameScene.ui
 	import ui.button.RadioButton;
 	import ui.button.RadioButtonManager;
 	import ui.button.SelectButton;
+	import flash.events.Event;
 
 	public class SettingPopup extends Popup
 	{
@@ -249,11 +250,13 @@ package scene.gameScene.ui
 		private function onEndedScreen(event:TrollingEvent):void
 		{
 			// switch control type	
+			dispatchEvent(new TrollingEvent("control", CONTROL_SCREEN));
 		}
 		
 		private function onEndedButton(event:TrollingEvent):void
 		{
 			// switch control type
+			dispatchEvent(new TrollingEvent("control", CONTROL_BUTTON));
 		}
 		
 		private function onEndedReplay(event:TrollingEvent):void
@@ -263,8 +266,8 @@ package scene.gameScene.ui
 		
 		private function onEndedMenu(event:TrollingEvent):void
 		{
-			SceneManager.switchScene("stageSelect", MainStage.currentStage);
-			SceneManager.deleteScene("Game");
+			SceneManager.outScene(MainStage.currentStage);
+//			SceneManager.deleteScene("Game");
 		}
 	}
 }

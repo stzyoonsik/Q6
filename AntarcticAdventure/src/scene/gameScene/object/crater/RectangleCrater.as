@@ -96,10 +96,10 @@ package scene.gameScene.object.crater
 			_right.y = 0;
 			_rightCollider.setRect(1,1);
 			
-			_left.colliderRender = true; 
-			_middle.colliderRender = true;
-			_right.colliderRender = true;
-			colliderRender = true;
+			//_left.colliderRender = true; 
+			//_middle.colliderRender = true;
+			//_right.colliderRender = true;
+			//colliderRender = true;
 		}
 		
 		private function onEnterFrame(event:TrollingEvent):void

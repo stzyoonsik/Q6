@@ -395,6 +395,7 @@ package scene.gameScene.object.player
 		{
 			if (!_arrived)
 			{
+				SoundManager.stopAll();
 				SoundManager.play("stageCleared");
 				_arrived = true;
 			}
@@ -647,6 +648,21 @@ package scene.gameScene.object.player
 		{
 			if(!_dashFlag)
 			{
+				_crashSpeed = 10;
+				_crashHeight = _stageHeight / 20;
+				
+				_hoppingCount = 0;
+				_crashTheta = 0;				
+				_crashFlag = false;
+				
+				_jumpFlag = false;
+				_jumpTheta = 0;
+				
+				_penguin.y = 0;
+				_grimja.width = _stageWidth / 5 + _penguin.y;
+				_grimja.height = _grimja.width;
+				
+				_penguin.transition(PlayerState.RUN);
 				_grimjaCollider.isActive = false;
 				_animator.getState(PlayerState.RUN).interval = 1;
 				_dashFlag = true;
@@ -682,11 +698,13 @@ package scene.gameScene.object.player
 				_state = PlayerState.RUN;
 			}
 		}
+		
 		private function die():void
 		{
 			_state = PlayerState.DEAD;
 			this.active = false;
 			MainStage.stageEnded = true;
+			SoundManager.stopAll();
 			SoundManager.play("stageFailed");
 			
 			if (_onFailed)

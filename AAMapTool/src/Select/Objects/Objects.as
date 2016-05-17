@@ -5,21 +5,20 @@ package Select.Objects
 	import starling.display.Button;
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.events.Event;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
-	import starling.events.Event;
 
 	public class Objects extends Sprite
 	{
-		
-		
 		private var _homeButton:Button;
 		private var _emptyButton:Button;
 		private var _ellipseImage:Image;
 		private var _rectImage:Image;
 		private var _flagImage:Image;
+		private var _cokeImage:Image;
 		
 		private var _leftEllipseButton:Button;
 		private var _centerEllipseButton:Button;
@@ -31,6 +30,10 @@ package Select.Objects
 		
 		private var _leftFlagButton:Button;
 		private var _rightFlagButton:Button;
+		
+		private var _leftCokeButton:Button;
+		private var _centerCokeButton:Button;
+		private var _rightCokeButton:Button;
 		
 		
 		public function Objects()
@@ -144,20 +147,60 @@ package Select.Objects
 			_rightFlagButton.y = 288;
 			addChild(_rightFlagButton)
 			
+			
+			texture = Texture.fromEmbeddedAsset(Assets.Coke);
+			_cokeImage = new Image(texture);	
+			_cokeImage.width = 64;
+			_cokeImage.height = 64;
+			_cokeImage.y = 336;
+			addChild(_cokeImage);
+			
+			texture = Texture.fromEmbeddedAsset(Assets.Left);
+			_leftCokeButton = new Button(texture);
+			_leftCokeButton.width = 32;
+			_leftCokeButton.height = 32;
+			_leftCokeButton.x = 100;
+			_leftCokeButton.y = 352;
+			addChild(_leftCokeButton)
+			
+			texture = Texture.fromEmbeddedAsset(Assets.Center);
+			_centerCokeButton = new Button(texture);
+			_centerCokeButton.width = 32;
+			_centerCokeButton.height = 32;
+			_centerCokeButton.x = 150;
+			_centerCokeButton.y = 352;
+			addChild(_centerCokeButton)
+			
+			texture = Texture.fromEmbeddedAsset(Assets.Right);
+			_rightCokeButton = new Button(texture);
+			_rightCokeButton.width = 32;
+			_rightCokeButton.height = 32;
+			_rightCokeButton.x = 200;
+			_rightCokeButton.y = 352;
+			addChild(_rightCokeButton)
+			
 		}
 		
 		private function pushEvent():void
 		{
 			_homeButton.addEventListener(TouchEvent.TOUCH, onClickHome);
+			
 			_emptyButton.addEventListener(TouchEvent.TOUCH, onClickEmpty);
+			
 			_leftEllipseButton.addEventListener(TouchEvent.TOUCH, onClickLeftEllipse);
 			_centerEllipseButton.addEventListener(TouchEvent.TOUCH, onClickCenterEllipse);
 			_rightEllipseButton.addEventListener(TouchEvent.TOUCH, onClickRightEllipse);
 			_leftRightEllipseButton.addEventListener(TouchEvent.TOUCH, onClickLeftRightEllipse);
+			
 			_leftRectButton.addEventListener(TouchEvent.TOUCH, onClickLeftRect);
 			_rightRectButton.addEventListener(TouchEvent.TOUCH, onClickRightRect);
+			
 			_leftFlagButton.addEventListener(TouchEvent.TOUCH, onClickLeftFlag);
 			_rightFlagButton.addEventListener(TouchEvent.TOUCH, onClickRightFlag);
+			
+			_leftCokeButton.addEventListener(TouchEvent.TOUCH, onClickLeftCoke);
+			_centerCokeButton.addEventListener(TouchEvent.TOUCH, onClickCenterCoke);
+			_rightCokeButton.addEventListener(TouchEvent.TOUCH, onClickRightCoke);
 		}
 		
 		private function onClickHome(event:TouchEvent):void
@@ -257,6 +300,36 @@ package Select.Objects
 			{
 				trace("rightFlagButton");
 				dispatchEvent(new Event("object", false, 8));
+			}	
+		}
+		
+		private function onClickLeftCoke(event:TouchEvent):void
+		{
+			var touch:Touch = event.getTouch(_leftCokeButton, TouchPhase.ENDED);
+			if(touch)
+			{
+				trace("leftCokeButton");
+				dispatchEvent(new Event("object", false, 10));
+			}	
+		}
+		
+		private function onClickCenterCoke(event:TouchEvent):void
+		{
+			var touch:Touch = event.getTouch(_centerCokeButton, TouchPhase.ENDED);
+			if(touch)
+			{
+				trace("leftCokeButton");
+				dispatchEvent(new Event("object", false, 9));
+			}	
+		}
+		
+		private function onClickRightCoke(event:TouchEvent):void
+		{
+			var touch:Touch = event.getTouch(_rightCokeButton, TouchPhase.ENDED);
+			if(touch)
+			{
+				trace("leftCokeButton");
+				dispatchEvent(new Event("object", false, 11));
 			}	
 		}
 	}

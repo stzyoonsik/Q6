@@ -95,10 +95,12 @@ package View
 			_mapVector.push(_map);
 			
 			_curveDataVector.push(-1);
-			var image:Image = new Image(null);			
+			texture = Texture.fromEmbeddedAsset(Assets.NormalCurve);
+			var image:Image = new Image(texture);	
+			image.width = 64;
+			image.height = 64;
 			_curveVector.push(image);
 			_stageSprite.addChild(image);
-			changeCurve(-1);
 			
 			_stageSprite.addChild(_map);	
 			_map.addEventListener(TouchEvent.TOUCH, onClickMap);
@@ -159,9 +161,9 @@ package View
 			_stageNum = 1;
 			_color = 0;
 			
-			_colorImage.x = 356;
-			_colorImage.width = 128;
-			_colorImage.height = 128;	
+			_colorImage.x = 420;
+			_colorImage.width = 64;
+			_colorImage.height = 64;	
 			_colorImage.texture = Texture.fromEmbeddedAsset(Assets.CyanBG);
 			
 			_stageTextField.format.size = 30;
@@ -263,7 +265,24 @@ package View
 					texture = Texture.fromEmbeddedAsset(Assets.Flag);	
 					changeObject(texture, 276, 64, 64, 1, true);
 					_objectDataVector[_currentObject] = 8;
-					break;				
+					break;	
+				case 9:
+					texture = Texture.fromEmbeddedAsset(Assets.Coke);	
+					changeObject(texture, 228, 32, 32, 1, true);
+					_objectDataVector[_currentObject] = 9;
+					break;	
+				case 10:
+					texture = Texture.fromEmbeddedAsset(Assets.Coke);	
+					changeObject(texture, 146, 32, 32, 1, true);
+					_objectDataVector[_currentObject] = 10;
+					break;	
+				case 11:
+					texture = Texture.fromEmbeddedAsset(Assets.Coke);	
+					changeObject(texture, 310, 32, 32, 1, true);
+					_objectDataVector[_currentObject] = 11;
+					break;	
+				
+				
 			}	
 			
 			printData();
@@ -332,9 +351,10 @@ package View
 				_currentPage = _mapVector.length - 1;
 				_page.text = _currentPage.toString();				
 				
-				changeCurve(-1);
 				
-				viewCurrentMap();				
+				
+				viewCurrentMap();	
+				//changeCurve(-1);
 			}
 		}
 		
