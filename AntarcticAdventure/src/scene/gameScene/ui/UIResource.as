@@ -23,7 +23,8 @@ package scene.gameScene.ui
 		public static const FAILED_POPUP:String = "failed";
 		public static const REPLAY:String = "replay";
 		public static const MENU:String = "menu";
-		public static const NEXT:String = "next";
+		public static const NEXT_WHITE:String = "next_white";
+		public static const NEXT_GRAY:String = "next_gray";
 		public static const STAR:String = "star";
 		public static const FILLED_STAR:String = "star_filled";
 	}

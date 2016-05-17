@@ -70,8 +70,8 @@ package scene.gameScene.ui
 		
 		public override function dispose():void
 		{
-			// to do
-			
+			_resources = null;
+			_runGame = null;
 			
 			super.dispose();
 		}
@@ -345,8 +345,6 @@ package scene.gameScene.ui
 			settingPopup.initialize(_resources);
 			settingPopup.addEventListener("control", onEndedControl);
 			settingPopup.addEventListener("initControlMode", onInitControlMode);
-			
-			delete _bitmaps[UIResource.SETTING_POPUP];
 			//
 			
 			// CLEARED_POPUP
@@ -483,7 +481,6 @@ package scene.gameScene.ui
 				if (_runGame)
 				{
 					_runGame(true);
-					
 				}
 			}
 		}

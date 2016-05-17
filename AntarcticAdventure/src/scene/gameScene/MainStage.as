@@ -7,6 +7,7 @@ package scene.gameScene
 	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
 	
+	import scene.data.SettingData;
 	import scene.gameScene.background.Background;
 	import scene.gameScene.background.Cloud;
 	import scene.gameScene.object.crater.EllipseCrater;
@@ -21,19 +22,17 @@ package scene.gameScene
 	import scene.gameScene.util.PlayerState;
 	import scene.loading.Resources;
 	
-	import trolling.core.Trolling;
 	import trolling.event.TrollingEvent;
 	import trolling.media.Sound;
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
-	import scene.loading.Resources;
 
 	public class MainStage extends Scene
 	{
 		private static var _currentStage:int;
-		
-//		private var _resource:Resource;
+
+		private const PLAYER_MAX_LIFE:int = 5;
 		
 		private var _player:Player;
 		private var _enemy:Enemy;		
@@ -76,7 +75,6 @@ package scene.gameScene
 		private var _playerArrive:Boolean;
 		private static var _stageEnded:Boolean = false;
 		
-		private var _playerMaxLife:int;
 		private var _totalNumFlag:int;
 		
 		private var _resource:Resources;
@@ -192,7 +190,7 @@ package scene.gameScene
 		 */
 		private function onTouchEnded(event:TrollingEvent):void
 		{
-			if(_controlMode == 1)
+			if(_controlMode == SettingData.CONTROL_BUTTON)
 				return;
 			
 			if(_player.state == PlayerState.ARRIVE ||
@@ -478,20 +476,14 @@ package scene.gameScene
 			}
 			
 			//onCompleteReadTxt();
-			// UI 테스트용 변수 임의 설정 !
-			_playerMaxLife = 5;
-			//
-			_ui.initialize(_currentStage, _objectArray.length, _playerMaxLife, _totalNumFlag, pause);
+			_ui.initialize(_currentStage, _objectArray.length, PLAYER_MAX_LIFE, _totalNumFlag, pause);
 			_ui.addEventListener("control", onEndedControl);
 			_ui.addEventListener("settingPopup", onEndedSettingPopup);
 			_ui.addEventListener("initControlMode", onInitControlMode);
-			//_ui.
 			
-			_player.maxLife = _playerMaxLife;
+			_player.maxLife = PLAYER_MAX_LIFE;
 			_player.setCurrentLifeAtUi = setCurrentLife;
 			_player.setCurrentFlagAtUi = setCurrentFlag;
-			
-			
 			_player.onCleared = onCleared;
 			_player.onFailed = onFailed;
 			

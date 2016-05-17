@@ -1,7 +1,5 @@
 package scene.gameScene.ui
 {
-	import flash.utils.Dictionary;
-	
 	import scene.gameScene.MainStage;
 	import scene.loading.Resources;
 	import scene.loading.SpriteSheet;

@@ -173,18 +173,6 @@ package scene.gameScene.ui
 			spriteSheet.removeSubTexture(UIResource.BUTTON_ORANGE);
 		}
 		
-		private function saveSetting():void
-		{
-			// to do
-			
-		}
-		
-		private function loadSetting():void
-		{
-			// to do
-			
-		}
-		
 		private function preset(bgm:Boolean, sound:Boolean, control:int):void
 		{
 			if (!bgm)
