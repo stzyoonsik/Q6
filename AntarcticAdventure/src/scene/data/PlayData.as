@@ -76,6 +76,7 @@ package scene.data
 			
 			data = null;
 			stream = null;
+			file = null;
 		}
 		
 		protected override function onCompleteLoad(event:Event):void
