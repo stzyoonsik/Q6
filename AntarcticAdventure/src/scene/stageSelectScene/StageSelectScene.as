@@ -1,14 +1,12 @@
 package scene.stageSelectScene
 {
-	import flash.display.Loader;
-	import flash.display.LoaderInfo;
 	import flash.events.Event;
-	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
-	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
 	
 	import scene.gameScene.MainStage;
+	import scene.loading.ResourceLoad;
+	import scene.loading.SpriteSheet;
 	
 	import trolling.component.ComponentType;
 	import trolling.component.graphic.Image;
@@ -26,7 +24,9 @@ package scene.stageSelectScene
 		private var _imageDic:Dictionary = new Dictionary();
 		private var _imageURLVector:Vector.<String> = new Vector.<String>();
 		private var _imageLoadCount:uint = 0;
-		private var _filePath:File = File.applicationDirectory.resolvePath("scene/stageSelectScene");
+		
+		private var _spriteDir:File = File.applicationDirectory.resolvePath("scene/stageSelectScene");
+		private var _soundDir:File = File.applicationDirectory.resolvePath("scene/stageSelectScene");
 		
 		private var _backGround:GameObject;
 		private var _backGroundImage:Image;
@@ -35,8 +35,12 @@ package scene.stageSelectScene
 		private var _prevButton:Button;
 		
 		private var _numberVector:Vector.<GameObject> = new Vector.<GameObject>();
+		private var _buttomVector:Vector.<Button> = new Vector.<Button>();
 		
 		private var _stageIndex:uint;
+		
+		private var _resource:ResourceLoad;
+		private var _spriteSheet:SpriteSheet;
 		
 		public function StageSelectScene()
 		{
@@ -45,84 +49,46 @@ package scene.stageSelectScene
 		
 		private function onInit(event:Event):void
 		{
-			_imageURLVector.push("sea1.png");
-			_imageURLVector.push("buttonImage.png");
-			_imageURLVector.push("nextButton.png");
-			_imageURLVector.push("prevButton.png");
-			_imageURLVector.push("0_number.png");
-			_imageURLVector.push("1_number.png");
-			_imageURLVector.push("2_number.png");
-			_imageURLVector.push("3_number.png");
-			_imageURLVector.push("4_number.png");
-			_imageURLVector.push("5_number.png");
-			_imageURLVector.push("6_number.png");
-			_imageURLVector.push("7_number.png");
-			_imageURLVector.push("8_number.png");
-			_imageURLVector.push("9_number.png");
-			
-			var loader:Loader;
-			var urlRequest:URLRequest;
-			for(var i:int = 0; i < _imageURLVector.length; i++)
+			if(this.data == null)
 			{
-				loader = new Loader();
-				urlRequest = new URLRequest(_filePath.resolvePath(_imageURLVector[i]).url);
-				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onImageLoaded);
-				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onImageLoadFaild);
-				loader.load(urlRequest);
+				_resource = new ResourceLoad(_spriteDir, _soundDir);
+				_resource.addSpriteName("selectSceneSprite0.png");
+				_resource.addSoundName("stageSelect.mp3");
+				_resource.loadResource(onCompleteLoad, onFaildLoad);
+			}
+			else
+			{
+				_stageIndex = ((this.data as uint)-1)/5;
+				setStageNumber();
 			}
 		}
 		
-		private function onImageLoaded(event:Event):void
+		private function onFaildLoad(message:String):void
 		{
-			trace("ddd = " + LoaderInfo(event.currentTarget).url);
-			_imageDic[LoaderInfo(event.currentTarget).url.replace(_filePath.url.toString()+"/", "")] = LoaderInfo(event.currentTarget).loader.content;
-			
-			LoaderInfo(event.currentTarget).removeEventListener(Event.COMPLETE, onImageLoaded);
-			LoaderInfo(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onImageLoadFaild);
-			_imageLoadCount++;
-			
-			if(_imageURLVector.length <= _imageLoadCount)
+			trace(message);
+		}
+		
+		private function onCompleteLoad():void
+		{
+			if(this.data == null)
 			{
-				_imageURLVector.splice(0, _imageURLVector.length);
-				completeLoadImage();
-			}
-		}
-		
-		private function onImageLoadFaild(event:IOErrorEvent):void
-		{
-			trace("Please Check " + LoaderInfo(event.currentTarget).url);
-			LoaderInfo(event.currentTarget).removeEventListener(Event.COMPLETE, onImageLoaded);
-			LoaderInfo(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onImageLoadFaild);
-			_imageLoadCount++;
-		}
-		
-		private function completeLoadImage():void
-		{
-			//			this.width = 800;
-			//			this.height = 600;
-			
-			
-//			if(this.data == null)
-//			{
 				_stageIndex = 0;
-				if(this.data != null)
-					_stageIndex = this.data as uint;
 				
 				_backGround = new GameObject();
-				_backGroundImage = new Image(new Texture(_imageDic["sea1.png"]));
+				_backGroundImage = new Image(_resource.getSubTexture("selectSceneSprite0.png", "sea1"));
 				_backGround.addComponent(_backGroundImage);
 				
 				_backGround.width = this.width;
 				_backGround.height = this.height;
 				
-				var buttonTexture:Texture = new Texture(_imageDic["buttonImage.png"]);
+				var buttonTexture:Texture = _resource.getSubTexture("selectSceneSprite0.png", "buttonImage");
 				var buttonX:Number = this.width / 6;
 				var buttonY:Number = this.height / 6;
 				
 				for(var i:int = 1; i <= 5; i++)
 				{
 					var stageButton:Button = new Button(buttonTexture);
-					stageButton.name = i.toString();
+//					stageButton.name = i.toString();
 					stageButton.width = 100;
 					stageButton.height = 100;
 					stageButton.x = buttonX*i;
@@ -130,6 +96,7 @@ package scene.stageSelectScene
 					stageButton.pivot = PivotType.CENTER;
 					stageButton.addEventListener(TrollingEvent.TOUCH_ENDED, onButtonClick);
 					_backGround.addChild(stageButton);
+					_buttomVector.push(stageButton);
 					
 					var stageNumber:GameObject = new GameObject();
 					var numberImage:Image = new Image();
@@ -156,7 +123,7 @@ package scene.stageSelectScene
 					_numberVector.push(stageNumber2);
 				}
 				
-				_nextButton = new Button(new Texture(_imageDic["nextButton.png"]));
+				_nextButton = new Button(_resource.getSubTexture("selectSceneSprite0.png", "nextButton"));
 				_nextButton.width = 100;
 				_nextButton.height = 100;
 				_nextButton.x = 860;
@@ -164,42 +131,42 @@ package scene.stageSelectScene
 				_nextButton.pivot = PivotType.CENTER;
 				_nextButton.addEventListener(TrollingEvent.TOUCH_ENDED, onNextClick);
 				
-				_prevButton = new Button(new Texture(_imageDic["prevButton.png"]));
+				_prevButton = new Button(_resource.getSubTexture("selectSceneSprite0.png", "prevButton"));
 				_prevButton.width = 100;
 				_prevButton.height = 100;
 				_prevButton.x = 100;
 				_prevButton.y = 440;
 				_prevButton.pivot = PivotType.CENTER;
 				_prevButton.addEventListener(TrollingEvent.TOUCH_ENDED, onPrevClick);
-//			}
-//			else
+			}
 			
 			setStageNumber();
 			
 			addChild(_backGround);
 			_backGround.addChild(_nextButton);
 			_backGround.addChild(_prevButton);
-			_backGround.addEventListener(TrollingEvent.TOUCH_ENDED, onTouch);
 		}
 		
 		private function setStageNumber():void
 		{
-			for(var i:int = 1; i <= 5; i++)
+			for(var i:int = 0; i < 5; i++)
 			{
-				var stageCount:uint = (_stageIndex*5)+i;
+				var stageCount:uint = (_stageIndex*5)+i+1;
 				var countString:String = stageCount.toString();
 				
-				_numberVector[(i-1)*2].components[ComponentType.IMAGE].texture = new Texture(_imageDic[int(countString.charAt(0))+"_number.png"]);
+				_buttomVector[i].name = countString;
+				
+				_numberVector[i*2].components[ComponentType.IMAGE].texture = _resource.getSubTexture("selectSceneSprite0.png", countString.charAt(0)+"_number");
 				if(countString.length >= 2)
 				{
-					_numberVector[(i-1)*2].x = -10;
-					_numberVector[((i-1)*2)+1].components[ComponentType.IMAGE].texture = new Texture(_imageDic[int(countString.charAt(1))+"_number.png"]);
-					_numberVector[((i-1)*2)+1].x = 10;
+					_numberVector[i*2].x = -10;
+					_numberVector[(i*2)+1].components[ComponentType.IMAGE].texture = _resource.getSubTexture("selectSceneSprite0.png", countString.charAt(1)+"_number");
+					_numberVector[(i*2)+1].x = 10;
 				}
 				else
 				{
-					_numberVector[((i-1)*2)+1].components[ComponentType.IMAGE].texture = null;
-					_numberVector[(i-1)*2].x = 0;
+					_numberVector[(i*2)+1].components[ComponentType.IMAGE].texture = null;
+					_numberVector[i*2].x = 0;
 				}
 			}
 		}
@@ -208,8 +175,6 @@ package scene.stageSelectScene
 		{
 			if(_stageIndex <= 0)
 			{
-				//				SceneManager.outScene();
-				//				SceneManager.deleteScene("stageSelect");
 				return;
 			}
 			_stageIndex--;
@@ -233,12 +198,6 @@ package scene.stageSelectScene
 		{
 			SceneManager.addScene(MainStage, "Game");
 			SceneManager.goScene("Game", (_stageIndex*5)+int(event.currentTarget.name));
-			//			SceneManager.goScene("Game", 1);
-		}
-		
-		private function onTouch(event:TrollingEvent):void
-		{
-			trace(event.data[0]);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package scene.gameScene
 {
+	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
@@ -10,7 +11,6 @@ package scene.gameScene
 	
 	import scene.gameScene.background.Background;
 	import scene.gameScene.background.Cloud;
-	import scene.loading.Resource;
 	import scene.gameScene.object.crater.EllipseCrater;
 	import scene.gameScene.object.crater.RectangleCrater;
 	import scene.gameScene.object.enemy.Enemy;
@@ -22,8 +22,12 @@ package scene.gameScene
 	import scene.gameScene.util.FileStreamWithLineReader;
 	import scene.gameScene.util.ObjectName;
 	import scene.gameScene.util.PlayerState;
+	import scene.loading.Resource;
+	import scene.loading.ResourceLoad;
 	
 	import trolling.event.TrollingEvent;
+	import trolling.media.Sound;
+	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
 
@@ -31,7 +35,7 @@ package scene.gameScene
 	{
 		private static var _currentStage:int;
 		
-		private var _resource:Resource;
+//		private var _resource:Resource;
 		
 		private var _player:Player;
 		private var _enemy:Enemy;		
@@ -68,12 +72,16 @@ package scene.gameScene
 		private var _soundLoadCount:uint = 0;
 		private var _filePath:File = File.applicationDirectory;
 		
+		private var _spriteDir:File = File.applicationDirectory.resolvePath("scene/gameScene/sprite");
+		private var _soundDir:File = File.applicationDirectory.resolvePath("scene/gameScene/sound");
+		
 		private var _playerArrive:Boolean;
 		private static var _stageEnded:Boolean = false;
 		
 		private var _playerMaxLife:int;
 		private var _totalNumFlag:int;
-
+		
+		private var _resources:ResourceLoad;
 		
 		public static function get coverFaceForFall():GameObject { return _coverFaceForFall; }
 		public static function set coverFaceForFall(value:GameObject):void { _coverFaceForFall = value; }
@@ -104,8 +112,23 @@ package scene.gameScene
 			_currentStage = this.data as int;
 			_stageEnded = false;
 			
-			_resource = new Resource();
-			_resource.addEventListener("loadedAllImages", onLoadedAllImages);
+//			_resource = new Resource();
+//			_resource.addEventListener("loadedAllImages", onLoadedAllImages);
+			
+			_resources = new ResourceLoad(_spriteDir, _soundDir);
+			_resources.addSpriteName("MainStageSprite0.png");
+			_resources.addSoundName("crashed0.mp3");
+			_resources.addSoundName("crashed1.mp3");
+			_resources.addSoundName("fall.mp3");
+			_resources.addSoundName("fish.mp3");
+			_resources.addSoundName("flag.mp3");
+			_resources.addSoundName("jump.mp3");
+			_resources.addSoundName("MainBgm.mp3");
+			_resources.addSoundName("Opening.mp3");
+			_resources.addSoundName("stageCleared.mp3");
+			_resources.addSoundName("stageFailed.mp3");
+			
+			_resources.loadResource(onLoadedAllImages, onFailImageLoad);
 			
 			_stageWidth = this.width;
 			_stageHeight = this.height;
@@ -117,19 +140,31 @@ package scene.gameScene
 			_speed = 0; 
 			_playerSpeed = _stageWidth / 100;			 
 			
+//			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
 		}
 		
-		private function onLoadedAllImages(event:Event):void
+		private function onFailImageLoad(message:String):void
 		{
-			
-			
+			trace(message);
+		}
+		
+		private function onLoadedAllImages():void
+		{
 			_ui = new IngameUI();
 			
-			_player = new Player();			
+			_player = new Player(_resources);			
 			addChild(_player);
 			
 			//readTXT("stage.txt");
-			loadJSON("stage"+_currentStage+".json"); 			
+			loadJSON("stage"+_currentStage+".json");
+			
+			_resources.getSoundFile("MainBgm.mp3").volume = 0.5;
+			_resources.getSoundFile("MainBgm.mp3").loops = Sound.INFINITE;
+			SoundManager.play("MainBgm");
+			
+			_resources.getSoundFile("stageFailed.mp3").loops = Sound.INFINITE;
+			
+			_resources.getSoundFile("stageCleared.mp3").loops = Sound.INFINITE;
 		}
 		
 //		private function onCompleteReadTxt():void
@@ -244,7 +279,7 @@ package scene.gameScene
 			if(_intervalBetweenObject > 100)
 			{
 				//구름 생성
-				var cloud:Cloud = new Cloud();
+				var cloud:Cloud = new Cloud(_resources);
 				addChildAt(cloud, 1);
 				
 				if(_objectArray && _objectArray.length != 0)
@@ -418,7 +453,7 @@ package scene.gameScene
 			_player.onCleared = onCleared;
 			_player.onFailed = onFailed;
 			
-			_background = new Background(_backgroundColor);
+			_background = new Background(_resources, _backgroundColor);
 			addChildAt(_background, 0);
 			//			
 			_coverFace.width = _stageWidth;
@@ -528,7 +563,7 @@ package scene.gameScene
 			{
 				//도착
 				case ObjectName.HOME:
-					var home:Home = new Home();
+					var home:Home = new Home(_resources);
 					addChildAt(home, 1);
 					home.addEventListener(PlayerState.ARRIVE, onArrive);
 					break;
@@ -537,59 +572,59 @@ package scene.gameScene
 					break;
 				//타원 크레이터 가운데
 				case ObjectName.ELLIPSE_NORMAL:
-					var ellipseCrater:EllipseCrater = new EllipseCrater(-1);
+					var ellipseCrater:EllipseCrater = new EllipseCrater(_resources, -1);
 					addChildAt(ellipseCrater, 1);
 					break;
 				//타원 크레이터 왼쪽
 				case ObjectName.ELLIPSE_LEFT:
-					ellipseCrater = new EllipseCrater(0);
+					ellipseCrater = new EllipseCrater(_resources, 0);
 					addChildAt(ellipseCrater, 1);
 					break;
 				//타원 크레이터 오른쪽
 				case ObjectName.ELLIPSE_RIGHT:
-					ellipseCrater = new EllipseCrater(1);
+					ellipseCrater = new EllipseCrater(_resources, 1);
 					addChildAt(ellipseCrater, 1);
 					break;
 				//타원 크레이터 왼쪽, 오른쪽
 				case ObjectName.ELLIPSE_LEFT_RIGHT:
-					ellipseCrater = new EllipseCrater(0);
+					ellipseCrater = new EllipseCrater(_resources, 0);
 					addChildAt(ellipseCrater, 1);
-					ellipseCrater = new EllipseCrater(1);
+					ellipseCrater = new EllipseCrater(_resources, 1);
 					addChildAt(ellipseCrater, 1);
 					break;
 				//네모 크레이터 왼쪽
 				case ObjectName.RECT_LEFT:
-					var rectangleCrater:RectangleCrater = new RectangleCrater(0);
+					var rectangleCrater:RectangleCrater = new RectangleCrater(_resources, 0);
 					addChildAt(rectangleCrater, 1);
 					break;
 				//네모 크레이터 오른쪽
 				case ObjectName.RECT_RIGHT:
-					rectangleCrater = new RectangleCrater(1);
+					rectangleCrater = new RectangleCrater(_resources, 1);
 					addChildAt(rectangleCrater, 1);
 					break;
 				//깃발 왼쪽
 				case ObjectName.FLAG_LEFT:
-					var flag:Flag = new Flag(0);
+					var flag:Flag = new Flag(_resources, 0);
 					addChildAt(flag, 1);
 					break;
 				//깃발 오른쪽
 				case ObjectName.FLAG_RIGHT:
-					flag = new Flag(1);
+					flag = new Flag(_resources, 1);
 					addChildAt(flag, 1);
 					break;
 				//콜라 가운데
 				case ObjectName.COKE_NORMAL:
-					var coke:Coke = new Coke(-1);
+					var coke:Coke = new Coke(_resources, -1);
 					addChildAt(coke, 1);
 					break;
 				//콜라 왼쪽
 				case ObjectName.COKE_LEFT:
-					coke = new Coke(0);
+					coke = new Coke(_resources, 0);
 					addChildAt(coke, 1);
 					break;
 				//콜라 오른쪽
 				case ObjectName.COKE_RIGHT:
-					coke = new Coke(1);
+					coke = new Coke(_resources, 1);
 					addChildAt(coke, 1);
 					break;
 				default:

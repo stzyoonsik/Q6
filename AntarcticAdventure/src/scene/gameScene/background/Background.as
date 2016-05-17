@@ -3,14 +3,13 @@ package scene.gameScene.background
 	import flash.display.Bitmap;
 	
 	import scene.gameScene.MainStage;
-	import scene.loading.Resource;
+	import scene.loading.ResourceLoad;
 	
 	import trolling.component.animation.Animator;
 	import trolling.component.animation.State;
 	import trolling.component.graphic.Image;
 	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;
-	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 	
 	public class Background extends GameObject
@@ -31,13 +30,13 @@ package scene.gameScene.background
 		
 		public function get curve():int	{ return _curve; }		
 		
-		public function Background(color:int)
+		public function Background(resource:ResourceLoad, color:int)
 		{
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
 			
 			//_image = new Image(new Texture(Resource.imageDic["topBackground0"]));	
-			_image = new Image(Resource.spriteSheet.subTextures["topBackground0"]);	
+			_image = new Image(resource.getSubTexture("MainStageSprite0.png", "topBackground0"));	
 			
 			_topBackground.addComponent(_image); 
 			
@@ -50,7 +49,7 @@ package scene.gameScene.background
 			
 			_topBackgroundMountain.pivot = PivotType.CENTER;
 			//_image = new Image(new Texture(Resource.imageDic["topBackgroundMountain0"]));	
-			_image = new Image(Resource.spriteSheet.subTextures["topBackgroundMountain0"]);	
+			_image = new Image(resource.getSubTexture("MainStageSprite0.png", "topBackgroundMountain0"));	
 			_topBackgroundMountain.addComponent(_image);
 			
 			_topBackgroundMountain.width = _stageWidth * 2;
@@ -58,7 +57,7 @@ package scene.gameScene.background
 			_topBackgroundMountain.y = _stageHeight / 10 * 3.33 - (_topBackgroundMountain.height / 2);
 			addChild(_topBackgroundMountain);
 			
-			initAnimator();
+			initAnimator(resource);
 			
 			_bottomBackground.width = _stageWidth;
 			_bottomBackground.height = _stageHeight / 10 * 6.66;	
@@ -78,27 +77,27 @@ package scene.gameScene.background
 				_topBackground.blendColor(1, 0.5, 0.25);
 		}
 		
-		private function initAnimator():void
+		private function initAnimator(resource:ResourceLoad):void
 		{
 			_animator = new Animator();
 			
 			var state:State = new State("curve_none"); 			
-			state.addFrame(Resource.spriteSheet.subTextures["bottomBackground0"]);
-			state.addFrame(Resource.spriteSheet.subTextures["bottomBackground1"]);
+			state.addFrame(resource.getSubTexture("MainStageSprite0.png", "bottomBackground0"));
+			state.addFrame(resource.getSubTexture("MainStageSprite0.png", "bottomBackground1"));
 			_animator.addState(state);
 			state.interval= ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;			
 			
 			state = new State("curve_left"); 						
-			state.addFrame(Resource.spriteSheet.subTextures["bottomBackgroundLeft0"]);
-			state.addFrame(Resource.spriteSheet.subTextures["bottomBackgroundLeft1"]);
-			state.addFrame(Resource.spriteSheet.subTextures["bottomBackgroundLeft2"]);	
+			state.addFrame(resource.getSubTexture("MainStageSprite0.png", "bottomBackgroundLeft0"));
+			state.addFrame(resource.getSubTexture("MainStageSprite0.png", "bottomBackgroundLeft1"));
+			state.addFrame(resource.getSubTexture("MainStageSprite0.png", "bottomBackgroundLeft2"));	
 			_animator.addState(state);
 			state.interval= ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;			
 			
 			state = new State("curve_right"); 						
-			state.addFrame(Resource.spriteSheet.subTextures["bottomBackgroundRight0"]);
-			state.addFrame(Resource.spriteSheet.subTextures["bottomBackgroundRight1"]);
-			state.addFrame(Resource.spriteSheet.subTextures["bottomBackgroundRight2"]);	
+			state.addFrame(resource.getSubTexture("MainStageSprite0.png", "bottomBackgroundRight0"));
+			state.addFrame(resource.getSubTexture("MainStageSprite0.png", "bottomBackgroundRight1"));
+			state.addFrame(resource.getSubTexture("MainStageSprite0.png", "bottomBackgroundRight2"));	
 			_animator.addState(state);
 			state.interval= ((MainStage.maxSpeed - MainStage.speed) + 1) * 5;
 			

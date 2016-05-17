@@ -4,8 +4,9 @@ package scene.gameScene.object.item
 	
 	import scene.gameScene.MainStage;
 	import scene.gameScene.ObjectTag;
-	import scene.loading.Resource;
 	import scene.gameScene.object.Objects;
+	import scene.loading.Resource;
+	import scene.loading.ResourceLoad;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
@@ -19,9 +20,11 @@ package scene.gameScene.object.item
 		
 		private var _jumpSpeed:int;
 		private var _jumpHeight:int;
-		private var _jumpTheta:Number = 0;		
+		private var _jumpTheta:Number = 0;
 		
-		public function Fish(direction:int)
+		private var _resource:ResourceLoad;
+		
+		public function Fish(resource:ResourceLoad, direction:int)
 		{
 			this.tag = ObjectTag.ITEM;
 			
@@ -35,10 +38,11 @@ package scene.gameScene.object.item
 			
 			//_image = new Image(null);
 			
+			_resource = resource;
 			if(direction == 0)
-				_image = new Image(Resource.spriteSheet.subTextures["leftFish0"]);
+				_image = new Image(resource.getSubTexture("MainStageSprite0.png", "leftFish0"));
 			else
-				_image = new Image(Resource.spriteSheet.subTextures["rightFish0"]);
+				_image = new Image(resource.getSubTexture("MainStageSprite0.png", "rightFish0"));
 			
 			initRandomColor();			
 			
@@ -99,9 +103,9 @@ package scene.gameScene.object.item
 				if(_imageIndex == 1)
 				{
 					if(_direction == 0)
-						_image.texture = Resource.spriteSheet.subTextures["leftFish1"];
+						_image.texture = _resource.getSubTexture("MainStageSprite0.png", "leftFish1");
 					else
-						_image.texture = Resource.spriteSheet.subTextures["rightFish1"];
+						_image.texture = _resource.getSubTexture("MainStageSprite0.png", "rightFish1");
 					
 					_imageIndex++;
 				}			
@@ -111,9 +115,9 @@ package scene.gameScene.object.item
 				if(_imageIndex == 2)
 				{
 					if(_direction == 0)
-						_image.texture = Resource.spriteSheet.subTextures["leftFish2"];
+						_image.texture = _resource.getSubTexture("MainStageSprite0.png", "leftFish2");
 					else
-						_image.texture = Resource.spriteSheet.subTextures["leftFish2"];
+						_image.texture = _resource.getSubTexture("MainStageSprite0.png", "leftFish2");
 					
 					_imageIndex++;
 				}				

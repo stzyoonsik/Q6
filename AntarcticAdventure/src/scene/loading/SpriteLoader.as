@@ -4,7 +4,6 @@ package scene.loading
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
-	import flash.net.FileFilter;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	

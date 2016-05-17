@@ -4,14 +4,13 @@ package scene.gameScene.object.crater
 	
 	import scene.gameScene.MainStage;
 	import scene.gameScene.ObjectTag;
-	import scene.loading.Resource;
 	import scene.gameScene.object.Objects;
+	import scene.loading.ResourceLoad;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;
-	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 	
 	public class RectangleCrater extends Objects
@@ -25,13 +24,12 @@ package scene.gameScene.object.crater
 		private var _rightCollider:Collider = new Collider();
 		private var _middleCollider:Collider = new Collider();		
 		
-		public function RectangleCrater(direction)
+		public function RectangleCrater(resource:ResourceLoad, direction)
 		{
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
 			
-			var image:Image = new Image(Resource.spriteSheet.subTextures["rectCrater0"]);
-			//var image:Image = new Image(new Texture(Resource.spriteSheet.subTextures["rectCrater0"]));
+			var image:Image = new Image(resource.getSubTexture("MainStageSprite0.png", "rectCrater0"));
 			this.pivot = PivotType.CENTER;
 			addComponent(image);
 			

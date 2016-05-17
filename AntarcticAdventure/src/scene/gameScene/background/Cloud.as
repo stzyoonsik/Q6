@@ -5,6 +5,7 @@ package scene.gameScene.background
 	
 	import scene.gameScene.MainStage;
 	import scene.loading.Resource;
+	import scene.loading.ResourceLoad;
 	
 	import trolling.component.graphic.Image;
 	import trolling.event.TrollingEvent;
@@ -19,14 +20,14 @@ package scene.gameScene.background
 		
 		private var _isLeft:Boolean;		
 		
-		public function Cloud()
+		public function Cloud(resource:ResourceLoad)
 		{
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
 			
 			pivot = PivotType.CENTER;
 			
-			var image:Image = new Image(Resource.spriteSheet.subTextures["cloud0"]);	
+			var image:Image = new Image(resource.getSubTexture("MainStageSprite0.png", "cloud0"));	
 			addComponent(image);
 			
 			var point:Point = initRandomPosition();

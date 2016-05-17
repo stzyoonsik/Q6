@@ -2,27 +2,29 @@ package scene.gameScene.object.enemy
 {
 	import scene.gameScene.MainStage;
 	import scene.gameScene.ObjectTag;
-	import scene.loading.Resource;
 	import scene.gameScene.object.Objects;
+	import scene.loading.ResourceLoad;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
-	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 	
 	public class Enemy extends Objects
 	{		
-		private var _imageIndex:int;		
+		private var _imageIndex:int;
+		private var _resource:ResourceLoad;
 		
-		public function Enemy()
+		public function Enemy(resource:ResourceLoad)
 		{
 			this.tag = ObjectTag.ENEMY;
 			
 			_stageWidth = MainStage.stageWidth; 
 			_stageHeight = MainStage.stageHeight;
 			
-			_image = new Image(Resource.spriteSheet.subTextures["enemy0"]);
+			_resource = resource;
+			
+			_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "enemy0"));
 			addComponent(_image);
 			
 			this.pivot = PivotType.CENTER;			
@@ -56,8 +58,7 @@ package scene.gameScene.object.enemy
 			{				
 				if(_imageIndex == 1)
 				{
-					trace("ENEMY1111111111111111111111111111111111111111");
-					_image.texture = Resource.spriteSheet.subTextures["enemy1"];
+					_image.texture = _resource.getSubTexture("MainStageSprite0.png", "enemy1");
 					_imageIndex++;
 				}			
 			}			
@@ -65,7 +66,7 @@ package scene.gameScene.object.enemy
 			{
 				if(_imageIndex == 2)
 				{
-					_image.texture = Resource.spriteSheet.subTextures["enemy2"];
+					_image.texture = _resource.getSubTexture("MainStageSprite0.png", "enemy2");
 					_imageIndex++;
 				}				
 			}

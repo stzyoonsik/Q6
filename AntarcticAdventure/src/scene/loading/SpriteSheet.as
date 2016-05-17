@@ -64,6 +64,7 @@ package scene.loading
 				var subTexture:Texture = new Texture()
 				subTexture.setFromTexture(_atlasTexture, region);
 				_subTextures[_images[i].name] = subTexture;
+//				trace(_images[i].name);
 			}
 		}
 		

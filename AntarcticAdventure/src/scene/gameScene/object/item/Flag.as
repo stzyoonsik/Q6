@@ -5,8 +5,9 @@ package scene.gameScene.object.item
 	
 	import scene.gameScene.MainStage;
 	import scene.gameScene.ObjectTag;
-	import scene.loading.Resource;
 	import scene.gameScene.object.Objects;
+	import scene.loading.Resource;
+	import scene.loading.ResourceLoad;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
@@ -18,7 +19,7 @@ package scene.gameScene.object.item
 	{
 		private var _image:Image;
 		
-		public function Flag(direction)
+		public function Flag(resource:ResourceLoad, direction:int)
 		{
 			this.tag = ObjectTag.ITEM;
 			
@@ -29,7 +30,7 @@ package scene.gameScene.object.item
 			
 			var bitmap:Bitmap;		
 			
-			_image = new Image(Resource.spriteSheet.subTextures["flag0"]);	
+			_image = new Image(resource.getSubTexture("MainStageSprite0.png", "flag0"));	
 			
 			this.pivot = PivotType.CENTER;
 			addComponent(_image);

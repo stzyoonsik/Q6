@@ -2,10 +2,11 @@ package scene.gameScene.object.crater
 {
 	import scene.gameScene.MainStage;
 	import scene.gameScene.ObjectTag;
-	import scene.loading.Resource;
 	import scene.gameScene.object.Objects;
 	import scene.gameScene.object.enemy.Enemy;
 	import scene.gameScene.object.item.Fish;
+	import scene.loading.Resource;
+	import scene.loading.ResourceLoad;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
@@ -16,15 +17,18 @@ package scene.gameScene.object.crater
 	public class EllipseCrater extends Objects
 	{		
 		private var _isObjectCreate:Boolean;
+		private var _resource:ResourceLoad;
 		
-		public function EllipseCrater(direction:int)
+		public function EllipseCrater(resource:ResourceLoad, direction:int)
 		{
 			this.tag = ObjectTag.ENEMY;
 			
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
 			
-			var image:Image = new Image(Resource.spriteSheet.subTextures["ellipseCrater0"]);		
+			_resource = resource;
+			
+			var image:Image = new Image(_resource.getSubTexture("MainStageSprite0.png", "ellipseCrater0"));		
 			
 			this.pivot = PivotType.CENTER;
 			addComponent(image);
@@ -106,7 +110,7 @@ package scene.gameScene.object.crater
 						//물개 생성
 						case 1:
 							trace("물개 생성");
-							var enemy:Enemy = new Enemy();
+							var enemy:Enemy = new Enemy(_resource);
 							addChild(enemy);
 							break;
 						//생선 생성
@@ -115,17 +119,17 @@ package scene.gameScene.object.crater
 							{
 								case -1:
 									trace("생선 랜덤 생성");
-									var fish:Fish = new Fish(makeRandomForFish());
+									var fish:Fish = new Fish(_resource, makeRandomForFish());
 									addChild(fish);
 									break;
 								case 0:
 									trace("생선 오른쪽 생성");
-									fish = new Fish(1);		
+									fish = new Fish(_resource, 1);		
 									addChild(fish);
 									break;
 								case 1:
 									trace("생선 왼쪽 생성");
-									fish = new Fish(0);
+									fish = new Fish(_resource, 0);
 									addChild(fish);
 									break;
 								default:

@@ -4,7 +4,6 @@ package scene.gameScene.object.player
 	
 	import scene.gameScene.MainStage;
 	import scene.gameScene.ObjectTag;
-	import scene.loading.Resource;
 	import scene.gameScene.object.Objects;
 	import scene.gameScene.object.crater.EllipseCrater;
 	import scene.gameScene.object.crater.RectangleCrater;
@@ -13,6 +12,7 @@ package scene.gameScene.object.player
 	import scene.gameScene.object.item.Fish;
 	import scene.gameScene.object.item.Flag;
 	import scene.gameScene.util.PlayerState;
+	import scene.loading.ResourceLoad;
 	
 	import trolling.component.animation.Animator;
 	import trolling.component.animation.State;
@@ -63,6 +63,7 @@ package scene.gameScene.object.player
 		//private var _dashSpeed:Number = 0;
 		private var _dashCount:int;
 		
+		private var _resource:ResourceLoad;
 		
 		private const END_DELAY:uint = 120;
 		private var _endFrameCounter:uint;
@@ -95,7 +96,7 @@ package scene.gameScene.object.player
 		public function get struggleRightCount():int { return _struggleRightCount; }		
 		public function set struggleRightCount(value:int):void { _struggleRightCount = value; }
 		
-		public function Player()
+		public function Player(resource:ResourceLoad)
 		{
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
@@ -105,6 +106,8 @@ package scene.gameScene.object.player
 			this.y = _stageHeight / 10 * 8;
 			
 			_state = PlayerState.RUN;
+			
+			_resource = resource;
 			
 			_maxLife = 0;
 			_currentLife = 0;
@@ -145,7 +148,7 @@ package scene.gameScene.object.player
 			_penguin.addComponent(_animator);
 			
 			
-			_image = new Image(Resource.spriteSheet.subTextures["shadow0"]);			
+			_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "shadow0"));			
 			_grimja.addComponent(_image);
 			
 			_grimja.pivot = PivotType.CENTER;
@@ -178,45 +181,45 @@ package scene.gameScene.object.player
 			_animator = new Animator(); 
 			
 			var state:State = new State(PlayerState.RUN);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinRun0"]);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinRun1"]);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinRun2"]);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinRun3"]);
+			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinRun0"));
+			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinRun1"));
+			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinRun2"));
+			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinRun3"));
 			_animator.addState(state);
 			state.interval = 3;
 			
 			state = new State(PlayerState.JUMP);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinJump0"]);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinJump1"]);
+			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinJump0"));
+			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinJump1"));
 			_animator.addState(state);			
 			state.interval = 2;
 			
 			state = new State(PlayerState.CRASHED_LEFT);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinCrashedLeft0"]);	
+			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinCrashedLeft0"));	
 			state.interval = 60;
 			_animator.addState(state);	
 			
 			state = new State(PlayerState.CRASHED_RIGHT);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinCrashedRight0"]);	
+			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinCrashedRight0"));	
 			state.interval = 60;
 			_animator.addState(state);		
 			
 			state = new State(PlayerState.FALL);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinFall0"]);	
+			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinFall0"));	
 			state.interval = 60;
 			_animator.addState(state);
 			
 			state = new State(PlayerState.STRUGGLE);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinStruggle0"]);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinStruggle1"]);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinStruggle2"]);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinStruggle3"]);
+			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinStruggle0"));
+			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinStruggle1"));
+			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinStruggle2"));
+			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinStruggle3"));
 			state.interval = 4;
 			_animator.addState(state);
 			
 			state = new State(PlayerState.ARRIVED);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinArrived0"]);
-			state.addFrame(Resource.spriteSheet.subTextures["penguinArrived1"]);
+			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinArrived0"));
+			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinArrived1"));
 			state.interval = 5;
 			_animator.addState(state);
 			
