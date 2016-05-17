@@ -39,6 +39,7 @@ package ui.button
 			addEventListener(TrollingEvent.TOUCH_BEGAN, onBegan);
 			addEventListener(TrollingEvent.TOUCH_OUT, onOut);
 			addEventListener(TrollingEvent.TOUCH_ENDED, onEnded);
+			addEventListener(TrollingEvent.TOUCH_HOVER, onHover);
 		}
 		
 		public override function dispose():void
@@ -88,6 +89,12 @@ package ui.button
 		{
 			this.scaleX = _originScaleX;
 			this.scaleY = _originScaleY;
+		}
+		
+		protected function onHover(event:TrollingEvent):void
+		{
+			this.scaleX = _scaleDownRatio;
+			this.scaleY = _scaleDownRatio;
 		}
 	}
 }
