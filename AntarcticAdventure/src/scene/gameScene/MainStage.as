@@ -119,6 +119,7 @@ package scene.gameScene
 			
 			_resource = new Resources(_spriteDir, _soundDir);
 			_resource.addSpriteName("MainStageSprite0.png");
+			
 			_resource.addSoundName("crashed0.mp3");
 			_resource.addSoundName("crashed1.mp3");
 			_resource.addSoundName("fall.mp3");
@@ -160,7 +161,7 @@ package scene.gameScene
 			
 			_resource.getSoundFile("MainBgm.mp3").volume = 0.5;
 			_resource.getSoundFile("MainBgm.mp3").loops = Sound.INFINITE;
-			SoundManager.play("MainBgm");
+			SoundManager.play("MainBgm.mp3");
 			
 			_resource.getSoundFile("stageFailed.mp3").loops = Sound.INFINITE;
 			

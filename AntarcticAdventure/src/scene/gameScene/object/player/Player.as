@@ -233,7 +233,7 @@ package scene.gameScene.object.player
 		{
 			if(event.data is Fish)
 			{
-				SoundManager.play("fish");
+				SoundManager.play("fish.mp3");
 				event.data.dispatchEvent(new Event("collideFish"));
 				
 				// Life 증가 처리
@@ -252,7 +252,7 @@ package scene.gameScene.object.player
 			else if(event.data is Flag)
 			{
 				trace("깃발 먹음");
-				SoundManager.play("flag");			
+				SoundManager.play("flag.mp3");			
 				event.data.dispatchEvent(new Event("collideFlag"));
 				
 				// Flag 증가 처리
@@ -266,7 +266,7 @@ package scene.gameScene.object.player
 			else if(event.data is Coke)
 			{
 				trace("콜라 먹음");
-				SoundManager.play("flag");			
+				SoundManager.play("flag.mp3");			
 				event.data.dispatchEvent(new Event("collideCoke"));						
 				
 				_state = PlayerState.DASH;
@@ -397,7 +397,7 @@ package scene.gameScene.object.player
 			if (!_arrived)
 			{
 				SoundManager.stopAll();
-				SoundManager.play("stageCleared");
+				SoundManager.play("stageCleared.mp3");
 				_arrived = true;
 			}
 			
@@ -470,7 +470,7 @@ package scene.gameScene.object.player
 			{
 				trace("점프 시작");
 				_penguin.transition(PlayerState.JUMP);
-				SoundManager.play("jump");
+				SoundManager.play("jump.mp3");
 				_jumpFlag = true;
 			}
 			var degree:Number = _jumpTheta * Math.PI / 180;
@@ -512,7 +512,7 @@ package scene.gameScene.object.player
 					_penguin.transition(PlayerState.CRASHED_RIGHT);
 				_crashFlag = true;
 				
-				SoundManager.play("crashed0");
+				SoundManager.play("crashed0.mp3");
 				// Life 감소 처리
 				_currentLife--;
 				if (_currentLife <= 0)
@@ -553,7 +553,7 @@ package scene.gameScene.object.player
 				_crashHeight *= 0.75;			
 				_crashSpeed *= 1.25;				
 				
-				SoundManager.play("crashed1");
+				SoundManager.play("crashed1.mp3");
 				
 				_hoppingCount++;
 			}
@@ -584,7 +584,7 @@ package scene.gameScene.object.player
 			if(!_fallFlag)
 			{
 				_penguin.transition(PlayerState.FALL);
-				SoundManager.play("fall");	
+				SoundManager.play("fall.mp3");	
 				
 				this.y = _fallY;
 				_penguin.scaleY = _fallScaleY;
@@ -706,7 +706,7 @@ package scene.gameScene.object.player
 			this.active = false;
 			MainStage.stageEnded = true;
 			SoundManager.stopAll();
-			SoundManager.play("stageFailed");
+			SoundManager.play("stageFailed.mp3");
 			
 			if (_onFailed)
 			{
