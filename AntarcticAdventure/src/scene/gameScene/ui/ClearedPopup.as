@@ -182,9 +182,6 @@ package scene.gameScene.ui
 		
 		private function onEndedNext(event:TrollingEvent):void
 		{
-			// need to check if this stage is the last stage
-			// StageSelectScene.LAST_STAGE_ID
-			
 			SceneManager.restartScene(MainStage, "Game", MainStage.currentStage + 1); 
 		}
 	}
