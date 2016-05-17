@@ -14,6 +14,7 @@ package scene.gameScene.object.home
 	public class Home extends Objects
 	{		
 		private var _nationFlag:GameObject = new GameObject();
+		private var _isArrivedAtHome:Boolean;
 		
 		public function Home()
 		{
@@ -59,10 +60,16 @@ package scene.gameScene.object.home
 			if(this.y > _stageHeight * 0.475)
 			{
 				//removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
-				dispatchEvent(new TrollingEvent(PlayerState.ARRIVE));
+				if(!_isArrivedAtHome)
+				{
+					dispatchEvent(new TrollingEvent(PlayerState.ARRIVE));
+					_isArrivedAtHome = true;
+				}
+				
 				if(_nationFlag.y > -20)
 				{
 					_nationFlag.y -= 0.05;
+					
 				}
 				
 			}

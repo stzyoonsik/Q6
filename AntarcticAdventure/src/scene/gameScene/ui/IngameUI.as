@@ -539,11 +539,12 @@ package scene.gameScene.ui
 				{
 					if (_runGame)
 					{
-						_runGame(false);
+						_runGame(false);						
 					}
 					background.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedBackground);
 					background.visible = true;
 					settingPopup.show();	
+					dispatchEvent(new TrollingEvent("settingPopup", settingPopup.visible));
 				}
 			}
 		}
@@ -556,11 +557,13 @@ package scene.gameScene.ui
 			if (background && settingPopup)
 			{
 				settingPopup.close();
+				dispatchEvent(new TrollingEvent("settingPopup", settingPopup.visible));
 				background.visible = false;
 				background.removeEventListener(TrollingEvent.TOUCH_ENDED, onEndedBackground);
 				if (_runGame)
 				{
 					_runGame(true);
+					
 				}
 			}
 		}

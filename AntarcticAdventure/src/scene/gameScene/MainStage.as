@@ -23,6 +23,7 @@ package scene.gameScene
 	import scene.gameScene.util.PlayerState;
 	import scene.loading.Resource;
 	
+	import trolling.core.Trolling;
 	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
@@ -74,7 +75,8 @@ package scene.gameScene
 		private var _playerMaxLife:int;
 		private var _totalNumFlag:int;
 		
-		private var _control:int;
+		/** 0 = Screen Mode , 1 = Button Mode */
+		private var _controlMode:int;
 		private var _controller:Controller;
 
 		
@@ -159,13 +161,15 @@ package scene.gameScene
 		 */
 		private function onTouchEnded(event:TrollingEvent):void
 		{
-			if(_control == 1)
+			if(_controlMode == 1)
 				return;
 			
 			if(_player.state == PlayerState.ARRIVE ||
 				_player.state == PlayerState.CRASHED_LEFT ||
 				_player.state == PlayerState.CRASHED_RIGHT ||
-				_player.state == PlayerState.FALL)
+				_player.state == PlayerState.FALL ||
+				_player.state == PlayerState.STRUGGLE ||
+				_player.state == PlayerState.DASH)
 			{
 				return;
 			}
@@ -179,11 +183,7 @@ package scene.gameScene
 			
 			if(currentTouch.y - prevTouch.y > _yForJump)
 			{
-				//trace("JUMPJUMPJUMP");
-				if(_player.state != PlayerState.DASH)
-				{
-					_player.state = PlayerState.JUMP;
-				}					
+				_player.state = PlayerState.JUMP;									
 			}
 		}
 		
@@ -194,7 +194,7 @@ package scene.gameScene
 		 */
 		private function onTouchHover(event:TrollingEvent):void
 		{
-			if(_control == 1)
+			if(_controlMode == 1)
 				return;
 			
 			if(_player.state == PlayerState.ARRIVE ||
@@ -391,8 +391,11 @@ package scene.gameScene
 		 */
 		private function onArrive(event:TrollingEvent):void
 		{
-			trace("원모어타임");
+			trace("집 도착");
 			_playerArrive = true;
+			_coverFace.active = false;
+			_controller.active = false;
+			
 			_speed = 0;
 			_coverFace.removeEventListener(TrollingEvent.TOUCH_HOVER, onTouchHover);
 			event.currentTarget.removeEventListener(PlayerState.ARRIVE, onArrive);
@@ -449,6 +452,7 @@ package scene.gameScene
 			//
 			_ui.initialize(_currentStage, _objectArray.length, _playerMaxLife, _totalNumFlag, pause);
 			_ui.addEventListener("control", onEndedControl);
+			_ui.addEventListener("settingPopup", onEndedSettingPopup);
 			//_ui.
 			
 			_player.maxLife = _playerMaxLife;
@@ -474,10 +478,11 @@ package scene.gameScene
 			
 			_coverFace.addChild(_ui);
 			
-			_controller = new Controller();
+			_controller = new Controller();			
+			_coverFace.addChild(_controller);
+			_controller.addEventListener("move", onMove);
+			_controller.addEventListener("jump", onJump);
 			_controller.visible = false;
-			_coverFace.addChildAt(_controller, 0);
-			
 			
 			
 			//_coverFaceForFall.width = _stageWidth;
@@ -678,24 +683,90 @@ package scene.gameScene
 		{
 			if (_ui)
 			{
+				_coverFace.active = true;
 				_ui.showPopup(IngameUI.CLEARED);
 			}
 		}
 		
 		private function onEndedControl(event:TrollingEvent):void
 		{
-			_control = int(event.data);
-			if(_control == 0)
+			_controlMode = int(event.data);
+		}
+		
+		private function onEndedSettingPopup(event:TrollingEvent):void
+		{
+			trace("셋팅팝업 : " + event.data);
+			if(event.data == true)
 			{
-				_controller.visible = false;
-				//_coverFace.visible = true;
+				_controller.visible = false;				
+				//_coverFace.removeEventListener("move", onMove);
+				//_coverFace.removeEventListener("jump", onJump);
 			}
+			
 			else
 			{
-				_controller.visible = true;
-				//_coverFace.visible = false;
+				if(_controlMode == 0)
+				{
+					_controller.visible = false;					
+					//_coverFace.removeEventListener("move", onMove);
+					//_coverFace.removeEventListener("jump", onJump);
+				}
+				else
+				{
+					_controller.visible = true;					
+					//_coverFace.addEventListener("move", onMove);
+					//_coverFace.addEventListener("jump", onJump);
+				}
+				
 			}
 		}
-	
+		
+		private function onMove(event:TrollingEvent):void
+		{
+			if(_controlMode == 0)
+				return;
+			
+			trace("movemovemove");
+			if(_player.state == PlayerState.RUN || _player.state == PlayerState.JUMP || _player.state == PlayerState.DASH)
+			{
+				if(event.data == 0)
+				{
+					_player.x -= _playerSpeed;
+				}
+				else
+				{
+					_player.x += _playerSpeed;
+				}
+			}
+			
+			else if(_player.state == PlayerState.FALL || _player.state == PlayerState.STRUGGLE)
+			{
+				if(event.data == 0)
+				{
+					_player.struggleLeftCount++;
+					if(_player.state == PlayerState.FALL)
+						_player.state = PlayerState.STRUGGLE;
+				}
+				else
+				{
+					_player.struggleRightCount++;
+					if(_player.state == PlayerState.FALL)
+						_player.state = PlayerState.STRUGGLE;
+				}
+			}
+			
+			
+		}
+		
+		private function onJump(event:TrollingEvent):void			
+		{
+			if(_controlMode == 0)
+				return;
+			
+			if(_player.state == PlayerState.RUN)
+			{
+				_player.state = PlayerState.JUMP;
+			}
+		}
 	}
 }
