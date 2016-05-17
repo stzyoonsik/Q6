@@ -26,6 +26,7 @@ package
 			
 			Trolling.multitouchEnabled = true;
 			var trolling:Trolling = new Trolling(stage, new Rectangle(0, 0, 960, 540));
+			trolling.statsVisible = true;
 			SceneManager.addScene(TitleScene, "Title");
 			SceneManager.addScene(StageSelectScene, "stageSelect");
 			
