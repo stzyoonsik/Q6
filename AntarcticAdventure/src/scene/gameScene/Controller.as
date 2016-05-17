@@ -31,7 +31,7 @@ package scene.gameScene
 			_left.height = _left.width;			
 			_left.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchLeft);
 			
-			_right = new Button(resource.getSubTexture("MainStageSprite0.png", "right"));		
+			_right = new Button(resource.getSubTexture("MainStageSprite0.png", "right"));
 			_right.pivot = PivotType.CENTER;
 			_right.x = _stageWidth * 0.3;
 			_right.y = _stageHeight * 0.8;
