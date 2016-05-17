@@ -327,6 +327,7 @@ package scene.gameScene.ui
 			settingPopup.height *= 1.2;
 			settingPopup.initialize(_bitmaps);
 			settingPopup.addEventListener("control", onEndedControl);
+			settingPopup.addEventListener("initControlMode", onInitControlMode);
 			
 			delete _bitmaps[UIResource.SETTING_POPUP];
 			//
@@ -571,6 +572,11 @@ package scene.gameScene.ui
 		private function onEndedControl(event:TrollingEvent):void
 		{
 			dispatchEvent(new TrollingEvent("control", event.data));
+		}
+		
+		private function onInitControlMode(event:TrollingEvent):void
+		{
+			dispatchEvent(new TrollingEvent("initControlMode", event.data));
 		}
 	}
 }

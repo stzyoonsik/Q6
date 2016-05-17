@@ -485,6 +485,7 @@ package scene.gameScene
 			_ui.initialize(_currentStage, _objectArray.length, _playerMaxLife, _totalNumFlag, pause);
 			_ui.addEventListener("control", onEndedControl);
 			_ui.addEventListener("settingPopup", onEndedSettingPopup);
+			_ui.addEventListener("initControlMode", onInitControlMode);
 			//_ui.
 			
 			_player.maxLife = _playerMaxLife;
@@ -707,6 +708,10 @@ package scene.gameScene
 		{
 			if (_ui)
 			{
+				if(_controlMode == 1)
+				{
+					_controller.visible = false;					
+				}
 				_ui.showPopup(IngameUI.FAILED);
 			}
 		}
@@ -715,6 +720,10 @@ package scene.gameScene
 		{
 			if (_ui)
 			{
+				if(_controlMode == 1)
+				{
+					_controller.visible = false;					
+				}
 				_coverFace.active = true;
 				_ui.showPopup(IngameUI.CLEARED);
 			}
@@ -731,8 +740,6 @@ package scene.gameScene
 			if(event.data == true)
 			{
 				_controller.visible = false;				
-				//_coverFace.removeEventListener("move", onMove);
-				//_coverFace.removeEventListener("jump", onJump);
 			}
 			
 			else
@@ -740,16 +747,22 @@ package scene.gameScene
 				if(_controlMode == 0)
 				{
 					_controller.visible = false;					
-					//_coverFace.removeEventListener("move", onMove);
-					//_coverFace.removeEventListener("jump", onJump);
 				}
 				else
 				{
 					_controller.visible = true;					
-					//_coverFace.addEventListener("move", onMove);
-					//_coverFace.addEventListener("jump", onJump);
 				}
 				
+			}
+		}
+		
+		private function onInitControlMode(event:TrollingEvent):void
+		{
+			trace("_controlMode = " + _controlMode);
+			_controlMode = int(event.data);
+			if(_controlMode == 1)
+			{
+				_controller.visible = true;	
 			}
 		}
 		
