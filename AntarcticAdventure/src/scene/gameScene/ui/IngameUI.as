@@ -1,10 +1,14 @@
 package scene.gameScene.ui
 {
+	import flash.desktop.NativeApplication;
+	import flash.events.KeyboardEvent;
 	import flash.filesystem.File;
+	import flash.ui.Keyboard;
 	
-	import scene.gameScene.MainStage;
 	import loading.Resources;
 	import loading.SpriteSheet;
+	
+	import scene.gameScene.MainStage;
 	
 	import trolling.component.ComponentType;
 	import trolling.component.graphic.Image;
@@ -73,6 +77,7 @@ package scene.gameScene.ui
 			_resources = null;
 			_runGame = null;
 			
+			NativeApplication.nativeApplication.removeEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
 			super.dispose();
 		}
 		
@@ -410,6 +415,57 @@ package scene.gameScene.ui
 			spriteSheet.removeSubTexture(UIResource.CLEARED_POPUP);
 			spriteSheet.removeSubTexture(UIResource.FAILED_POPUP);
 			spriteSheet.removeSubTexture(UIResource.STAGE);
+			
+			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
+		}
+		
+		private function onTouchKeyBoard(event:KeyboardEvent):void
+		{
+			var settingPopup:SettingPopup = getChild(SETTING_POPUP) as SettingPopup;
+			var title:Title = getChild(TITLE) as Title;
+			var background:GameObject = getChild(BACKGROUND);
+			trace(event.keyCode);
+//			if(event.keyCode == 8)
+			if(event.keyCode == Keyboard.BACK)
+			{
+				event.preventDefault();
+				if(!settingPopup.visible)
+				{					
+					if (background && settingPopup)
+					{
+						if (title)
+						{
+							removeChild(title);
+						}
+						
+						if (!settingPopup.visible)
+						{
+							if (_runGame)
+							{
+								_runGame(false);						
+							}
+							background.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedBackground);
+							background.visible = true;
+							settingPopup.show();	
+							dispatchEvent(new TrollingEvent("settingPopup", settingPopup.visible));
+						}
+					}
+				}
+				else
+				{	
+					if (background && settingPopup)
+					{
+						settingPopup.close();
+						dispatchEvent(new TrollingEvent("settingPopup", settingPopup.visible));
+						background.visible = false;
+						background.removeEventListener(TrollingEvent.TOUCH_ENDED, onEndedBackground);
+						if (_runGame)
+						{
+							_runGame(true);
+						}
+					}
+				}
+			}
 		}
 		
 		private function onFailedLoad(message:String):void

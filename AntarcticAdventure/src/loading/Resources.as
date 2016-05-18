@@ -1,7 +1,10 @@
 package loading
 {
 	import flash.display.Bitmap;
+	import flash.display.Loader;
+	import flash.display.LoaderInfo;
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
 	import flash.net.URLRequest;
@@ -11,34 +14,40 @@ package loading
 	import trolling.media.SoundManager;
 	import trolling.rendering.Texture;
 	
-	public class Resources
+	public class Resources extends EventDispatcher
 	{	
 		private var _spriteSheetDic:Dictionary;
 		private var _soundDic:Dictionary;
+		private var _imageDic:Dictionary;
 		
 		private var _spriteName:Vector.<String>;
 		private var _soundName:Vector.<String>;
+		private var _imageName:Vector.<String>;
 
+		private var _spriteDir:File;
+		private var _soundDir:File;
+		private var _imageDir:File;
+		
 		private var _callbackFunc:Function;
 		private var _faildFunc:Function;
 		
-		private var _spriteDir:File;
-		private var _soundDir:File;
-		
 		private var _loadedCount:uint;
 		
-		public function Resources(spriteDirectory:File = null, soundDirectory:File = null)
+		public function Resources(spriteDirectory:File = null, soundDirectory:File = null, imageDirectory:File = null)
 		{
 			_spriteSheetDic = new Dictionary();
 			_soundDic = new Dictionary();
+			_imageDic = new Dictionary();
 			
 			_spriteName = new Vector.<String>();
 			_soundName = new Vector.<String>();
+			_imageName = new Vector.<String>();
 			
 			_loadedCount = 0;
 			
 			_spriteDir = spriteDirectory;
 			_soundDir = soundDirectory;
+			_imageDir = imageDirectory;
 		}
 		
 		public function loadResource(callbackFunction:Function, faildFunction:Function):void
@@ -60,13 +69,29 @@ package loading
 				spriteLoader = null;
 			}
 			
+			if(_imageDir != null)
+			{
+				var imageLoader:Loader;
+				var imageURLRequest:URLRequest;
+				for(var j:int = 0; j < _imageName.length; j++)
+				{
+					imageURLRequest = new URLRequest(_imageDir.resolvePath(_imageName[j]).url);
+					imageLoader = new Loader();
+					imageLoader.loaderInfo.addEventListener(Event.COMPLETE, onImageLoaded);
+					imageLoader.loaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onImageLoadedFailed);
+					imageLoader.load(imageURLRequest);
+				}
+				imageLoader = null;
+				imageURLRequest = null;
+			}
+			
 			if(_soundDir != null)
 			{
 				var sound:Sound;
 				var soundURLRequest:URLRequest;
-				for(var j:int = 0; j < _soundName.length; j++)
+				for(var k:int = 0; k < _soundName.length; k++)
 				{
-					soundURLRequest = new URLRequest(_soundDir.resolvePath(_soundName[j]).url);
+					soundURLRequest = new URLRequest(_soundDir.resolvePath(_soundName[k]).url);
 					sound = new Sound();
 					sound.addEventListener(Event.COMPLETE, onSoundLoaded);
 					sound.addEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFailed);
@@ -75,6 +100,30 @@ package loading
 				sound = null;
 				soundURLRequest = null;
 			}
+		}
+		
+		private function onImageLoaded(event:Event):void
+		{
+			var imageFileName:String = LoaderInfo(event.currentTarget).url.replace(_imageDir.url.toString()+"/", "");
+			trace(imageFileName);
+			var imageBitmap:Bitmap = LoaderInfo(event.currentTarget).loader.content as Bitmap;
+			var imageTexture:Texture = new Texture(imageBitmap);
+			_imageDic[imageFileName] = imageTexture;
+			LoaderInfo(event.currentTarget).removeEventListener(Event.COMPLETE, onImageLoaded);
+			LoaderInfo(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onImageLoadedFailed);
+			
+			_loadedCount++;
+			checkLoadComplete();
+		}
+		
+		private function onImageLoadedFailed(event:IOErrorEvent):void
+		{
+			
+			LoaderInfo(event.currentTarget).removeEventListener(Event.COMPLETE, onImageLoaded);
+			LoaderInfo(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onImageLoadedFailed);
+			_faildFunc(event.text);
+			_loadedCount++;
+			checkLoadComplete();
 		}
 		
 		private function onSoundLoaded(event:Event):void
@@ -118,15 +167,21 @@ package loading
 		
 		private function checkLoadComplete():void
 		{
-			trace("_spriteName.length + _soundName.length = " + (_spriteName.length + _soundName.length));
+			trace("_spriteName.length + _soundName.length + _imageName.length = " + (_spriteName.length + _soundName.length + _imageName.length));
 			trace("_loadedCount = " + _loadedCount);
-			if(_loadedCount >= (_spriteName.length + _soundName.length))
+			if(_loadedCount >= (_spriteName.length + _soundName.length + _imageName.length))
 			{
 				_spriteName.splice(0, _spriteName.length);
 				_soundName.splice(0, _soundName.length);
+				_imageName.splice(0, _imageName.length);
 				
 				_callbackFunc();
 			}
+		}
+		
+		public function addImageName(imageFileName:String):void
+		{
+			_imageName.push(imageFileName);
 		}
 		
 		public function addSpriteName(spriteFileName:String):void
@@ -137,6 +192,11 @@ package loading
 		public function addSoundName(soundFileName:String):void
 		{
 			_soundName.push(soundFileName);
+		}
+		
+		public function getImageFile(imageFileName:String):Texture
+		{
+			return (_imageDic[imageFileName] as Texture);
 		}
 		
 		public function getSoundFile(soundFileName:String):Sound

@@ -91,10 +91,10 @@ package scene.stageSelectScene
 				setStageNumber();
 				SoundManager.play("stageSelect.mp3");
 			}
-			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onClickButton);
+			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
 		}
 		
-		private function onClickButton(event:KeyboardEvent):void
+		private function onTouchKeyBoard(event:KeyboardEvent):void
 		{
 			trace(event.keyCode);
 //			if(event.keyCode == 8)
@@ -332,7 +332,7 @@ package scene.stageSelectScene
 		
 		private function onButtonClick(event:TrollingEvent):void
 		{
-			NativeApplication.nativeApplication.removeEventListener(KeyboardEvent.KEY_DOWN, onClickButton);
+			NativeApplication.nativeApplication.removeEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
 			SceneManager.addScene(MainStage, "Game");
 			SceneManager.goScene("Game", (_stageIndex*5)+int(event.currentTarget.name));
 		}

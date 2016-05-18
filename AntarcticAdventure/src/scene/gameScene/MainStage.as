@@ -5,9 +5,11 @@ package scene.gameScene
 	import flash.geom.Point;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	import flash.utils.Dictionary;
 	
 	import gameData.SettingData;
+	
+	import loading.Resources;
+	
 	import scene.gameScene.background.Background;
 	import scene.gameScene.background.Cloud;
 	import scene.gameScene.object.crater.EllipseCrater;
@@ -20,7 +22,6 @@ package scene.gameScene
 	import scene.gameScene.ui.IngameUI;
 	import scene.gameScene.util.ObjectName;
 	import scene.gameScene.util.PlayerState;
-	import loading.Resources;
 	
 	import trolling.event.TrollingEvent;
 	import trolling.media.Sound;
@@ -56,18 +57,7 @@ package scene.gameScene
 		private var _objectArray:Array = new Array();
 		private var _backgroundColor:int;
 		
-		//private var _curveDistanceVector:Vector.<int> = new Vector.<int>();
 		private var _curveDirectionVector:Vector.<int> = new Vector.<int>();
-		//private var _maxCurveCount:int;
-		//private var _curveCount:int
-		
-		//private static var _coverFaceForFall:GameObject = new GameObject();
-		//private var _fallFlag:Boolean;
-		
-		private var _soundDic:Dictionary = new Dictionary();
-		private var _soundURL:Vector.<String> = new Vector.<String>();
-		private var _soundLoadCount:uint = 0;
-		private var _filePath:File = File.applicationDirectory;
 		
 		private var _spriteDir:File = File.applicationDirectory.resolvePath("scene/gameScene/sprite");
 		private var _soundDir:File = File.applicationDirectory.resolvePath("scene/gameScene/sound");
@@ -82,9 +72,6 @@ package scene.gameScene
 		/** 0 = Screen Mode , 1 = Button Mode */
 		private var _controlMode:int;
 		private var _controller:Controller;
-		
-		//public static function get coverFaceForFall():GameObject { return _coverFaceForFall; }
-		//public static function set coverFaceForFall(value:GameObject):void { _coverFaceForFall = value; }
 		
 		public static function get currentStage():int { return _currentStage; }
 		public static function set stageEnded(value:Boolean):void { _stageEnded = value; }
@@ -111,9 +98,6 @@ package scene.gameScene
 		{
 			_currentStage = this.data as int;
 			_stageEnded = false;
-			
-//			_resource = new Resource();
-//			_resource.addEventListener("loadedAllImages", onLoadedAllImages);
 			
 			_resource = new Resources(_spriteDir, _soundDir);
 			_resource.addSpriteName("MainStageSprite0.png");
@@ -164,23 +148,6 @@ package scene.gameScene
 			
 			_resource.getSoundFile("stageCleared.mp3").loops = Sound.INFINITE;
 		}
-		
-//		private function onCompleteReadTxt():void
-//		{
-//			// UI 테스트용 변수 임의 설정 !
-//			_playerMaxLife = 5;
-//			//
-//			_ui.initialize(_currentStage, _objectArray.length, _playerMaxLife, _totalNumFlag, pause);
-//			
-//			_player.maxLife = _playerMaxLife;
-//			_player.setCurrentLifeAtUi = setCurrentLife;
-//			_player.setCurrentFlagAtUi = setCurrentFlag;
-//				
-// 
-//			_player.onCleared = onCleared;
-//			_player.onFailed = onFailed;
-//		}
-
 		
 		/**
 		 * 터치 뗏을때 이벤트
@@ -288,11 +255,6 @@ package scene.gameScene
 		 */
 		private function onEnterFrame(event:Event):void
 		{
-			//trace("현재 속도 = " + _speed);
-			//trace("남은 거리 = " + _distanceToFinish);
-			
-			//trace("메인클래스 state = " + _player.state); 
-		
 			if (!this.active || _stageEnded)
 			{
 				return;
@@ -316,13 +278,11 @@ package scene.gameScene
 				
 				if(_objectArray && _objectArray.length != 0)
 				{
-					//var curveIndex:int = ;
 					if(_objectArray.length % 10 == 0 && _curveDirectionVector.length != 0)
 					{
 						_background.changeCurve(_curveDirectionVector[0]);
 						_curveDirectionVector.shift();
 					}
-					//trace(_objectArray[0] + "오브젝트 생성");
 					makeObject();
 					_objectArray.shift();
 					// UI 남은 거리 업데이트
@@ -372,46 +332,13 @@ package scene.gameScene
 			{
 				if(!_player.fallFlag)
 				{
-					trace("빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐");			
-					//_coverFace.addChildAt(_coverFaceForFall, 0);
+					trace("빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐빠짐");
 					_player.fallFlag = true;
 				}
 				
 			}
 		}
 		
-//		/**
-//		 * 
-//		 * @param event
-//		 * 빠짐 상태 전용 커버 페이스 터치 이벤트 리스너
-//		 */
-//		private function onTouchCoverFaceForFall(event:TrollingEvent):void
-//		{
-//			var pointsTemp:Vector.<Point> = event.data as Vector.<Point>;
-//			if(pointsTemp.length <= 1)
-//				return;
-//			var prevTouch:Point = pointsTemp[0];
-//			var currentTouch:Point = pointsTemp[pointsTemp.length-1];
-//			
-//			//trace(currentTouch.x - prevTouch.x);
-//			if(currentTouch.x - prevTouch.x > _xForStruggle)
-//			{				
-//				_player.struggleLeftCount++;
-//				if(_player.state == PlayerState.FALL)
-//					_player.state = PlayerState.STRUGGLE;
-//				
-//				//trace(_player.struggleLeftCount);
-//			}
-//			
-//			if(currentTouch.x - prevTouch.x < -_xForStruggle)
-//			{
-//				_player.struggleRightCount++;
-//				if(_player.state == PlayerState.FALL)
-//					_player.state = PlayerState.STRUGGLE;
-//				
-//				//trace(_player.struggleRightCount);
-//			}
-//		} 
 		/**
 		 * 도착 
 		 * @param event
@@ -449,14 +376,8 @@ package scene.gameScene
 		private function onCompleteLoadJSON(event:Event):void
 		{
 			var loader:URLLoader = URLLoader(event.target);
-			//trace("completeHandler: " + loader.data);
 			
-			var data:Object = JSON.parse(loader.data);
-			//trace("The answer is " + data.id+" ; "+data.first_var+" ; "+data.second_var);
-//			trace(data.stage);
-//			trace(data.backgroundColor);
-//			trace(data.curve);
-//			trace(data.object);			
+			var data:Object = JSON.parse(loader.data);	
 			
 			_backgroundColor = data.backgroundColor;			
 			
@@ -474,7 +395,6 @@ package scene.gameScene
 				}
 			}
 			
-			//onCompleteReadTxt();
 			_ui.initialize(_currentStage, _objectArray.length, PLAYER_MAX_LIFE, _totalNumFlag, pause);
 			_ui.addEventListener("control", onEndedControl);
 			_ui.addEventListener("settingPopup", onEndedSettingPopup);
@@ -488,11 +408,7 @@ package scene.gameScene
 			
 			_background = new Background(_resource, _backgroundColor);
 			addChildAt(_background, 0);
-			
-			
-			
-			
-			//			
+				
 			_coverFace.width = _stageWidth;
 			_coverFace.height = _stageHeight;
 			_coverFace.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchHover);		
@@ -507,96 +423,8 @@ package scene.gameScene
 			_controller.addEventListener("jump", onJump);
 			_controller.visible = false;
 			
-			
-			//_coverFaceForFall.width = _stageWidth;
-			//_coverFaceForFall.height = _stageHeight * 0.8;
-			//_coverFaceForFall.y = _stageHeight * 0.2;
-			//_coverFaceForFall.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchCoverFaceForFall);	
-			
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);				
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
-		
-//		/**
-//		 * 데이터를 읽어서 array에 푸쉬하는 메소드 
-//		 * @param stageName
-//		 * 
-//		 */
-//		private function readTXT(fileName:String):void
-//		{
-//			var file:File = new File();
-//			var stream:FileStreamWithLineReader = new FileStreamWithLineReader();
-//			file = File.applicationDirectory.resolvePath(fileName);
-//			var lineCount:int;
-//			var findStage:Boolean;
-//			
-//			if(file.exists)
-//			{
-//				stream.open(file, FileMode.READ);
-//				while(stream.bytesAvailable)
-//				{
-//					var line:String = stream.readUTFLine();
-//					
-//					if(line != "#"+_currentStage.toString() && !findStage)
-//					{
-//						continue;
-//					}
-//					else
-//					{
-//						//trace(line);
-//						findStage = true;
-//						switch(lineCount)
-//						{
-//							case 0:
-//								break;	
-//							
-//							case 1:
-//								var tempArray:Array = line.split('/');
-//								
-//								for(var i:int = 0; i < tempArray.length; ++i)
-//								{
-//									_curveDistanceVector.push(int(tempArray[i].split(',')[0]));
-//									_curveDirectionVector.push(int(tempArray[i].split(',')[1]));
-//									_maxCurveCount++;
-//								}
-//								break;
-//							
-//							case 2:
-//								_objectArray = new Array();
-//								_objectArray = line.split(',');
-//								
-//								// 깃발 개수 카운트
-//								_totalNumFlag = 0;
-//								if (_objectArray)
-//								{
-//									for (i = 0; i < _objectArray.length; i++)
-//									{
-//										if (int(_objectArray[i]) == ObjectName.FLAG_LEFT || int(_objectArray[i]) == ObjectName.FLAG_RIGHT)
-//										{
-//											_totalNumFlag++;
-//										}
-//									}
-//								}								
-//								break;
-//							
-//							default:
-//								break;
-//						}
-//						lineCount++;
-//						if(lineCount >= 3)
-//						{
-//							break;
-//						}
-//					}				
-//				}
-//				stream.close();
-//				
-//				onCompleteReadTxt();
-//			}
-//			else
-//			{
-//				trace(fileName + " open error");
-//			}
-//		}
 		
 		/**
 		 * 오브젝트를 생성하는 메소드 
