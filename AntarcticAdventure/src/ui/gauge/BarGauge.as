@@ -63,7 +63,7 @@ package ui.gauge
 			}
 			else
 			{
-				bar.visable = false;
+				bar.visible = false;
 			}
 		}
 	}
