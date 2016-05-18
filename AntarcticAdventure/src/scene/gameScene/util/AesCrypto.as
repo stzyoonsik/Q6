@@ -10,7 +10,6 @@ package scene.gameScene.util
 	
 	public class AesCrypto
 	{
-		       
 		public static function encrypt(rawData:String, key:String):String {
 				var kdata:ByteArray = Hex.toArray(Hex.fromString(key));
 				
