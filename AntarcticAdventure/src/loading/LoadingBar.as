@@ -1,4 +1,4 @@
-package ui.gauge
+package loading
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -7,14 +7,18 @@ package ui.gauge
 	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	import trolling.utils.Color;
+	
+	import ui.gauge.Gauge;
 
-	public class BarGauge extends Gauge
+	public class LoadingBar extends Gauge
 	{
-		private const DEFAULT_BAR_SCALE:Number = 0.9;
-		private const BAR:int = 1;
+		private const DEFAULT_BAR_SCALE:Number = 0.01;
+		private const BAR:int = 0;
 		
-		public function BarGauge(width:Number, height:Number, barScale:Number = DEFAULT_BAR_SCALE,
-								 baseColor:uint = Color.SILVER, barColor:uint = Color.LIME)
+		private var _base:GameObject;
+		
+		public function LoadingBar(width:Number, height:Number, barScale:Number = DEFAULT_BAR_SCALE,
+								   baseColor:uint = Color.SILVER, barColor:uint = Color.LIME)
 		{
 			if (width <= 0)
 			{
@@ -31,24 +35,23 @@ package ui.gauge
 				barScale = DEFAULT_BAR_SCALE;
 			}
 			
-			var base:GameObject = new GameObject();
+			_base = new GameObject();
 			var bar:GameObject = new GameObject();
 			
 			var bitmap:Bitmap = new Bitmap(new BitmapData(width, height, false, baseColor));
-			base.addComponent(new Image(new Texture(bitmap)));
+			_base.addComponent(new Image(new Texture(bitmap)));
 			
-			bitmap = new Bitmap(new BitmapData(width * barScale, height * barScale, false, barColor));
-			bar.x = width * (1 - barScale) / 2;
-			bar.y = height * (1 - barScale) / 2;
+			bitmap = new Bitmap(new BitmapData(width, height, false, barColor));
+			bar.scaleX = DEFAULT_BAR_SCALE;
 			bar.addComponent(new Image(new Texture(bitmap)));
 			
-			addChild(base);
-			addChild(bar);
+			addChild(_base);
+			_base.addChild(bar);
 		}
 		
 		public override function update(current:Number):void
 		{
-			var bar:GameObject = getChild(BAR);
+			var bar:GameObject = _base.getChild(BAR);
 			
 			if (!bar || current < 0)
 			{
@@ -60,16 +63,9 @@ package ui.gauge
 			if (current != 0)
 			{
 				bar.scaleX = _current / _total;
-			}
-			else
-			{
-				bar.visible = false;
+//				bar.scaleX = 1;
+				trace("bar.scaleX = " + bar.scaleX);
 			}
 		}
 	}
 }
-
-
-
-
-
