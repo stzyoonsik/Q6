@@ -31,14 +31,20 @@ package
 			SceneManager.addScene(StageSelectScene, "stageSelect");
 			
 			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
+			NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, onDeactivate);
 			
 			trolling.start();
+		}
+		
+		private function onDeactivate(event:Event):void
+		{
+//			var notification:NotificationExtension = new NotificationExtension();
+//			notification.setNotification("남극탐험", "펭귄이 달리고 싶어합니다!!", 30);
 		}
 		
 		private function onExit(event:Event):void
 		{
 			NativeApplication.nativeApplication.removeEventListener(Event.EXITING, onExit);
-			
 			SceneManager.dispose();
 		}
 	}

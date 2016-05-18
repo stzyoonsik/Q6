@@ -97,7 +97,7 @@ package scene.titleScene
 			sound.volume = 0.5;
 			sound.loops = Sound.INFINITE;
 			
-			SoundManager.play("Opening.mp3");
+			SoundManager.play("Opening");
 		}
 		
 		private function onSoundLoadFaild(event:IOErrorEvent):void
@@ -181,12 +181,7 @@ package scene.titleScene
 		}
 		
 		private function onTouch(event:TrollingEvent):void
-		{
-			//var image:Bitmap = new notiImage() as Bitmap;
-			//trace(image.width);
-			
-			//var notification:NotificationExtension = new NotificationExtension();
-			//notification.setNotification("돌아와요!!", "Notification", 30);
+		{			
 			SceneManager.switchScene("stageSelect");
 		}
 	}

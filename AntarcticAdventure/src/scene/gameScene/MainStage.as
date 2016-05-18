@@ -125,7 +125,6 @@ package scene.gameScene
 			_resource.addSoundName("flag.mp3");
 			_resource.addSoundName("jump.mp3");
 			_resource.addSoundName("MainBgm.mp3");
-			_resource.addSoundName("Opening.mp3");
 			_resource.addSoundName("stageCleared.mp3");
 			_resource.addSoundName("stageFailed.mp3");
 			
@@ -450,7 +449,7 @@ package scene.gameScene
 		private function onCompleteLoadJSON(event:Event):void
 		{
 			var loader:URLLoader = URLLoader(event.target);
-			trace("completeHandler: " + loader.data);
+			//trace("completeHandler: " + loader.data);
 			
 			var data:Object = JSON.parse(loader.data);
 			//trace("The answer is " + data.id+" ; "+data.first_var+" ; "+data.second_var);
