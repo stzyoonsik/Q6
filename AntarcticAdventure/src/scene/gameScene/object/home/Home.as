@@ -61,7 +61,6 @@ package scene.gameScene.object.home
 			
 			if(this.y > _stageHeight * 0.475)
 			{
-				//removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 				if(!_isArrivedAtHome)
 				{
 					dispatchEvent(new TrollingEvent(PlayerState.ARRIVE));
@@ -70,8 +69,7 @@ package scene.gameScene.object.home
 				
 				if(_nationFlag.y > -20)
 				{
-					_nationFlag.y -= 0.05;
-					
+					_nationFlag.y -= 0.05;					
 				}
 				
 			}

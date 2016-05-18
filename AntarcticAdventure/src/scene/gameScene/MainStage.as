@@ -244,7 +244,9 @@ package scene.gameScene
 				//trace(currentTouch.x - prevTouch.x);
 				if(currentTouch.x - prevTouch.x > _xForStruggle)
 				{				
-					_player.struggleLeftCount++;
+					if(_player.struggleLeftCount - _player.struggleRightCount <= 1)   
+						_player.struggleLeftCount++;
+					
 					if(_player.state == PlayerState.FALL)
 						_player.state = PlayerState.STRUGGLE;
 					
@@ -253,7 +255,9 @@ package scene.gameScene
 				
 				if(currentTouch.x - prevTouch.x < -_xForStruggle)
 				{
-					_player.struggleRightCount++;
+					if(_player.struggleRightCount - _player.struggleLeftCount <= 1)   
+						_player.struggleRightCount++;
+					
 					if(_player.state == PlayerState.FALL)
 						_player.state = PlayerState.STRUGGLE;
 					
@@ -761,7 +765,7 @@ package scene.gameScene
 			if(_controlMode == 0)
 				return;
 			
-			trace("movemovemove");
+			//trace("movemovemove");
 			if(_player.state == PlayerState.RUN || _player.state == PlayerState.JUMP || _player.state == PlayerState.DASH)
 			{
 				if(event.data == 0)
@@ -778,13 +782,17 @@ package scene.gameScene
 			{
 				if(event.data == 0)
 				{
-					_player.struggleLeftCount++;
+					if(_player.struggleLeftCount - _player.struggleRightCount <= 1)   
+						_player.struggleLeftCount++;
+					
 					if(_player.state == PlayerState.FALL)
 						_player.state = PlayerState.STRUGGLE;
 				}
 				else
 				{
-					_player.struggleRightCount++;
+					if(_player.struggleRightCount - _player.struggleLeftCount <= 1)   
+						_player.struggleRightCount++;
+					
 					if(_player.state == PlayerState.FALL)
 						_player.state = PlayerState.STRUGGLE;
 				}

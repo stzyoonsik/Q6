@@ -12,7 +12,6 @@ package scene.gameScene.object.item
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
-	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 	
 	public class Flag extends Objects

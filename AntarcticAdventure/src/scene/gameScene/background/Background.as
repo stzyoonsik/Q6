@@ -35,7 +35,6 @@ package scene.gameScene.background
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
 			
-			//_image = new Image(new Texture(Resource.imageDic["topBackground0"]));	
 			_image = new Image(resource.getSubTexture("MainStageSprite0.png", "topBackground0"));	
 			
 			_topBackground.addComponent(_image); 
@@ -48,7 +47,7 @@ package scene.gameScene.background
 			addChild(_topBackground);	
 			
 			_topBackgroundMountain.pivot = PivotType.CENTER;
-			//_image = new Image(new Texture(Resource.imageDic["topBackgroundMountain0"]));	
+			
 			_image = new Image(resource.getSubTexture("MainStageSprite0.png", "topBackgroundMountain0"));	
 			_topBackgroundMountain.addComponent(_image);
 			

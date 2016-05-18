@@ -58,7 +58,6 @@ package scene.gameScene.object.player
 		private var _struggleRightCount:int;
 		
 		private var _dashFlag:Boolean;
-		//private var _dashSpeed:Number = 0;
 		private var _dashCount:int;
 		
 		private var _resource:Resources;
@@ -474,7 +473,7 @@ package scene.gameScene.object.player
 				_jumpFlag = true;
 			}
 			var degree:Number = _jumpTheta * Math.PI / 180;
-//			trace(degree);
+			
 			_penguin.y = -(Math.sin(degree) * _jumpHeight);
 			
 			_jumpTheta += _jumpSpeed;
@@ -623,7 +622,7 @@ package scene.gameScene.object.player
 			
 			if(_struggleLeftCount > 5 && _struggleRightCount > 5)
 			{
-				trace("탈출");
+				//trace("탈출");
 				_struggleLeftCount = 0;
 				_struggleRightCount = 0;
 				_fallFlag = false;
@@ -639,8 +638,6 @@ package scene.gameScene.object.player
 				
 				_state = PlayerState.RUN;
 				_penguin.transition(PlayerState.RUN);
-				
-				//MainStage.coverFaceForFall.removeFromParent();
 			}
 			
 		}

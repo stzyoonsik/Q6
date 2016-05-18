@@ -141,7 +141,6 @@ package scene.gameScene.object.crater
 		 */
 		private function onFall(event:Event):void		
 		{
-			//this._addY = 0;
 			_leftCollider.isActive = false;
 			_middleCollider.isActive = false;
 			_rightCollider.isActive = false;
