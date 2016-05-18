@@ -8,9 +8,12 @@ package scene.stageSelectScene
 	import flash.utils.Dictionary;
 	
 	import gameData.PlayData;
-	import scene.gameScene.MainStage;
+	
+	import loading.LoadingEvent;
 	import loading.Resources;
 	import loading.SpriteSheet;
+	
+	import scene.gameScene.MainStage;
 	import scene.stageSelectScene.ui.ExitPopup;
 	
 	import trolling.component.ComponentType;
@@ -83,7 +86,10 @@ package scene.stageSelectScene
 				_resource.addSpriteName("selectSceneSprite0.png");
 				_resource.addSpriteName("ExitPopupSheet.png");
 				_resource.addSoundName("stageSelect.mp3");
-				_resource.loadResource(onCompleteLoad, onFaildLoad);
+				
+				_resource.addEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
+				_resource.addEventListener(LoadingEvent.FAILED, onFailedLoad);
+				_resource.loadResource();
 			}
 			else
 			{
@@ -97,8 +103,8 @@ package scene.stageSelectScene
 		private function onTouchKeyBoard(event:KeyboardEvent):void
 		{
 			trace(event.keyCode);
-//			if(event.keyCode == 8)
-			if(event.keyCode == Keyboard.BACK)
+			if(event.keyCode == 8)
+//			if(event.keyCode == Keyboard.BACK)
 			{
 				event.preventDefault();
 				if(_exitPopup != null)
@@ -111,13 +117,18 @@ package scene.stageSelectScene
 			}
 		}
 		
-		private function onFaildLoad(message:String):void
+		private function onFailedLoad(event:LoadingEvent):void
 		{
-			trace(message);
+			trace(event.data as String);
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.FAILED, onFailedLoad);
 		}
 		
-		private function onCompleteLoad():void
+		private function onCompleteLoad(event:LoadingEvent):void
 		{
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.FAILED, onFailedLoad);
+			
 			_stageIndex = 0;
 			
 			_backGround = new GameObject();

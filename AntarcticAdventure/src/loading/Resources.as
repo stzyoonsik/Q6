@@ -28,9 +28,6 @@ package loading
 		private var _soundDir:File;
 		private var _imageDir:File;
 		
-		private var _callbackFunc:Function;
-		private var _faildFunc:Function;
-		
 		private var _loadedCount:uint;
 		
 		public function Resources(spriteDirectory:File = null, soundDirectory:File = null, imageDirectory:File = null)
@@ -50,11 +47,8 @@ package loading
 			_imageDir = imageDirectory;
 		}
 		
-		public function loadResource(callbackFunction:Function, faildFunction:Function):void
+		public function loadResource():void
 		{
-			_callbackFunc = callbackFunction;
-			_faildFunc = faildFunction;
-			
 			if (_spriteDir) trace(_spriteDir.url);
 			if (_soundDir)	trace(_soundDir.url);
 			
@@ -113,17 +107,15 @@ package loading
 			LoaderInfo(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onImageLoadedFailed);
 			
 			_loadedCount++;
-			checkLoadComplete();
+			checkLoadComplete(imageFileName);
 		}
 		
 		private function onImageLoadedFailed(event:IOErrorEvent):void
 		{
-			
 			LoaderInfo(event.currentTarget).removeEventListener(Event.COMPLETE, onImageLoaded);
 			LoaderInfo(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onImageLoadedFailed);
-			_faildFunc(event.text);
-			_loadedCount++;
-			checkLoadComplete();
+			
+			dispatchEvent(new LoadingEvent(LoadingEvent.FAILED, event.text));
 		}
 		
 		private function onSoundLoaded(event:Event):void
@@ -137,16 +129,15 @@ package loading
 			SoundManager.addSound(soundFileName, _soundDic[soundFileName]);
 			
 			_loadedCount++;
-			checkLoadComplete();
+			checkLoadComplete(soundFileName);
 		}
 		
 		private function onSoundLoadFailed(event:IOErrorEvent):void
 		{
 			Sound(event.currentTarget).removeEventListener(Event.COMPLETE, onSoundLoaded);
 			Sound(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFailed);
-			_faildFunc(event.text);
-			_loadedCount++;
-			checkLoadComplete();
+			
+			dispatchEvent(new LoadingEvent(LoadingEvent.FAILED, event.text));
 		}
 		
 		private function onCompleteSpriteLoad(name:String, spriteBitmap:Bitmap, xml:XML):void
@@ -155,18 +146,17 @@ package loading
 			_spriteSheetDic[name] = spriteSheet;
 			trace(spriteSheet.name);
 			_loadedCount++;
-			checkLoadComplete();
+			checkLoadComplete(name);
 		}
 		
 		private function onFaildSpriteLoad(message:String):void
 		{
-			_faildFunc(message);
-			_loadedCount++;
-			checkLoadComplete();
+			dispatchEvent(new LoadingEvent(LoadingEvent.FAILED, message));
 		}
 		
-		private function checkLoadComplete():void
+		private function checkLoadComplete(fileName:String):void
 		{
+			dispatchEvent(new LoadingEvent(LoadingEvent.PROGRESS, fileName));
 			trace("_spriteName.length + _soundName.length + _imageName.length = " + (_spriteName.length + _soundName.length + _imageName.length));
 			trace("_loadedCount = " + _loadedCount);
 			if(_loadedCount >= (_spriteName.length + _soundName.length + _imageName.length))
@@ -175,7 +165,7 @@ package loading
 				_soundName.splice(0, _soundName.length);
 				_imageName.splice(0, _imageName.length);
 				
-				_callbackFunc();
+				dispatchEvent(new LoadingEvent(LoadingEvent.COMPLETE));
 			}
 		}
 		

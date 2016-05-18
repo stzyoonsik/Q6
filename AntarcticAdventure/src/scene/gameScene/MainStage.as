@@ -8,6 +8,7 @@ package scene.gameScene
 	
 	import gameData.SettingData;
 	
+	import loading.LoadingEvent;
 	import loading.Resources;
 	
 	import scene.gameScene.background.Background;
@@ -112,7 +113,9 @@ package scene.gameScene
 			_resource.addSoundName("stageCleared.mp3");
 			_resource.addSoundName("stageFailed.mp3");
 			
-			_resource.loadResource(onLoadedAllImages, onFailImageLoad);
+			_resource.addEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
+			_resource.addEventListener(LoadingEvent.FAILED, onFailedLoad);
+			_resource.loadResource();
 			
 			_stageWidth = this.width;
 			_stageHeight = this.height;
@@ -121,17 +124,22 @@ package scene.gameScene
 			_xForStruggle = _stageWidth * 0.3;
 			_xForMoveAtLeast = _stageWidth / 50;
 			
-			_speed = 0; 
+			_speed = 0;
 			_playerSpeed = _stageWidth / 100;			 
 		}
 		
-		private function onFailImageLoad(message:String):void
+		private function onFailedLoad(event:LoadingEvent):void
 		{
-			trace(message);
+			trace(event.data as String);
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.FAILED, onFailedLoad);
 		}
 		
-		private function onLoadedAllImages():void
+		private function onCompleteLoad(event:LoadingEvent):void
 		{
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.FAILED, onFailedLoad);
+			
 			_ui = new IngameUI();
 			
 			_player = new Player(_resource);			

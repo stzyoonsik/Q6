@@ -5,6 +5,7 @@ package scene.gameScene.ui
 	import flash.filesystem.File;
 	import flash.ui.Keyboard;
 	
+	import loading.LoadingEvent;
 	import loading.Resources;
 	import loading.SpriteSheet;
 	
@@ -69,7 +70,10 @@ package scene.gameScene.ui
 			
 			_resources = new Resources(new File(UIResource.DIRECTORY));
 			_resources.addSpriteName(UIResource.SPRITE);
-			_resources.loadResource(onCompleteLoad, onFailedLoad);
+			
+			_resources.addEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
+			_resources.addEventListener(LoadingEvent.FAILED, onFailedLoad);
+			_resources.loadResource();
 		}
 		
 		public override function dispose():void
@@ -221,8 +225,11 @@ package scene.gameScene.ui
 			_currentFlag = numFlag;
 		}
 		
-		private function onCompleteLoad():void
+		private function onCompleteLoad(event:LoadingEvent):void
 		{
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.FAILED, onFailedLoad);
+			
 			var fieldsXY:Number = MainStage.stageWidth / 70;
 			// FIELDS
 			var field:GameObject = new GameObject();
@@ -468,9 +475,11 @@ package scene.gameScene.ui
 			}
 		}
 		
-		private function onFailedLoad(message:String):void
+		private function onFailedLoad(event:LoadingEvent):void
 		{
-			trace(message);
+			trace(event.data as String);
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.FAILED, onFailedLoad);
 		}
 		
 		private function onEnterFrame(event:TrollingEvent):void
