@@ -9,6 +9,7 @@ package scene.stageSelectScene
 	
 	import gameData.PlayData;
 	
+	import loading.Loading;
 	import loading.LoadingEvent;
 	import loading.Resources;
 	import loading.SpriteSheet;
@@ -87,8 +88,11 @@ package scene.stageSelectScene
 				_resource.addSpriteName("ExitPopupSheet.png");
 				_resource.addSoundName("stageSelect.mp3");
 				
+				Loading.current.setLoading(this, _resource.getTotalLoadCount());
+				
 				_resource.addEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
 				_resource.addEventListener(LoadingEvent.FAILED, onFailedLoad);
+				_resource.addEventListener(LoadingEvent.PROGRESS, onProgressLoad);
 				_resource.loadResource();
 			}
 			else
@@ -100,11 +104,16 @@ package scene.stageSelectScene
 			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
 		}
 		
+		private function onProgressLoad(event:LoadingEvent):void
+		{
+			Loading.current.setCurrent(event.data as Number);
+		}
+		
 		private function onTouchKeyBoard(event:KeyboardEvent):void
 		{
 			trace(event.keyCode);
-			if(event.keyCode == 8)
-//			if(event.keyCode == Keyboard.BACK)
+//			if(event.keyCode == 8)
+			if(event.keyCode == Keyboard.BACK)
 			{
 				event.preventDefault();
 				if(_exitPopup != null)
@@ -122,12 +131,15 @@ package scene.stageSelectScene
 			trace(event.data as String);
 			Resources(event.currentTarget).removeEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
 			Resources(event.currentTarget).removeEventListener(LoadingEvent.FAILED, onFailedLoad);
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.PROGRESS, onProgressLoad);
 		}
 		
 		private function onCompleteLoad(event:LoadingEvent):void
 		{
+			Loading.current.loadComplete();
 			Resources(event.currentTarget).removeEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
 			Resources(event.currentTarget).removeEventListener(LoadingEvent.FAILED, onFailedLoad);
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.PROGRESS, onProgressLoad);
 			
 			_stageIndex = 0;
 			
@@ -338,7 +350,8 @@ package scene.stageSelectScene
 		
 		private function onBubble(event:TrollingEvent):void
 		{
-			GameObject(event.currentTarget).parent.dispatchEvent(new TrollingEvent(event.type, event.data));
+			if(GameObject(event.currentTarget).parent != null)
+				GameObject(event.currentTarget).parent.dispatchEvent(new TrollingEvent(event.type, event.data));
 		}
 		
 		private function onButtonClick(event:TrollingEvent):void
