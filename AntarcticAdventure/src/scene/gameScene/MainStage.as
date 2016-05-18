@@ -8,6 +8,7 @@ package scene.gameScene
 	
 	import gameData.SettingData;
 	
+	import loading.Loading;
 	import loading.LoadingEvent;
 	import loading.Resources;
 	
@@ -113,8 +114,11 @@ package scene.gameScene
 			_resource.addSoundName("stageCleared.mp3");
 			_resource.addSoundName("stageFailed.mp3");
 			
+			Loading.current.setLoading(this, _resource.getTotalLoadCount());
+			
 			_resource.addEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
 			_resource.addEventListener(LoadingEvent.FAILED, onFailedLoad);
+			_resource.addEventListener(LoadingEvent.PROGRESS, onProgressLoad);
 			_resource.loadResource();
 			
 			_stageWidth = this.width;
@@ -128,17 +132,25 @@ package scene.gameScene
 			_playerSpeed = _stageWidth / 100;			 
 		}
 		
+		private function onProgressLoad(event:LoadingEvent):void
+		{
+			Loading.current.setCurrent(event.data as Number);
+		}
+		
 		private function onFailedLoad(event:LoadingEvent):void
 		{
 			trace(event.data as String);
 			Resources(event.currentTarget).removeEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
 			Resources(event.currentTarget).removeEventListener(LoadingEvent.FAILED, onFailedLoad);
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.PROGRESS, onProgressLoad);
 		}
 		
 		private function onCompleteLoad(event:LoadingEvent):void
 		{
+			Loading.current.loadComplete();
 			Resources(event.currentTarget).removeEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
 			Resources(event.currentTarget).removeEventListener(LoadingEvent.FAILED, onFailedLoad);
+			Resources(event.currentTarget).removeEventListener(LoadingEvent.PROGRESS, onProgressLoad);
 			
 			_ui = new IngameUI();
 			

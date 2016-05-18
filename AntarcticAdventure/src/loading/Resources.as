@@ -47,6 +47,41 @@ package loading
 			_imageDir = imageDirectory;
 		}
 		
+		public function getTotalLoadCount():int
+		{
+			return (_spriteName.length + _soundName.length + _imageName.length);
+		}
+		
+		public function dispose():void
+		{
+			if(_spriteSheetDic)
+			{
+				for(var key:String in _spriteSheetDic)
+				{
+					delete _spriteSheetDic[key];
+				}
+				_spriteSheetDic = null;
+			}
+			
+			if(_soundDic)
+			{
+				for(key in _soundDic)
+				{
+					delete _soundDic[key];
+				}
+				_soundDic = null;
+			}
+			
+			if(_imageDic)
+			{
+				for(key in _imageDic)
+				{
+					delete _imageDic[key];
+				}
+				_imageDic = null;
+			}
+		}
+		
 		public function loadResource():void
 		{
 			if (_spriteDir) trace(_spriteDir.url);
@@ -71,8 +106,8 @@ package loading
 				{
 					imageURLRequest = new URLRequest(_imageDir.resolvePath(_imageName[j]).url);
 					imageLoader = new Loader();
-					imageLoader.loaderInfo.addEventListener(Event.COMPLETE, onImageLoaded);
-					imageLoader.loaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onImageLoadedFailed);
+					imageLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onImageLoaded);
+					imageLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onImageLoadedFailed);
 					imageLoader.load(imageURLRequest);
 				}
 				imageLoader = null;
@@ -156,7 +191,7 @@ package loading
 		
 		private function checkLoadComplete(fileName:String):void
 		{
-			dispatchEvent(new LoadingEvent(LoadingEvent.PROGRESS, fileName));
+			dispatchEvent(new LoadingEvent(LoadingEvent.PROGRESS, _loadedCount));
 			trace("_spriteName.length + _soundName.length + _imageName.length = " + (_spriteName.length + _soundName.length + _imageName.length));
 			trace("_loadedCount = " + _loadedCount);
 			if(_loadedCount >= (_spriteName.length + _soundName.length + _imageName.length))
