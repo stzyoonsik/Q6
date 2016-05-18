@@ -5,12 +5,10 @@ package scene.gameScene.background
 	
 	import scene.gameScene.MainStage;
 	import loading.Resources;
-	import loading.Resources;
 	
 	import trolling.component.graphic.Image;
 	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;
-	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 	
 	public class Cloud extends GameObject
