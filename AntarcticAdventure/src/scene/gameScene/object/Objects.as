@@ -29,6 +29,26 @@ package scene.gameScene.object
 		protected var _addY:Number = 0;
 		
 		
+		public function get collider():Collider
+		{
+			return _collider;
+		}
+
+		public function set collider(value:Collider):void
+		{
+			_collider = value;
+		}
+
+		public function get animator():Animator
+		{
+			return _animator;
+		}
+
+		public function set animator(value:Animator):void
+		{
+			_animator = value;
+		}
+
 		protected function setScale(value:Number):Number
 		{
 			var result:Number = 0;

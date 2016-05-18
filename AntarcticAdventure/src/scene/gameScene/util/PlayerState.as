@@ -21,11 +21,11 @@ package scene.gameScene.util
 		/** 허우적 */
 		public static const STRUGGLE:String = "struggle";
 		
-		/** 죽음*/		
-		public static const DASH:String = "dash";
+		/** 대쉬*/		
+		public static const DASH:String = "dash";	
 		
 		/** 죽음*/		
-		public static const DEAD:String = "dead";
+		public static const DEAD:String = "dead";	
 		
 		/** 도착 */
 		public static const ARRIVE:String = "arrive";

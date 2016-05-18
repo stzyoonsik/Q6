@@ -3,7 +3,6 @@ package scene.gameScene.object.player
 	import flash.events.Event;
 	
 	import scene.gameScene.MainStage;
-	import scene.gameScene.ObjectTag;
 	import scene.gameScene.object.Objects;
 	import scene.gameScene.object.crater.EllipseCrater;
 	import scene.gameScene.object.crater.RectangleCrater;
@@ -14,23 +13,15 @@ package scene.gameScene.object.player
 	import scene.gameScene.util.PlayerState;
 	import loading.Resources;
 	
-	import trolling.component.animation.Animator;
-	import trolling.component.animation.State;
-	import trolling.component.graphic.Image;
-	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
 	import trolling.media.SoundManager;
-	import trolling.object.GameObject;
 	import trolling.utils.PivotType;
 	
 	public class Player extends Objects
 	{		
-		private var _penguin:GameObject = new GameObject();		
-		private var _grimja:GameObject = new GameObject();
-		
-		private var _grimjaCollider:Collider;
-		private var _penguinCollider:Collider;
-		
+		private var _penguin:Penguin;		
+		private var _grimja:Grimja;
+				
 		private var _state:String;
 		
 		private var _maxLife:int;
@@ -126,112 +117,28 @@ package scene.gameScene.object.player
 			_crashHeight = _stageHeight / 20;
 			_crashTheta = 0;
 			
-			_penguin.pivot = PivotType.CENTER;
+			_penguin = new Penguin(_resource);
+			_penguin.addEventListener("collidePenguin", onCollideWithPenguin);
 			
-			_penguin.width = _stageWidth / 5;
-			_penguin.height = _penguin.width;
-			
-			_penguinCollider = new Collider();
-			_penguinCollider.setRect(0.3, 0.3);
-			_penguinCollider.addIgnoreTag(ObjectTag.ENEMY);
-			
-			//_penguin.colliderRender = true;
-			_penguin.addComponent(_penguinCollider);
-			_penguin.addEventListener(TrollingEvent.COLLIDE, onCollideWithPenguin);
-			
-			
-			
-			initAnimator();
-			_penguin.addComponent(_animator);
-			
-			
-			_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "shadow0"));			
-			_grimja.addComponent(_image);
-			
-			_grimja.pivot = PivotType.CENTER;
-			
-			_grimja.width = _stageWidth / 5;
-			_grimja.height = _grimja.width	
-			_grimja.y = _stageHeight * 0.08;
-			
-			_grimjaCollider = new Collider();
-			_grimjaCollider.setRect(0.33, 0.0625);
-			_grimjaCollider.addIgnoreTag(ObjectTag.ITEM);
-			
-			_grimja.addComponent(_grimjaCollider);
-			//_grimja.colliderRender = true;
-			_grimja.addEventListener(TrollingEvent.COLLIDE, onCollideWithGrimja);
-			
-			
+			_grimja = new Grimja(_resource);
+			_grimja.addEventListener("collideGrimja", onCollideWithGrimja);
+
 			addChild(_grimja);
 			addChild(_penguin);
 			
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);	
-		} 
-		
-		/**
-		 * 애니메이터를 초기 세팅하는 메소드 
-		 * 
-		 */
-		private function initAnimator():void
-		{
-			_animator = new Animator(); 
-			
-			var state:State = new State(PlayerState.RUN);
-			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinRun0"));
-			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinRun1"));
-			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinRun2"));
-			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinRun3"));
-			_animator.addState(state);
-			state.interval = 3;
-			
-			state = new State(PlayerState.JUMP);
-			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinJump0"));
-			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinJump1"));
-			_animator.addState(state);			
-			state.interval = 2;
-			
-			state = new State(PlayerState.CRASHED_LEFT);
-			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinCrashedLeft0"));	
-			state.interval = 60;
-			_animator.addState(state);	
-			
-			state = new State(PlayerState.CRASHED_RIGHT);
-			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinCrashedRight0"));	
-			state.interval = 60;
-			_animator.addState(state);		
-			
-			state = new State(PlayerState.FALL);
-			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinFall0"));	
-			state.interval = 60;
-			_animator.addState(state);
-			
-			state = new State(PlayerState.STRUGGLE);
-			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinStruggle0"));
-			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinStruggle1"));
-			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinStruggle2"));
-			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinStruggle3"));
-			state.interval = 4;
-			_animator.addState(state);
-			
-			state = new State(PlayerState.ARRIVED);
-			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinArrived0"));
-			state.addFrame(_resource.getSubTexture("MainStageSprite0.png", "penguinArrived1"));
-			state.interval = 5;
-			_animator.addState(state);
-			
-			state.play();
-		}
-		
+		} 		
+	
 		/**
 		 * 
 		 * @param event
-		 * 그림자의 콜라이더에 다른 콜라이더가 충돌했을때 그 콜라이더에 대한 정보를 바탕으로 어느 오브젝트와 충돌했는지를 검사하는 메소드
+		 * 펭귄의 콜라이더에 다른 콜라이더가 충돌했을때 그 콜라이더에 대한 정보를 바탕으로 어느 오브젝트와 충돌했는지를 검사하는 메소드
 		 */
 		private function onCollideWithPenguin(event:TrollingEvent):void
 		{
 			if(event.data is Fish)
 			{
+				trace("생선 먹음");
 				SoundManager.play("fish.mp3");
 				event.data.dispatchEvent(new Event("collideFish"));
 				
@@ -269,8 +176,7 @@ package scene.gameScene.object.player
 				event.data.dispatchEvent(new Event("collideCoke"));						
 				
 				_state = PlayerState.DASH;
-			}	
-			
+			}				
 		}
 		
 		
@@ -282,9 +188,7 @@ package scene.gameScene.object.player
 		private function onCollideWithGrimja(event:TrollingEvent):void
 		{			
 			if(event.data is EllipseCrater)
-			{
-				
-				//왼쪽을 부딪힘
+			{				
 				if(_state == PlayerState.RUN)
 				{
 					MainStage.speed = 0;
@@ -297,8 +201,7 @@ package scene.gameScene.object.player
 					{
 						_state = PlayerState.CRASHED_RIGHT;
 					}
-				}
-				
+				}				
 			}
 				
 			else if(event.data.parent is RectangleCrater)
@@ -330,20 +233,16 @@ package scene.gameScene.object.player
 				
 			else if(event.data is Enemy)
 			{
-				trace("물개와 충돌");
 				MainStage.speed = 0;
 				if(this.x < event.data.parent.x)
 				{						
 					_state = PlayerState.CRASHED_LEFT;
-				}
-					
+				}					
 				else
 				{
 					_state = PlayerState.CRASHED_RIGHT;
 				}
-			}			
-			
-			
+			}	
 		}
 		
 		
@@ -371,15 +270,11 @@ package scene.gameScene.object.player
 				case PlayerState.DASH:
 					dash();
 					break;
-				case PlayerState.DEAD:
-					break;
 				case PlayerState.ARRIVE:
 					arrived();
 					break;
 				case PlayerState.ARRIVED:
 					cleared();
-					break;
-				case PlayerState.DEAD:
 					break;
 				default:
 					break;
@@ -424,6 +319,10 @@ package scene.gameScene.object.player
 			}
 		}
 		
+		/**
+		 * 스테이지 클리어 
+		 * 
+		 */
 		private function cleared():void
 		{
 			_endFrameCounter++;
@@ -504,7 +403,7 @@ package scene.gameScene.object.player
 			if(!_crashFlag)
 			{
 				//trace("왼쪽 부딪힘");
-				_grimjaCollider.isActive = false;
+				_grimja.collider.isActive = false;
 				if(direction == 0)
 					_penguin.transition(PlayerState.CRASHED_LEFT);
 				else
@@ -557,8 +456,6 @@ package scene.gameScene.object.player
 				_hoppingCount++;
 			}
 			
-			
-			
 			if(_hoppingCount >= 3)
 			{
 				_crashSpeed = 10;
@@ -567,7 +464,7 @@ package scene.gameScene.object.player
 				_hoppingCount = 0;
 				_penguin.y = 0;
 				_state = PlayerState.RUN;
-				_grimjaCollider.isActive = true;
+				_grimja.collider.isActive = true;
 				_crashTheta = 0;				
 				_penguin.transition(PlayerState.RUN);
 				_crashFlag = false;
@@ -589,7 +486,7 @@ package scene.gameScene.object.player
 				_penguin.scaleY = _fallScaleY;
 				_penguin.scaleX = _fallScaleX;
 				
-				_grimjaCollider.isActive = false;
+				_grimja.collider.isActive = false;
 				_grimja.visible = false;
 				
 				// Life 감소 처리
@@ -632,7 +529,7 @@ package scene.gameScene.object.player
 				_penguin.scaleX = 1;
 				
 				_grimja.visible = true;
-				_grimjaCollider.isActive = true;
+				_grimja.collider.isActive = true;
 				
 				this.y = _stageHeight / 10 * 8;
 				
@@ -659,10 +556,11 @@ package scene.gameScene.object.player
 				_penguin.y = 0;
 				_grimja.width = _stageWidth / 5 + _penguin.y;
 				_grimja.height = _grimja.width;
-				
+					
 				_penguin.transition(PlayerState.RUN);
-				_grimjaCollider.isActive = false;
-				_animator.getState(PlayerState.RUN).interval = 1;
+				_grimja.collider.isActive = false;
+				//_grimjaCollider.isActive = false;
+				_penguin.animator.getState(PlayerState.RUN).interval = 1;
 				_dashFlag = true;
 				MainStage.speed = MainStage.maxSpeed * 3;
 			}
@@ -685,8 +583,8 @@ package scene.gameScene.object.player
 				MainStage.speed = MainStage.maxSpeed;
 				this.scaleX = 1;
 				this.scaleY = 1;
-				_grimjaCollider.isActive = true;
-				_animator.getState(PlayerState.RUN).interval = 3;				
+				_grimja.collider.isActive = true;
+				_penguin.animator.getState(PlayerState.RUN).interval = 3;				
 			}
 			
 			else if(60 <= _dashCount)
