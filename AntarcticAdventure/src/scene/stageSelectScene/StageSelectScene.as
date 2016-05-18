@@ -332,6 +332,7 @@ package scene.stageSelectScene
 		
 		private function onButtonClick(event:TrollingEvent):void
 		{
+			NativeApplication.nativeApplication.removeEventListener(KeyboardEvent.KEY_DOWN, onClickButton);
 			SceneManager.addScene(MainStage, "Game");
 			SceneManager.goScene("Game", (_stageIndex*5)+int(event.currentTarget.name));
 		}
