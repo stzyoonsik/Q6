@@ -449,7 +449,7 @@ package scene.gameScene
 			{
 				//도착
 				case ObjectName.HOME:
-					var home:Home = new Home(_resource);
+					var home:Home = new Home(_resource, Number(_player.currentFlag/_totalNumFlag));
 					addChildAt(home, 1);
 					home.addEventListener(PlayerState.ARRIVE, onArrive);
 					break;
