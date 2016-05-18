@@ -1,8 +1,9 @@
 package scene.gameScene.ui
 {
-	import scene.gameScene.MainStage;
 	import loading.Resources;
 	import loading.SpriteSheet;
+	
+	import scene.gameScene.MainStage;
 	import scene.stageSelectScene.StageSelectScene;
 	
 	import trolling.component.graphic.Image;
