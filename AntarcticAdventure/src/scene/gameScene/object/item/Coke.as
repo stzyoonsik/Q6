@@ -6,8 +6,8 @@ package scene.gameScene.object.item
 	import scene.gameScene.MainStage;
 	import scene.gameScene.ObjectTag;
 	import scene.gameScene.object.Objects;
-	import scene.loading.Resources;
-	import scene.loading.Resources;
+	import loading.Resources;
+	import loading.Resources;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
@@ -18,7 +18,7 @@ package scene.gameScene.object.item
 	{
 		private var _image:Image;
 		
-		public function Coke(resource:scene.loading.Resources, direction:int)
+		public function Coke(resource:loading.Resources, direction:int)
 		{
 			this.tag = ObjectTag.ITEM;
 			

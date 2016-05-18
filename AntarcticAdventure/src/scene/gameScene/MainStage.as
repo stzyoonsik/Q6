@@ -7,7 +7,7 @@ package scene.gameScene
 	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
 	
-	import scene.data.SettingData;
+	import gameData.SettingData;
 	import scene.gameScene.background.Background;
 	import scene.gameScene.background.Cloud;
 	import scene.gameScene.object.crater.EllipseCrater;
@@ -20,7 +20,7 @@ package scene.gameScene
 	import scene.gameScene.ui.IngameUI;
 	import scene.gameScene.util.ObjectName;
 	import scene.gameScene.util.PlayerState;
-	import scene.loading.Resources;
+	import loading.Resources;
 	
 	import trolling.event.TrollingEvent;
 	import trolling.media.Sound;

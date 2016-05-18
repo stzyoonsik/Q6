@@ -1,4 +1,4 @@
-package scene.loading
+package loading
 {
 	import flash.display.Bitmap;
 	import flash.events.Event;

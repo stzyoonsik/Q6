@@ -6,10 +6,10 @@ package scene.gameScene.ui
 	import flash.geom.ColorTransform;
 	import flash.geom.Rectangle;
 	
-	import scene.data.SettingData;
+	import gameData.SettingData;
 	import scene.gameScene.MainStage;
-	import scene.loading.Resources;
-	import scene.loading.SpriteSheet;
+	import loading.Resources;
+	import loading.SpriteSheet;
 	
 	import trolling.core.SceneManager;
 	import trolling.event.TrollingEvent;

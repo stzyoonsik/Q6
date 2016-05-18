@@ -4,8 +4,8 @@ package scene.gameScene.background
 	import flash.geom.Point;
 	
 	import scene.gameScene.MainStage;
-	import scene.loading.Resources;
-	import scene.loading.Resources;
+	import loading.Resources;
+	import loading.Resources;
 	
 	import trolling.component.graphic.Image;
 	import trolling.event.TrollingEvent;
@@ -20,7 +20,7 @@ package scene.gameScene.background
 		
 		private var _isLeft:Boolean;		
 		
-		public function Cloud(resource:scene.loading.Resources)
+		public function Cloud(resource:loading.Resources)
 		{
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;

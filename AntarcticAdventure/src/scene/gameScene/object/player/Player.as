@@ -12,7 +12,7 @@ package scene.gameScene.object.player
 	import scene.gameScene.object.item.Fish;
 	import scene.gameScene.object.item.Flag;
 	import scene.gameScene.util.PlayerState;
-	import scene.loading.Resources;
+	import loading.Resources;
 	
 	import trolling.component.animation.Animator;
 	import trolling.component.animation.State;

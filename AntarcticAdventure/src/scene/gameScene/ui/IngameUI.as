@@ -3,8 +3,8 @@ package scene.gameScene.ui
 	import flash.filesystem.File;
 	
 	import scene.gameScene.MainStage;
-	import scene.loading.Resources;
-	import scene.loading.SpriteSheet;
+	import loading.Resources;
+	import loading.SpriteSheet;
 	
 	import trolling.component.ComponentType;
 	import trolling.component.graphic.Image;

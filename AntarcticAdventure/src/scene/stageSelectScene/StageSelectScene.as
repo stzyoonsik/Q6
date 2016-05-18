@@ -7,10 +7,10 @@ package scene.stageSelectScene
 	import flash.ui.Keyboard;
 	import flash.utils.Dictionary;
 	
-	import scene.data.PlayData;
+	import gameData.PlayData;
 	import scene.gameScene.MainStage;
-	import scene.loading.Resources;
-	import scene.loading.SpriteSheet;
+	import loading.Resources;
+	import loading.SpriteSheet;
 	import scene.stageSelectScene.ui.ExitPopup;
 	
 	import trolling.component.ComponentType;

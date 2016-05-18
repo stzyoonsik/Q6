@@ -2,7 +2,7 @@ package scene.stageSelectScene.ui
 {
 	import flash.desktop.NativeApplication;
 	
-	import scene.loading.Resources;
+	import loading.Resources;
 	
 	import trolling.component.graphic.Image;
 	import trolling.event.TrollingEvent;

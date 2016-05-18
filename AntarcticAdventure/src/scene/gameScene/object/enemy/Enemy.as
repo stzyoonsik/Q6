@@ -3,7 +3,7 @@ package scene.gameScene.object.enemy
 	import scene.gameScene.MainStage;
 	import scene.gameScene.ObjectTag;
 	import scene.gameScene.object.Objects;
-	import scene.loading.Resources;
+	import loading.Resources;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;

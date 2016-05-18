@@ -1,6 +1,6 @@
 package scene.gameScene
 {
-	import scene.loading.Resources;
+	import loading.Resources;
 	
 	import trolling.event.TrollingEvent;
 	import trolling.object.GameObject;

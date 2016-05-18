@@ -5,8 +5,8 @@ package scene.gameScene.object.crater
 	import scene.gameScene.object.Objects;
 	import scene.gameScene.object.enemy.Enemy;
 	import scene.gameScene.object.item.Fish;
-	import scene.loading.Resources;
-	import scene.loading.Resources;
+	import loading.Resources;
+	import loading.Resources;
 	
 	import trolling.component.graphic.Image;
 	import trolling.component.physics.Collider;
@@ -17,9 +17,9 @@ package scene.gameScene.object.crater
 	public class EllipseCrater extends Objects
 	{		
 		private var _isObjectCreate:Boolean;
-		private var _resource:scene.loading.Resources;
+		private var _resource:loading.Resources;
 		
-		public function EllipseCrater(resource:scene.loading.Resources, direction:int)
+		public function EllipseCrater(resource:loading.Resources, direction:int)
 		{
 			this.tag = ObjectTag.ENEMY;
 			

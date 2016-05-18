@@ -3,7 +3,7 @@ package scene.gameScene.object.home
 	import scene.gameScene.MainStage;
 	import scene.gameScene.object.Objects;
 	import scene.gameScene.util.PlayerState;
-	import scene.loading.Resources;
+	import loading.Resources;
 	
 	import trolling.component.graphic.Image;
 	import trolling.event.TrollingEvent;

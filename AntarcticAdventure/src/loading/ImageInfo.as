@@ -1,4 +1,4 @@
-package scene.loading
+package loading
 {
 	public class ImageInfo
 	{
