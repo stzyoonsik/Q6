@@ -334,7 +334,7 @@ package scene.stageSelectScene
 		{
 			NativeApplication.nativeApplication.removeEventListener(KeyboardEvent.KEY_DOWN, onClickButton);
 			SceneManager.addScene(MainStage, "Game");
-			SceneManager.goScene("Game", (_stageIndex*5)+int(event.currentTarget.name));
+			SceneManager.goScene("Game", int(event.currentTarget.name));
 		}
 				
 		public static function get playData():PlayData
