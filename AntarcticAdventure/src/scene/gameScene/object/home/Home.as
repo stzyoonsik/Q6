@@ -46,15 +46,15 @@ package scene.gameScene.object.home
 			
 			if(ratio < 0.5)
 			{
-				_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "ari0"));
+				_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "hmnim0"));
 			}
 			else if(ratio < 0.8)
 			{
-				_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "mongyi0"));
+				_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "jmnim0"));
 			}
 			else
 			{
-				_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "ani0"));
+				_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "jynim0"));
 			}
 			
 			_nationFlag.width = 16;
