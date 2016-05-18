@@ -3,6 +3,8 @@ package scene.gameScene.ui
 	import flash.utils.Dictionary;
 	
 	import scene.gameScene.MainStage;
+	import scene.loading.Resources;
+	import scene.loading.SpriteSheet;
 	
 	import trolling.core.SceneManager;
 	import trolling.event.TrollingEvent;
@@ -33,29 +35,31 @@ package scene.gameScene.ui
 			super.dispose();
 		}
 		
-		public function initialize(bitmaps:Dictionary):void
+		public function initialize(resources:Resources):void
 		{
 			var stageButtonX:Number = this.width / 10;
 			// REPLAY
-			var replay:Button = new Button(new Texture(bitmaps[UIResource.REPLAY]));
+			var replay:Button = new Button(
+				resources.getSubTexture(UIResource.SPRITE, UIResource.REPLAY));
 			replay.x = -stageButtonX;
 			replay.y = this.height / 3.5;
 			replay.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedReplay);
-			
-			delete bitmaps[UIResource.REPLAY];
 			//
 			
 			// MENU
-			var menu:Button = new Button(new Texture(bitmaps[UIResource.MENU]));
+			var menu:Button = new Button(
+				resources.getSubTexture(UIResource.SPRITE, UIResource.MENU));
 			menu.x = stageButtonX;
 			menu.y = replay.y + 3;
 			menu.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedMenu);
-			
-			delete bitmaps[UIResource.MENU];
 			//
 			
 			addChild(replay);
 			addChild(menu);
+			
+			var spriteSheet:SpriteSheet = resources.getSpriteSheet(UIResource.SPRITE);
+			spriteSheet.removeSubTexture(UIResource.REPLAY);
+			spriteSheet.removeSubTexture(UIResource.MENU);
 		}
 		
 		private function onEndedReplay(event:TrollingEvent):void

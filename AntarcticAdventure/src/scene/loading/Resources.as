@@ -46,8 +46,8 @@ package scene.loading
 			_callbackFunc = callbackFunction;
 			_faildFunc = faildFunction;
 			
-			trace(_spriteDir.url);
-			trace(_soundDir.url);
+			if (_spriteDir) trace(_spriteDir.url);
+			if (_soundDir)	trace(_soundDir.url);
 			
 			if(_spriteDir != null)
 			{
@@ -69,7 +69,7 @@ package scene.loading
 					soundURLRequest = new URLRequest(_soundDir.resolvePath(_soundName[j]).url);
 					sound = new Sound();
 					sound.addEventListener(Event.COMPLETE, onSoundLoaded);
-					sound.addEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFaild);
+					sound.addEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFailed);
 					sound.load(soundURLRequest);
 				}
 				sound = null;
@@ -83,7 +83,7 @@ package scene.loading
 			var soundFileName:String = Sound(event.currentTarget).url.replace(_soundDir.url.toString()+"/", "");
 			_soundDic[soundFileName] = event.currentTarget as Sound;
 			Sound(event.currentTarget).removeEventListener(Event.COMPLETE, onSoundLoaded);
-			Sound(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFaild);
+			Sound(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFailed);
 			
 			SoundManager.addSound(soundFileName, _soundDic[soundFileName]);
 			
@@ -91,9 +91,13 @@ package scene.loading
 			checkLoadComplete();
 		}
 		
-		private function onSoundLoadFaild(event:IOErrorEvent):void
+		private function onSoundLoadFailed(event:IOErrorEvent):void
 		{
+			Sound(event.currentTarget).removeEventListener(Event.COMPLETE, onSoundLoaded);
+			Sound(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFailed);
 			_faildFunc(event.text);
+			_loadedCount++;
+			checkLoadComplete();
 		}
 		
 		private function onCompleteSpriteLoad(name:String, spriteBitmap:Bitmap, xml:XML):void
@@ -108,10 +112,13 @@ package scene.loading
 		private function onFaildSpriteLoad(message:String):void
 		{
 			_faildFunc(message);
+			_loadedCount++;
+			checkLoadComplete();
 		}
 		
 		private function checkLoadComplete():void
 		{
+			trace("_spriteName.length + _soundName.length = " + (_spriteName.length + _soundName.length));
 			trace("_loadedCount = " + _loadedCount);
 			if(_loadedCount >= (_spriteName.length + _soundName.length))
 			{

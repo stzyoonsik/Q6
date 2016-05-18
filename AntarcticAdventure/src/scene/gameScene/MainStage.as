@@ -127,7 +127,6 @@ package scene.gameScene
 			_resource.addSoundName("flag.mp3");
 			_resource.addSoundName("jump.mp3");
 			_resource.addSoundName("MainBgm.mp3");
-			_resource.addSoundName("Opening.mp3");
 			_resource.addSoundName("stageCleared.mp3");
 			_resource.addSoundName("stageFailed.mp3");
 			
@@ -142,8 +141,6 @@ package scene.gameScene
 			
 			_speed = 0; 
 			_playerSpeed = _stageWidth / 100;			 
-			
-//			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
 		}
 		
 		private function onFailImageLoad(message:String):void

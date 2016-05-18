@@ -1,15 +1,10 @@
 package scene.gameScene.ui
 {
-	import flash.display.Bitmap;
-	import flash.display.Loader;
-	import flash.display.LoaderInfo;
-	import flash.events.Event;
-	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
-	import flash.net.URLRequest;
-	import flash.utils.Dictionary;
 	
 	import scene.gameScene.MainStage;
+	import scene.loading.Resources;
+	import scene.loading.SpriteSheet;
 	
 	import trolling.component.ComponentType;
 	import trolling.component.graphic.Image;
@@ -38,10 +33,7 @@ package scene.gameScene.ui
 		private const FAILED_POPUP:int = 8;
 		private const TITLE:int = 9;
 		
-		private var _resourceDirectory:File;
-		private var _resourceList:Array;
-		private var _bitmaps:Dictionary;
-		private var _loadCount:int;
+		private var _resources:Resources;
 		
 		private var _stageId:int;
 		private var _totalDistance:Number;
@@ -49,22 +41,16 @@ package scene.gameScene.ui
 		private var _totalFlag:int;
 		private var _currentLife:int;
 		private var _currentFlag:int;
-		private var _textures:Dictionary;
 		
 		private var _runGame:Function;
 		
 		public function IngameUI()
 		{
-			_resourceDirectory = new File(UIResource.DIRECTORY);
-			_resourceList = _resourceDirectory.getDirectoryListing();
-			
-			_loadCount = 0;
 			_stageId = 0;
 			_totalDistance = 0;
 			_totalLife = 0;
 			_totalFlag = 0;
 			_currentLife = 0;
-			_textures = null;
 			_runGame = null;
 		}
 		
@@ -77,17 +63,9 @@ package scene.gameScene.ui
 			_totalFlag = totalFlag;
 			_runGame = pauseGame;
 			
-			_bitmaps = new Dictionary();
-			var file:File;
-			var loader:Loader;
-			for(var i:int = 0; i < _resourceList.length; i++)
-			{
-				file = _resourceList[i] as File;
-				loader = new Loader();
-				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompleteLoad);
-				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onCatchError);
-				loader.load(new URLRequest(file.url));
-			}
+			_resources = new Resources(new File(UIResource.DIRECTORY));
+			_resources.addSpriteName(UIResource.SPRITE);
+			_resources.loadResource(onCompleteLoad, onFailedLoad);
 		}
 		
 		public override function dispose():void
@@ -124,7 +102,7 @@ package scene.gameScene.ui
 					var clearedPopup:ClearedPopup = getChild(CLEARED_POPUP) as ClearedPopup;
 					if (clearedPopup)
 					{
-						clearedPopup.setResult(_totalFlag, _currentFlag, _textures);
+						clearedPopup.setResult(_totalFlag, _currentFlag, _resources);
 						clearedPopup.show();
 					}
 				}
@@ -228,7 +206,8 @@ package scene.gameScene.ui
 					
 					if (image)
 					{
-						image.texture = _textures[currentFlag.charAt(currentFlagIndex)];
+						image.texture = 
+							_resources.getSubTexture(UIResource.SPRITE, currentFlag.charAt(currentFlagIndex) + "_white");
 					}
 				}
 				currentFlagIndex--;
@@ -237,23 +216,22 @@ package scene.gameScene.ui
 			_currentFlag = numFlag;
 		}
 		
-		private function onCompleteLoadAll():void
+		private function onCompleteLoad():void
 		{
 			var fieldsXY:Number = MainStage.stageWidth / 70;
 			// FIELDS
-			var ingameText:GameObject = new GameObject();
-			ingameText.x = ingameText.y = fieldsXY;
-			ingameText.scaleX = 0.8;
-			ingameText.scaleY = 0.8;
-			ingameText.addComponent(new Image(new Texture(_bitmaps[UIResource.INGAME_TEXT])));
-			
-			delete _bitmaps[UIResource.INGAME_TEXT];
+			var field:GameObject = new GameObject();
+			field.x = field.y = fieldsXY;
+			field.scaleX = 0.8;
+			field.scaleY = 0.8;
+			field.addComponent(new Image(
+				_resources.getSubTexture(UIResource.SPRITE, UIResource.FIELD)));
 			/////
 			
-			var gaugeWidth:Number = ingameText.width * ingameText.scaleX * 1.5;
+			var gaugeWidth:Number = field.width * field.scaleX * 1.5;
 			var gaugeHeight:Number = gaugeWidth * 0.19;
 			var horizontalMargin:Number = gaugeWidth / 8;
-			var dataX:Number = fieldsXY + ingameText.width * ingameText.scaleX + horizontalMargin;
+			var dataX:Number = fieldsXY + field.width * field.scaleX + horizontalMargin;
 			var lightNavy:uint = 0xd9e6f2;
 			var darkNavy:uint = 0x1b344b;
 			// REST
@@ -274,7 +252,8 @@ package scene.gameScene.ui
 			for (var i:int = 0; i < _totalLife; i++)
 			{
 				heart = new GameObject();
-				heart.addComponent(new Image(new Texture(_bitmaps[UIResource.HEART])));
+				heart.addComponent(new Image(
+					_resources.getSubTexture(UIResource.SPRITE, UIResource.HEART)));
 				
 				scale = gaugeHeight / heart.height; 
 				heart.width *= scale;
@@ -287,8 +266,6 @@ package scene.gameScene.ui
 				
 				life.addChild(heart);
 			}
-			
-			delete _bitmaps[UIResource.HEART];
 			/////
 			
 			// FLAG
@@ -297,82 +274,9 @@ package scene.gameScene.ui
 			flag.y = life.y + gaugeHeight + verticalMargin + 5;
 			
 			var slash:GameObject = new GameObject();
-			slash.addComponent(new Image(new Texture(_bitmaps[UIResource.SLASH])));		
-			/////
-			
-			// SETTING_BUTTON
-			var settingButton:Button = new Button(new Texture(_bitmaps[UIResource.SETTING_ICON]));
-			settingButton.x = MainStage.stageWidth - settingButton.width;
-			settingButton.y = fieldsXY * 2.5;
-			settingButton.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedSettingButton);
-			
-			delete _bitmaps[UIResource.SETTING_ICON];
-			/////
-			
-			// BACKGROUND
-			var background:GameObject = new GameObject();
-			background.addComponent(new Image(new Texture(_bitmaps[UIResource.BACKGROUND])));
-			background.width = MainStage.stageWidth;
-			background.height = MainStage.stageHeight;
-			background.visible = false;
-			
-			delete _bitmaps[UIResource.BACKGROUND];
-			//
-			
-			// SETTING_POPUP
-			var settingPopup:SettingPopup = new SettingPopup(new Texture(_bitmaps[UIResource.SETTING_POPUP]));
-			settingPopup.x = MainStage.stageWidth / 2;
-			settingPopup.y = MainStage.stageHeight / 2;
-			settingPopup.width *= 1.2;
-			settingPopup.height *= 1.2;
-			settingPopup.initialize(_bitmaps);
-			settingPopup.addEventListener("control", onEndedControl);
-			settingPopup.addEventListener("initControlMode", onInitControlMode);
-			
-			delete _bitmaps[UIResource.SETTING_POPUP];
-			//
-			
-			// CLEARED_POPUP
-			var clearedPopup:ClearedPopup = new ClearedPopup(new Texture(_bitmaps[UIResource.CLEARED_POPUP]));
-			clearedPopup.x = MainStage.stageWidth / 2;
-			clearedPopup.y = MainStage.stageHeight / 2;
-			clearedPopup.width *= 1.2;
-			clearedPopup.height *= 1.2;
-			clearedPopup.initialize(_bitmaps);
-			
-			delete _bitmaps[UIResource.CLEARED_POPUP];
-			//
-			
-			// FAILED_POPUP
-			var failedPopup:FailedPopup = new FailedPopup(new Texture(_bitmaps[UIResource.FAILED_POPUP]));
-			failedPopup.x = MainStage.stageWidth / 2;
-			failedPopup.y = MainStage.stageHeight / 2;
-			failedPopup.width *= 1.2;
-			failedPopup.height *= 1.2;
-			failedPopup.initialize(_bitmaps);
-			
-			delete _bitmaps[UIResource.FAILED_POPUP];
-			//
-			
-			var titleRes:Vector.<Texture> = new Vector.<Texture>();
-			titleRes.push(new Texture(_bitmaps[UIResource.STAGE]));
-			// TITLE
-			var title:Title = new Title(MainStage.stageWidth, MainStage.stageHeight, titleRes);
-			
-			titleRes.pop();
-			delete _bitmaps[UIResource.STAGE];
-			/////
-			
-			// Numbers & Stars
-			_textures = new Dictionary();
-			for (var name:String in _bitmaps)
-			{
-				_textures[name] = new Texture(_bitmaps[name]); 
-			}
-			_bitmaps = null;
-			/////
-			
-			// FLAG
+			slash.addComponent(new Image(
+				_resources.getSubTexture(UIResource.SPRITE, UIResource.SLASH)));
+
 			var numFlag:String = _totalFlag.toString();
 			var totalFlagIndex:int = 0;
 			var textMargin:Number = 5;
@@ -382,12 +286,13 @@ package scene.gameScene.ui
 				if (i < numFlag.length)
 				{
 					digit = new GameObject();
-					digit.addComponent(new Image(_textures["0"]));
+					digit.addComponent(new Image(_resources.getSubTexture(UIResource.SPRITE, "0_white")));
 				}
 				else if (i > numFlag.length)
 				{
 					digit = new GameObject();
-					digit.addComponent(new Image(_textures[numFlag.charAt(totalFlagIndex)]));
+					digit.addComponent(new Image(
+						_resources.getSubTexture(UIResource.SPRITE, numFlag.charAt(totalFlagIndex) + "_white")));
 					
 					totalFlagIndex++;
 				}
@@ -413,11 +318,68 @@ package scene.gameScene.ui
 			}
 			/////
 			
+			// SETTING_BUTTON
+			var settingButton:Button = new Button(
+				_resources.getSubTexture(UIResource.SPRITE, UIResource.SETTING_ICON));
+			settingButton.x = MainStage.stageWidth - settingButton.width;
+			settingButton.y = fieldsXY * 2.5;
+			settingButton.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedSettingButton);
+			/////
+			
+			// BACKGROUND
+			var background:GameObject = new GameObject();
+			background.addComponent(new Image(
+				_resources.getSubTexture(UIResource.SPRITE, UIResource.BACKGROUND)));
+			background.width = MainStage.stageWidth;
+			background.height = MainStage.stageHeight;
+			background.visible = false;
+			//
+			
+			// SETTING_POPUP
+			var settingPopup:SettingPopup = new SettingPopup(
+				_resources.getSubTexture(UIResource.SPRITE, UIResource.SETTING_POPUP));
+			settingPopup.x = MainStage.stageWidth / 2;
+			settingPopup.y = MainStage.stageHeight / 2;
+			settingPopup.width *= 1.2;
+			settingPopup.height *= 1.2;
+			settingPopup.initialize(_resources);
+			settingPopup.addEventListener("control", onEndedControl);
+			settingPopup.addEventListener("initControlMode", onInitControlMode);
+			
+			//
+			
+			// CLEARED_POPUP
+			var clearedPopup:ClearedPopup = new ClearedPopup(
+				_resources.getSubTexture(UIResource.SPRITE, UIResource.CLEARED_POPUP));
+			clearedPopup.x = MainStage.stageWidth / 2;
+			clearedPopup.y = MainStage.stageHeight / 2;
+			clearedPopup.width *= 1.2;
+			clearedPopup.height *= 1.2;
+			clearedPopup.initialize(_resources);
+			//
+			
+			// FAILED_POPUP
+			var failedPopup:FailedPopup = new FailedPopup(
+				_resources.getSubTexture(UIResource.SPRITE, UIResource.FAILED_POPUP));
+			failedPopup.x = MainStage.stageWidth / 2;
+			failedPopup.y = MainStage.stageHeight / 2;
+			failedPopup.width *= 1.2;
+			failedPopup.height *= 1.2;
+			failedPopup.initialize(_resources);
+			//
+			
+			var titleRes:Vector.<Texture> = new Vector.<Texture>();
+			titleRes.push(_resources.getSubTexture(UIResource.SPRITE, UIResource.STAGE));
 			// TITLE
+			var title:Title = new Title(MainStage.stageWidth, MainStage.stageHeight, titleRes);
+			
+			titleRes.pop();
+			
 			var stageId:String = _stageId.toString();
 			for (i = 0; i < stageId.length; i++)
 			{
-				titleRes.push(_textures[stageId.charAt(i) + "orange"]);
+				titleRes.push(
+					_resources.getSubTexture(UIResource.SPRITE, stageId.charAt(i) + "_orange"));
 			}
 			
 			title.addSubTitle(MainStage.stageWidth, MainStage.stageHeight, titleRes);
@@ -427,19 +389,8 @@ package scene.gameScene.ui
 			titleRes.splice(0, titleRes.length);
 			titleRes = null;
 			/////
-			
-			//			private const FIELDS:int = 0;
-			//			private const REST:int = 1;
-			//			private const LIFE:int = 2;
-			//			private const FLAG:int = 3;
-			//			private const SETTING_BUTTON:int = 4;
-			//			private const BACKGROUND:int = 5;
-			//			private const SETTING_POPUP:int = 6;
-			//			private const CLEARED_POPUP:int = 7;
-			//			private const FAILED_POPUP:int = 8;
-			//			private const TITLE:int = 9;
-			
-			addChild(ingameText);
+
+			addChild(field);
 			addChild(restGauge);
 			addChild(life);
 			addChild(flag);	
@@ -449,54 +400,21 @@ package scene.gameScene.ui
 			addChild(clearedPopup);
 			addChild(failedPopup);
 			addChild(title);
+			
+			var spriteSheet:SpriteSheet = _resources.getSpriteSheet(UIResource.SPRITE);
+			spriteSheet.removeSubTexture(UIResource.FIELD);
+			spriteSheet.removeSubTexture(UIResource.HEART);
+			spriteSheet.removeSubTexture(UIResource.SETTING_ICON);
+			spriteSheet.removeSubTexture(UIResource.BACKGROUND);
+			spriteSheet.removeSubTexture(UIResource.SETTING_POPUP);
+			spriteSheet.removeSubTexture(UIResource.CLEARED_POPUP);
+			spriteSheet.removeSubTexture(UIResource.FAILED_POPUP);
+			spriteSheet.removeSubTexture(UIResource.STAGE);
 		}
 		
-		private function onCompleteLoad(event:Event):void
+		private function onFailedLoad(message:String):void
 		{
-			var loaderInfo:LoaderInfo = event.currentTarget as LoaderInfo;
-			var fileName:String = loaderInfo.url.replace(_resourceDirectory.url + "/", "")
-			var index:int = fileName.indexOf("_");
-			if (index != -1)
-			{
-				fileName = fileName.substring(0, index);
-			}
-			else
-			{
-				fileName = fileName.substring(0, fileName.indexOf("."));
-			}
-			
-			_bitmaps[fileName] = loaderInfo.loader.content as Bitmap;
-			
-			loaderInfo.removeEventListener(Event.COMPLETE, onCompleteLoad);
-			loaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, onCatchError);
-			loaderInfo.loader.unload();
-			loaderInfo = null;
-			
-			_loadCount++;
-			
-			if (_resourceList.length <= _loadCount)
-			{
-				for (var i:int = 0; i < _resourceList.length; i++)
-				{
-					_resourceList[i] = null;
-				}
-				_resourceList = null;
-				
-				_resourceDirectory = null;
-				_loadCount = 0;
-				
-				onCompleteLoadAll();
-			}
-		}
-		
-		private function onCatchError(event:IOErrorEvent):void
-		{
-			trace(TAG + " onCatchError : Please Check " + LoaderInfo(event.currentTarget).url + ".");
-			
-			LoaderInfo(event.currentTarget).removeEventListener(Event.COMPLETE, onCompleteLoad);
-			LoaderInfo(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onCatchError);
-			
-			_loadCount++;
+			trace(message);
 		}
 		
 		private function onEnterFrame(event:TrollingEvent):void

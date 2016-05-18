@@ -26,18 +26,25 @@ package
 			
 			Trolling.multitouchEnabled = true;
 			var trolling:Trolling = new Trolling(stage, new Rectangle(0, 0, 960, 540));
+			trolling.statsVisible = true;
 			SceneManager.addScene(TitleScene, "Title");
 			SceneManager.addScene(StageSelectScene, "stageSelect");
 			
 			NativeApplication.nativeApplication.addEventListener(Event.EXITING, onExit);
+			NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, onDeactivate);
 			
 			trolling.start();
+		}
+		
+		private function onDeactivate(event:Event):void
+		{
+//			var notification:NotificationExtension = new NotificationExtension();
+//			notification.setNotification("남극탐험", "펭귄이 달리고 싶어합니다!!", 30);
 		}
 		
 		private function onExit(event:Event):void
 		{
 			NativeApplication.nativeApplication.removeEventListener(Event.EXITING, onExit);
-			
 			SceneManager.dispose();
 		}
 	}

@@ -3,6 +3,7 @@ package scene.gameScene.ui
 	import flash.utils.Dictionary;
 	
 	import scene.gameScene.MainStage;
+	import scene.loading.Resources;
 	import scene.stageSelectScene.StageSelectScene;
 	
 	import trolling.component.graphic.Image;
@@ -39,11 +40,12 @@ package scene.gameScene.ui
 			super.dispose();
 		}
 		
-		public function initialize(bitmaps:Dictionary):void
+		public function initialize(resources:Resources):void
 		{
 			var stageButtonX:Number = this.width / 8;
 			// REPLAY
-			var replay:Button = new Button(new Texture(bitmaps[UIResource.REPLAY]));
+			var replay:Button = new Button(
+				resources.getSubTexture(UIResource.SPRITE, UIResource.REPLAY));
 			replay.x = -stageButtonX;
 			replay.y = this.height / 3.5;
 			replay.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedReplay);
@@ -51,26 +53,28 @@ package scene.gameScene.ui
 			
 			var margin:Number = 3;
 			// MENU
-			var menu:Button = new Button(new Texture(bitmaps[UIResource.MENU]));
+			var menu:Button = new Button(
+				resources.getSubTexture(UIResource.SPRITE, UIResource.MENU));
 			menu.y = replay.y + margin;
 			menu.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedMenu);
 			//
 			
 			// NEXT
-			var next:Button = new Button(new Texture(bitmaps[UIResource.NEXT]));
+			var next:Button = new Button(
+				resources.getSubTexture(UIResource.SPRITE, UIResource.NEXT));
 			next.x = stageButtonX;
 			next.y = replay.y + margin;
 			next.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedNext);
-			
-			delete bitmaps[UIResource.NEXT];
 			//
 			
 			addChild(replay);
 			addChild(menu);
 			addChild(next);
+			
+			resources.getSpriteSheet(UIResource.SPRITE).removeSubTexture(UIResource.NEXT);
 		}
 		
-		public function setResult(totalFlag:int, obtainedFlag:int, textures:Dictionary):void
+		public function setResult(totalFlag:int, obtainedFlag:int, resources:Resources):void
 		{
 			var ratio:Number = obtainedFlag / totalFlag * 100; 
 			var numStar:int = 1;
@@ -96,11 +100,11 @@ package scene.gameScene.ui
 				child = new GameObject;
 				if (i < numStar)
 				{
-					child.addComponent(new Image(textures[UIResource.FILLED_STAR]));
+					child.addComponent(new Image(resources.getSubTexture(UIResource.SPRITE, UIResource.FILLED_STAR)));
 				}
 				else
 				{
-					child.addComponent(new Image(textures[UIResource.STAR]));
+					child.addComponent(new Image(resources.getSubTexture(UIResource.SPRITE, UIResource.STAR)));
 				}
 				child.x = childX + child.width * i - margin * i;
 				child.y = -(this.height / 6.4);
@@ -125,22 +129,26 @@ package scene.gameScene.ui
 				{
 					if (obtainedFlagIndex >= 0)
 					{
-						child.addComponent(new Image(textures[strObtainedFlag.charAt(obtainedFlagIndex)]));
+						child.addComponent(new Image(
+							resources.getSubTexture(UIResource.SPRITE, strObtainedFlag.charAt(obtainedFlagIndex) + "_white")));
 						obtainedFlagIndex--;	
 					}
 					else
 					{
-						child.addComponent(new Image(textures["0"]));
+						child.addComponent(new Image(
+							resources.getSubTexture(UIResource.SPRITE, "0_white")));
 					}
 				}
 				else if (i > strTotalFlag.length)
 				{
-					child.addComponent(new Image(textures[strTotalFlag.charAt(totalFlagIndex)]));
+					child.addComponent(new Image(
+						resources.getSubTexture(UIResource.SPRITE, strTotalFlag.charAt(totalFlagIndex) + "_white")));
 					totalFlagIndex--;
 				}
 				else
 				{
-					child.addComponent(new Image(textures[UIResource.SLASH]));
+					child.addComponent(new Image(
+						resources.getSubTexture(UIResource.SPRITE, UIResource.SLASH)));
 				}
 				child.width *= scale;
 				child.height *= scale;  
