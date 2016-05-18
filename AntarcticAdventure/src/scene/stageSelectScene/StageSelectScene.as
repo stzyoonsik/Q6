@@ -8,9 +8,11 @@ package scene.stageSelectScene
 	import flash.utils.Dictionary;
 	
 	import gameData.PlayData;
-	import scene.gameScene.MainStage;
+	
 	import loading.Resources;
 	import loading.SpriteSheet;
+	
+	import scene.gameScene.MainStage;
 	import scene.stageSelectScene.ui.ExitPopup;
 	
 	import trolling.component.ComponentType;
@@ -57,10 +59,13 @@ package scene.stageSelectScene
 		public function StageSelectScene()
 		{
 			addEventListener(TrollingEvent.START_SCENE, onInit);
+			addEventListener(Event.DEACTIVATE, onDeactivate);
 		}
 		
 		public override function dispose():void
 		{
+			removeEventListener(Event.DEACTIVATE, onDeactivate);
+			
 			// output play data
 			if (_playData)
 			{
@@ -77,7 +82,7 @@ package scene.stageSelectScene
 			if(this.data == null)
 			{
 				_playData = new PlayData("playData", File.applicationStorageDirectory.resolvePath("data"));
-				//_playData.read();
+				_playData.read();
 				
 				_resource = new Resources(_spriteDir, _soundDir);
 				_resource.addSpriteName("selectSceneSprite0.png");
@@ -233,12 +238,7 @@ package scene.stageSelectScene
 			addChild(_exitPopup);
 			_backGround.addChild(_nextButton);
 			_backGround.addChild(_prevButton);
-				
-				// test
-//				_playData.addData(1, 3);
-//				_playData.addData(2, 2);
-//				_playData.addData(3, 3);
-//				_playData.addData(4, 1);
+
 			setStageNumber();
 			SoundManager.play("stageSelect.mp3");
 		}
@@ -249,7 +249,7 @@ package scene.stageSelectScene
 			{
 				var stageCount:uint = (_stageIndex*5)+i+1;
 				var countString:String = stageCount.toString();
-				
+			
 				_buttonVector[i].name = countString;
 				
 				_numberVector[i*2].components[ComponentType.IMAGE].texture = _resource.getSubTexture("selectSceneSprite0.png", countString.charAt(0)+"_number");
@@ -264,9 +264,46 @@ package scene.stageSelectScene
 					_numberVector[(i*2)+1].components[ComponentType.IMAGE].texture = null;
 					_numberVector[i*2].x = 0;
 				}
+				
+				setStageColor(_buttonVector[i]);
 			}
 			
 			setStar();
+		}
+		
+		private function setStageColor(stageButton:Button):void
+		{
+			var stageId:int = int(stageButton.name);
+			if (stageId == 1)
+			{
+				stageButton.red = 1;
+				stageButton.green = 1;
+				stageButton.blue = 1;
+				
+				return;
+			}
+			
+			if (!_playData)
+			{
+				stageButton.red = 0.5;
+				stageButton.green = 0.5;
+				stageButton.blue = 0.5;
+			}
+			else
+			{
+				if (_playData.getData(stageId - 1) == -1) // 이전 스테이지 클리어 기록이 없음
+				{
+					stageButton.red = 0.5;
+					stageButton.green = 0.5;
+					stageButton.blue = 0.5;
+				}
+				else
+				{
+					stageButton.red = 1;
+					stageButton.green = 1;
+					stageButton.blue = 1;
+				}
+			}
 		}
 		
 		private function setStar():void
@@ -332,9 +369,43 @@ package scene.stageSelectScene
 		
 		private function onButtonClick(event:TrollingEvent):void
 		{
-			NativeApplication.nativeApplication.removeEventListener(KeyboardEvent.KEY_DOWN, onClickButton);
-			SceneManager.addScene(MainStage, "Game");
-			SceneManager.goScene("Game", (_stageIndex*5)+int(event.currentTarget.name));
+			var stageButton:Button = event.currentTarget as Button;
+			if (!stageButton)
+			{
+				return;
+			}
+			
+			var stageId:int = int(stageButton.name);
+			var isAccessible:Boolean = true;
+			if (stageId > 1)
+			{
+				if (!_playData)
+				{
+					isAccessible = false;
+				}
+				else
+				{
+					if (_playData.getData(stageId - 1) == -1)
+					{
+						isAccessible = false;
+					}
+				}
+			}
+				
+			if (isAccessible)
+			{
+				NativeApplication.nativeApplication.removeEventListener(KeyboardEvent.KEY_DOWN, onClickButton);
+				SceneManager.addScene(MainStage, "Game");
+				SceneManager.goScene("Game", (_stageIndex*5) + stageId);
+			}
+		}
+		
+		private function onDeactivate(event:Event):void
+		{
+			if (_playData)
+			{
+				_playData.write();
+			}
 		}
 				
 		public static function get playData():PlayData

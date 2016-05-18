@@ -92,7 +92,7 @@ package gameData
 			
 			var data:Object = JSON.parse(AesCrypto.decrypt(loader.data, "jiminhyeyunyoonsik"));
 			
-			for (var i:int = 0; i < data.starData.length + 1; i + 2)
+			for (var i:int = 0; i < data.starData.length; i += 2)
 			{
 				addData(data.starData[i], data.starData[i + 1]); 
 			}
