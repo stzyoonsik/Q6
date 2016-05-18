@@ -1,9 +1,14 @@
 package Select.Load
 {
+	import com.hurlant.crypto.Crypto;
+	import com.hurlant.crypto.symmetric.ICipher;
+	
 	import flash.events.Event;
 	import flash.filesystem.File;
+	import flash.net.FileFilter;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.utils.ByteArray;
 	
 	import Asset.Assets;
 	
@@ -14,7 +19,6 @@ package Select.Load
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
-	import flash.net.FileFilter;
 
 	public class Load extends Sprite
 	{
@@ -97,11 +101,35 @@ package Select.Load
 		 */
 		private function onCompleteLoadJSON(event:flash.events.Event):void
 		{
-			var loader:URLLoader = URLLoader(event.target);			
+			var loader:URLLoader = URLLoader(event.target);		
 			
-			var data:Object = JSON.parse(loader.data);
+			var decryptData:String = AesCrypto.decrypt(loader.data, "jiminhyeyunyoonsik");
+			var data:Object = JSON.parse(decryptData);
 			dispatchEvent(new starling.events.Event("load", false, data));
 		}
+		
+		
+//		private function decrypt(data):String
+//		{
+//			
+//			var result:String;
+//			//var result:ByteArray = new ByteArray();
+//			
+//			var key:ByteArray = new ByteArray();
+//			key.writeUTF("abcd");
+//			var aes:ICipher = Crypto.getCipher("blowfish-ecb", key, Crypto.getPad("pkcs5"));
+//			
+//			//result.writeUTFBytes(str);
+//			aes.decrypt(data);	
+//			
+//			result = data;
+//			
+//			return result;
+//			
+//		}
+		
+
+
 		
 	}
 }
