@@ -16,14 +16,14 @@ package scene.gameScene.object.home
 		private var _resource:Resources;
 		private var _isArrivedAtHome:Boolean;
 		
-		public function Home(resource:Resources)
+		public function Home(resource:Resources, ratio:Number)
 		{
 			_resource = resource;
 			
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
 			
-			initNationFlag();
+			initNationFlag(ratio);
 			
 			this.pivot = PivotType.CENTER;
 			
@@ -40,10 +40,23 @@ package scene.gameScene.object.home
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 		}
 		
-		private function initNationFlag():void
+		private function initNationFlag(ratio:Number):void
 		{
 			_nationFlag.pivot = PivotType.CENTER;
-			_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "nationFlag0"));
+			
+			if(ratio < 0.5)
+			{
+				_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "hmnim0"));
+			}
+			else if(ratio < 0.8)
+			{
+				_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "jmnim0"));
+			}
+			else
+			{
+				_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "jynim0"));
+			}
+			
 			_nationFlag.width = 16;
 			_nationFlag.height = 12;
 			_nationFlag.x = 9;

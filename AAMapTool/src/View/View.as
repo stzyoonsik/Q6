@@ -543,6 +543,12 @@ package View
 			buildMap(event.data);
 			
 			viewCurrentMap();
+			
+//			for(var i:int = 0; i < _curveDataVector.length; ++i)
+//			{
+//				trace(_curveDataVector[i]);
+//			}
+			
 		}
 		
 		/**
@@ -681,7 +687,13 @@ package View
 		{
 			var texture:Texture = Texture.fromEmbeddedAsset(Assets.ObjectBG);
 			
-			for(var i:int = 0; i < data.object.length; ++i)
+			for(var i:int = 0; i < data.curve.length; ++i)
+			{
+				_curveDataVector.push(data.curve[i]);
+				buildCurveVector(data.curve[i]);
+			}
+			
+			for(i = 0; i < data.object.length; ++i)
 			{
 				_objectDataVector.push(data.object[i]);
 				
@@ -692,9 +704,6 @@ package View
 					_stageSprite.addChild(_map);
 					_mapVector.push(_map);
 					_map.addEventListener(TouchEvent.TOUCH, onClickMap);
-					
-					_curveDataVector.push(data.curve[i]);
-					buildCurveVector(data.curve[int(i/10)]);
 				}
 				
 				var objectBG:Image = new Image(texture);

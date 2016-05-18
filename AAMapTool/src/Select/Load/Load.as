@@ -65,7 +65,7 @@ package Select.Load
 		 */
 		private function loadJSON():void
 		{
-			var file:File = File.documentsDirectory;
+			var file:File = File.applicationDirectory;
 			var filter:FileFilter = new FileFilter("JSON", "*.json"); 
 			file.browseForOpen("select json file", [filter]);
 			file.addEventListener(flash.events.Event.SELECT, onFileSelected);	
@@ -105,6 +105,7 @@ package Select.Load
 			
 			var decryptData:String = AesCrypto.decrypt(loader.data, "jiminhyeyunyoonsik");
 			var data:Object = JSON.parse(decryptData);
+			trace(decryptData);
 			dispatchEvent(new starling.events.Event("load", false, data));
 		}
 		
