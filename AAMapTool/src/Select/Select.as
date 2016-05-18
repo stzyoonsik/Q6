@@ -1,8 +1,9 @@
 package Select
 {
 	import Select.Background.Background;
-	import Select.Save.Save;
+	import Select.Load.Load;
 	import Select.Objects.Objects;
+	import Select.Save.Save;
 	
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -13,6 +14,7 @@ package Select
 		private var _objects:Objects = new Objects();
 		private var _background:Background = new Background();
 		private var _save:Save = new Save();
+		private var _load:Load = new Load();
 		
 		public function Select()
 		{
@@ -26,20 +28,30 @@ package Select
 			_background.addEventListener("curve", onClickCurve);
 			_background.addEventListener("color", onClickColor);
 			
-			_save.x = 128;
+			_save.x = 224;
 			_save.y = 700;
 			addChild(_save);
 			_save.addEventListener("save", onClickSave);
+			
+			_load.x = 32;
+			_load.y = 700;
+			addChild(_load);
+			_load.addEventListener("load", onClickLoad);
 		}
 		
 		private function onClickObject(event:Event):void
 		{			
-			dispatchEvent(new Event("object",false,event.data));		
+			dispatchEvent(new Event("object", false, event.data));		
 		}
 		
 		private function onClickSave(event:Event):void
 		{
 			dispatchEvent(new Event("save"));
+		}
+		
+		private function onClickLoad(event:Event):void
+		{
+			dispatchEvent(new Event("load", false, event.data));			
 		}
 		
 		private function onClickCurve(event:Event):void

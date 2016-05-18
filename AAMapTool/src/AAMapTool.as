@@ -1,10 +1,10 @@
-package
+package 
 {
 	import flash.display.Sprite;
 	
 	import starling.core.Starling;
 	
-	[SWF(width = "1280", height = "1024", backgroundColor = "0xffffcc")]	
+	[SWF(width = "1024", height = "800", backgroundColor = "0xaaaaaa")]	
 	public class AAMapTool extends Sprite
 	{
 		public function AAMapTool()
@@ -13,4 +13,4 @@ package
 			starling.start();
 		}
 	}
-}
+} 
