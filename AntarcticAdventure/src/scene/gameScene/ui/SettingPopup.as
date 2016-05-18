@@ -34,8 +34,6 @@ package scene.gameScene.ui
 		
 		private var _settingData:SettingData;
 		private var _controlButtonManager:RadioButtonManager;
-		
-		private var _temp:Vector.<GameObject>;
 				
 		public function SettingPopup(canvas:Texture)
 		{
@@ -43,7 +41,6 @@ package scene.gameScene.ui
 			
 			_controlButtonManager = null;
 			_settingData = null;
-			_temp = null;
 		}
 		
 		public override function dispose():void
@@ -81,13 +78,6 @@ package scene.gameScene.ui
 		
 		public function initialize(resources:Resources):void
 		{
-			// load setting data
-			_settingData = new SettingData("settingData", File.applicationStorageDirectory.resolvePath("data"));
-			_settingData.onReadyToPreset = onCompleteLoadData;
-			_settingData.read();
-			
-			_temp = new Vector.<GameObject>();
-			
 			var check:Texture = resources.getSubTexture(UIResource.SPRITE, UIResource.CHECK);
 			var bitmapData:BitmapData = new BitmapData(check.width, check.height);
 			var ct:ColorTransform = new ColorTransform();
@@ -99,7 +89,6 @@ package scene.gameScene.ui
 			bgm.y = -(this.height / 9.5);
 			bgm.isSelected = true;
 			bgm.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedBgm);
-			_temp.push(bgm);
 			//
 			
 			// SOUND
@@ -110,7 +99,6 @@ package scene.gameScene.ui
 			sound.height = check.height;
 			sound.isSelected = true;
 			sound.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedSound);
-			_temp.push(sound);
 			//
 			
 			_controlButtonManager = new RadioButtonManager();
@@ -165,6 +153,11 @@ package scene.gameScene.ui
 			addChild(replay);
 			addChild(menu);
 			
+			// load setting data
+			_settingData = new SettingData("settingData", File.applicationStorageDirectory.resolvePath("data"));
+			_settingData.onReadyToPreset = preset;
+			_settingData.read();
+			
 			var spriteSheet:SpriteSheet = resources.getSpriteSheet(UIResource.SPRITE);
 			spriteSheet.removeSubTexture(UIResource.CHECK);
 			spriteSheet.removeSubTexture(UIResource.SCREEN_WHITE);
@@ -173,57 +166,33 @@ package scene.gameScene.ui
 			spriteSheet.removeSubTexture(UIResource.BUTTON_ORANGE);
 		}
 		
-		private function saveSetting():void
+		private function preset():void
 		{
-			// to do
-			
-		}
-		
-		private function loadSetting():void
-		{
-			// to do
-			
-		}
-		
-		private function preset(bgm:Boolean, sound:Boolean, control:int):void
-		{
-			if (!bgm)
+			if (!_settingData.bgm)
 			{
 				SoundManager.isBgmActive = false;
 				SoundManager.stopBgm();
 			}
 			
-			if (!sound)
+			if (!_settingData.sound)
 			{
 				SoundManager.isSoundEffectActive = false;	
 				SoundManager.stopSoundEffect();
 			}
 			
-			dispatchEvent(new TrollingEvent("initControlMode", control));			
-		}
-		
-		private function onCompleteLoadData():void
-		{
-			// preset
-			preset(_settingData.bgm, _settingData.sound, _settingData.control);
+			dispatchEvent(new TrollingEvent("initControlMode", _settingData.control));
 			
+			// in popup
 			if (_controlButtonManager)
 			{
 				_controlButtonManager.selectButton(_settingData.control);
 			}
-
-			if (_temp)
-			{
-				var button:SelectButton;
-				button = _temp[0] as SelectButton;
-				button.isSelected = _settingData.bgm;
-				
-				button = _temp[1] as SelectButton;
-				button.isSelected = _settingData.sound;
-				
-				_temp.splice(0, _temp.length);
-				_temp = null;
-			}
+			
+			var button:SelectButton = getChild(BGM) as SelectButton;
+			if (button) button.isSelected = _settingData.bgm;
+			
+			button = getChild(SOUND) as SelectButton;
+			if (button) button.isSelected = _settingData.sound;
 		}
 		
 		private function onEndedBgm(event:TrollingEvent):void

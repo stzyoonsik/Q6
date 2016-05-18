@@ -43,7 +43,7 @@ package scene.gameScene.object.item
 			this.height = width;
 			
 			_collider = new Collider();
-			_collider.setRect(1, 1);
+			_collider.setRect(0.3, 0.3);
 			//colliderRender = true;
 			addComponent(_collider);
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);

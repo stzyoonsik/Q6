@@ -1,9 +1,8 @@
 package scene.gameScene.ui
 {
-	import flash.utils.Dictionary;
-	
 	import scene.gameScene.MainStage;
 	import scene.loading.Resources;
+	import scene.loading.SpriteSheet;
 	import scene.stageSelectScene.StageSelectScene;
 	
 	import trolling.component.graphic.Image;
@@ -60,18 +59,30 @@ package scene.gameScene.ui
 			//
 			
 			// NEXT
-			var next:Button = new Button(
-				resources.getSubTexture(UIResource.SPRITE, UIResource.NEXT));
+			var next:Button;
+			if (MainStage.currentStage < StageSelectScene.LAST_STAGE_ID)
+			{
+				next = new Button(
+					resources.getSubTexture(UIResource.SPRITE, UIResource.NEXT_WHITE));
+				next.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedNext);
+			}
+			else
+			{
+				next = new Button(
+					resources.getSubTexture(UIResource.SPRITE, UIResource.NEXT_GRAY));
+			}
+			
 			next.x = stageButtonX;
 			next.y = replay.y + margin;
-			next.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedNext);
 			//
 			
 			addChild(replay);
 			addChild(menu);
 			addChild(next);
 			
-			resources.getSpriteSheet(UIResource.SPRITE).removeSubTexture(UIResource.NEXT);
+			var spriteSheet:SpriteSheet = resources.getSpriteSheet(UIResource.SPRITE);
+			spriteSheet.removeSubTexture(UIResource.NEXT_WHITE);
+			spriteSheet.removeSubTexture(UIResource.NEXT_GRAY);
 		}
 		
 		public function setResult(totalFlag:int, obtainedFlag:int, resources:Resources):void
@@ -171,9 +182,6 @@ package scene.gameScene.ui
 		
 		private function onEndedNext(event:TrollingEvent):void
 		{
-			// need to check if this stage is the last stage
-			// StageSelectScene.LAST_STAGE_ID
-			
 			SceneManager.restartScene(MainStage, "Game", MainStage.currentStage + 1); 
 		}
 	}

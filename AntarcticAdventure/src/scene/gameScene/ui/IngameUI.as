@@ -70,8 +70,8 @@ package scene.gameScene.ui
 		
 		public override function dispose():void
 		{
-			// to do
-			
+			_resources = null;
+			_runGame = null;
 			
 			super.dispose();
 		}
@@ -482,7 +482,6 @@ package scene.gameScene.ui
 				if (_runGame)
 				{
 					_runGame(true);
-					
 				}
 			}
 		}
