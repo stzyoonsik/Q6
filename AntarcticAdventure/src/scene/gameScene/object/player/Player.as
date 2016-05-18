@@ -36,7 +36,7 @@ package scene.gameScene.object.player
 		private var _crashSpeed:Number;
 		private var _crashHeight:Number;
 		private var _crashTheta:Number;
-		private var _hoppingCount:int;
+		private var _hoppingCount:uint;
 		private var _crashFlag:Boolean;
 		
 		private var _fallFlag:Boolean;
@@ -49,7 +49,7 @@ package scene.gameScene.object.player
 		private var _struggleRightCount:int;
 		
 		private var _dashFlag:Boolean;
-		private var _dashCount:int;
+		private var _dashCount:uint;
 		
 		private var _resource:Resources;
 		
@@ -475,6 +475,10 @@ package scene.gameScene.object.player
 		}
 		
 		
+		/**
+		 * 사각크레이터에 빠졌을때 
+		 * 
+		 */
 		private function fall():void
 		{
 			if(!_fallFlag)
@@ -519,7 +523,6 @@ package scene.gameScene.object.player
 			
 			if(_struggleLeftCount > 5 && _struggleRightCount > 5)
 			{
-				//trace("탈출");
 				_struggleLeftCount = 0;
 				_struggleRightCount = 0;
 				_fallFlag = false;
@@ -535,8 +538,7 @@ package scene.gameScene.object.player
 				
 				_state = PlayerState.RUN;
 				_penguin.transition(PlayerState.RUN);
-			}
-			
+			}			
 		}
 		
 		private function dash():void
@@ -559,7 +561,6 @@ package scene.gameScene.object.player
 					
 				_penguin.transition(PlayerState.RUN);
 				_grimja.collider.isActive = false;
-				//_grimjaCollider.isActive = false;
 				_penguin.animator.getState(PlayerState.RUN).interval = 1;
 				_dashFlag = true;
 				MainStage.speed = MainStage.maxSpeed * 3;
@@ -595,6 +596,10 @@ package scene.gameScene.object.player
 			}
 		}
 		
+		/**
+		 * 죽음... 
+		 * 
+		 */
 		private function die():void
 		{
 			_state = PlayerState.DEAD;
