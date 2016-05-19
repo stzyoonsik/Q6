@@ -62,14 +62,12 @@ package scene.gameScene.ui
 		
 		private function onEndedReplay(event:TrollingEvent):void
 		{
-			trace("다시하긔");
 			SceneManager.restartScene(MainStage, "Game", MainStage.currentStage);
 		}
 		
 		private function onEndedMenu(event:TrollingEvent):void
 		{
-			SceneManager.switchScene("stageSelect", MainStage.currentStage);
-			SceneManager.deleteScene("Game");
+			SceneManager.outScene(MainStage.currentStage);
 		}
 	}
 }

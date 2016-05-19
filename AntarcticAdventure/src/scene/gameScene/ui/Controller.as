@@ -36,7 +36,7 @@ package scene.gameScene.ui
 			
 			_right = new Button(resource.getSubTexture("MainStageSprite0.png", "right"));
 			_right.pivot = PivotType.CENTER;
-			_right.x = _stageWidth * 0.3;
+			_right.x = _stageWidth * 0.25;
 			_right.y = _stageHeight * 0.8;
 			_right.width = _stageWidth * 0.1;
 			_right.height = _right.width;	
@@ -46,7 +46,7 @@ package scene.gameScene.ui
 				
 			_jump = new Button(resource.getSubTexture("MainStageSprite0.png", "jump"));
 			_jump.pivot = PivotType.CENTER;
-			_jump.x = _stageWidth * 0.85;
+			_jump.x = _stageWidth * 0.9;
 			_jump.y = _stageHeight * 0.8;
 			_jump.width = _stageWidth * 0.1;
 			_jump.height = _jump.width;
