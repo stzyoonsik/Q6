@@ -17,6 +17,7 @@ package scene.gameScene.ui
 	import trolling.object.GameObject;
 	import trolling.rendering.Texture;
 	
+	import ui.Popup;
 	import ui.Title;
 	import ui.button.Button;
 	import ui.gauge.CursorGauge;
@@ -97,11 +98,6 @@ package scene.gameScene.ui
 			{
 				case CLEARED:
 				{
-					if (_runGame)
-					{
-						_runGame(false);
-					}
-					
 					var background:GameObject = getChild(BACKGROUND);
 					if (background)
 					{
@@ -111,6 +107,7 @@ package scene.gameScene.ui
 					var clearedPopup:ClearedPopup = getChild(CLEARED_POPUP) as ClearedPopup;
 					if (clearedPopup)
 					{
+						addEventListener(Popup.END_SHOW, onEndShowPopup);
 						clearedPopup.setResult(_totalFlag, _currentFlag, _resources);
 						clearedPopup.show();
 					}
@@ -491,18 +488,25 @@ package scene.gameScene.ui
 				
 				if (background.alpha >= 1)
 				{
-					if (_runGame)
-					{
-						_runGame(false);
-					}
 					removeEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);
 					
 					var failedPopup:FailedPopup = getChild(FAILED_POPUP) as FailedPopup;
 					if (failedPopup)
 					{
+						addEventListener(Popup.END_SHOW, onEndShowPopup);
 						failedPopup.show();
 					}
 				}
+			}
+		}
+		
+		private function onEndShowPopup(event:TrollingEvent):void
+		{
+			removeEventListener(Popup.END_SHOW, onEndShowPopup);
+			
+			if (_runGame)
+			{
+				_runGame(false);
 			}
 		}
 		
@@ -521,13 +525,12 @@ package scene.gameScene.ui
 				
 				if (!settingPopup.visible)
 				{
-					if (_runGame)
-					{
-						_runGame(false);						
-					}
 					background.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedBackground);
 					background.visible = true;
+					
+					addEventListener(Popup.END_SHOW, onEndShowPopup);
 					settingPopup.show();	
+					
 					dispatchEvent(new TrollingEvent("settingPopup", settingPopup.visible));
 				}
 			}
