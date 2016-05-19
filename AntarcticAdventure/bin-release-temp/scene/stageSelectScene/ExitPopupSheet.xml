@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="ExitPopupSheet.png">
+   <SubTexture name="exit" x="0" y="302" width="160" height="67" />
+   <SubTexture name="no" x="264" y="302" width="80" height="67" />
+   <SubTexture name="popup" x="0" y="0" width="400" height="300" />
+   <SubTexture name="yes" x="162" y="302" width="100" height="67" />
+</TextureAtlas>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="gameSceneUiSprite0.png">
+   <SubTexture name="0_orange" x="364" y="673" width="28" height="35" />
+   <SubTexture name="0_white" x="757" y="302" width="28" height="35" />
+   <SubTexture name="1_orange" x="364" y="710" width="28" height="35" />
+   <SubTexture name="1_white" x="532" y="545" width="28" height="35" />
+   <SubTexture name="2_orange" x="637" y="407" width="28" height="35" />
+   <SubTexture name="2_white" x="667" y="407" width="28" height="35" />
+   <SubTexture name="3_orange" x="637" y="444" width="28" height="35" />
+   <SubTexture name="3_white" x="757" y="339" width="28" height="35" />
+   <SubTexture name="4_orange" x="709" y="392" width="28" height="35" />
+   <SubTexture name="4_white" x="562" y="545" width="28" height="35" />
+   <SubTexture name="5_orange" x="667" y="444" width="28" height="35" />
+   <SubTexture name="5_white" x="532" y="582" width="28" height="35" />
+   <SubTexture name="6_orange" x="637" y="481" width="28" height="35" />
+   <SubTexture name="6_white" x="739" y="392" width="28" height="35" />
+   <SubTexture name="7_orange" x="592" y="545" width="28" height="35" />
+   <SubTexture name="7_white" x="697" y="429" width="28" height="35" />
+   <SubTexture name="8_orange" x="501" y="642" width="28" height="35" />
+   <SubTexture name="8_white" x="562" y="582" width="28" height="35" />
+   <SubTexture name="9_orange" x="667" y="481" width="28" height="35" />
+   <SubTexture name="9_white" x="532" y="619" width="28" height="35" />
+   <SubTexture name="background" x="202" y="673" width="64" height="64" />
+   <SubTexture name="button_orange" x="0" y="604" width="200" height="67" />
+   <SubTexture name="button_white" x="0" y="673" width="200" height="67" />
+   <SubTexture name="check" x="316" y="721" width="40" height="40" />
+   <SubTexture name="cleared" x="0" y="0" width="400" height="300" />
+   <SubTexture name="failed" x="402" y="0" width="400" height="300" />
+   <SubTexture name="field" x="402" y="440" width="128" height="200" />
+   <SubTexture name="heart" x="399" y="642" width="100" height="100" />
+   <SubTexture name="menu" x="268" y="673" width="46" height="46" />
+   <SubTexture name="next_gray" x="268" y="721" width="46" height="46" />
+   <SubTexture name="next_white" x="316" y="673" width="46" height="46" />
+   <SubTexture name="replay" x="709" y="302" width="46" height="46" />
+   <SubTexture name="screen_orange" x="402" y="302" width="200" height="67" />
+   <SubTexture name="screen_white" x="402" y="371" width="200" height="67" />
+   <SubTexture name="setting_icon" x="709" y="350" width="40" height="40" />
+   <SubTexture name="setting_popup" x="0" y="302" width="400" height="300" />
+   <SubTexture name="slash" x="637" y="518" width="28" height="35" />
+   <SubTexture name="stage" x="202" y="604" width="195" height="67" />
+   <SubTexture name="star" x="604" y="302" width="103" height="103" />
+   <SubTexture name="star_filled" x="532" y="440" width="103" height="103" />
+</TextureAtlas>

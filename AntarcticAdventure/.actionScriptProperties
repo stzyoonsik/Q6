@@ -37,9 +37,9 @@
       <libraryPathEntry kind="3" linkType="1" path="lib/as3crypto.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="lib/FrameWork.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="5" linkType="2" path="NativeExtension/com.distriqt.AndroidSupport.ane"/>
-      <libraryPathEntry kind="5" linkType="2" path="NativeExtension/NotificationExtension.ane"/>
       <libraryPathEntry kind="5" linkType="2" path="NativeExtension/DialogExtension.ane"/>
       <libraryPathEntry kind="5" linkType="2" path="NativeExtension/AndroidFullScreen.ane"/>
+      <libraryPathEntry kind="5" linkType="2" path="NativeExtension/NotificationExtension.ane"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
@@ -59,9 +59,9 @@
         <airExcludes/>
         <anePaths>
           <anePathEntry path="NativeExtension/com.distriqt.AndroidSupport.ane"/>
-          <anePathEntry path="NativeExtension/NotificationExtension.ane"/>
           <anePathEntry path="NativeExtension/DialogExtension.ane"/>
           <anePathEntry path="NativeExtension/AndroidFullScreen.ane"/>
+          <anePathEntry path="NativeExtension/NotificationExtension.ane"/>
         </anePaths>
         <newLaunchParams/>
         <modifiedLaunchParams/>
@@ -71,7 +71,6 @@
       <actionScriptSettings version="1"/>
     </buildTarget>
     <buildTarget buildTargetName="default" isCurrent="true" platformId="default">
-      <multiPlatformSettings enabled="false" hideAneLibSymbols="0" includePlatformLibs="false" platformID="default" reducedSizePackaging="false" version="1"/>
       <airSettings airCertificatePath="" airTimestamp="true" anePathSet="false" version="1">
         <airExcludes/>
         <anePaths/>
@@ -80,6 +79,7 @@
         <newPackagingParams/>
         <modifiedPackagingParams/>
       </airSettings>
+      <multiPlatformSettings enabled="false" hideAneLibSymbols="0" includePlatformLibs="false" platformID="default" reducedSizePackaging="false" version="1"/>
       <actionScriptSettings version="1"/>
     </buildTarget>
   </buildTargets>
