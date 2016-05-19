@@ -5,6 +5,8 @@ package gameData
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.net.URLLoader;
+	
+	import scene.gameScene.util.AesCrypto;
 
 	public class SettingData extends Data
 	{
@@ -41,6 +43,8 @@ package gameData
 								"\t\"sound\" : "	+	_sound.toString()	+	",\n"	+
 								"\t\"control\" : "	+	_control.toString()	+	"\n}";
 			
+			data = AesCrypto.encrypt(data, "jiminhyeyunyoonsik");
+			
 			var stream:FileStream = new FileStream();
 			var file:File = new File(_path.resolvePath(_name + ".json").url);
 			stream.open(file, FileMode.WRITE);
@@ -62,7 +66,7 @@ package gameData
 				return;
 			}
 			
-			var data:Object = JSON.parse(loader.data);
+			var data:Object = JSON.parse(AesCrypto.decrypt(loader.data, "jiminhyeyunyoonsik"));
 			
 			_bgm = data.bgm;
 			_sound = data.sound;
