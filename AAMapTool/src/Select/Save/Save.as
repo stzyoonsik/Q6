@@ -1,11 +1,7 @@
 package Select.Save
-{
-	import com.hurlant.crypto.Crypto;
-	import com.hurlant.crypto.symmetric.ICipher;
-	
+{	
 	import flash.events.Event;
 	import flash.filesystem.File;
-	import flash.utils.ByteArray;
 	
 	import Asset.Assets;
 	
@@ -95,24 +91,9 @@ package Select.Save
 			var str:String = stageStr + bgColorStr + curveStr + objectStr;
 			
 			str = AesCrypto.encrypt(str, "jiminhyeyunyoonsik");
-//			var strBA:ByteArray = encrypt(str);
 			
 			file.save(str);
 		}
-		
-//		private function encrypt(str:String):ByteArray
-//		{
-//			var result:ByteArray = new ByteArray();
-//			
-//			var key:ByteArray = new ByteArray();
-//			key.writeUTF("abcd");
-//			var aes:ICipher = Crypto.getCipher("blowfish-ecb", key, Crypto.getPad("pkcs5"));
-//			
-//			result.writeUTFBytes(str);
-//			aes.encrypt(result);			
-//			
-//			return result;
-//		}
 		
 		/**
 		 *  
