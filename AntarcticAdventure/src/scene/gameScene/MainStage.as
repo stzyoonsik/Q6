@@ -162,13 +162,72 @@ package scene.gameScene
 			//readTXT("stage.txt");
 			loadJSON("stage"+_currentStage+".json");
 			
-			_resource.getSoundFile("MainBgm.mp3").volume = 0.5;
-			_resource.getSoundFile("MainBgm.mp3").loops = Sound.INFINITE;
-			SoundManager.play("MainBgm.mp3");
+			var sound:Sound = _resource.getSoundFile("crashed0.mp3");
+			if (sound)
+			{
+				sound.volume = 0.6;
+				SoundManager.addSound("crashed0.mp3", sound);
+			}
 			
-			_resource.getSoundFile("stageFailed.mp3").loops = Sound.INFINITE;
+			sound = _resource.getSoundFile("crashed1.mp3");
+			if (sound)
+			{
+				sound.volume = 0.6;
+				SoundManager.addSound("crashed1.mp3", sound);
+			}
 			
-			_resource.getSoundFile("stageCleared.mp3").loops = Sound.INFINITE;
+			sound = _resource.getSoundFile("fall.mp3");
+			if (sound)
+			{
+				sound.volume = 0.6;
+				SoundManager.addSound("fall.mp3", sound);
+			}
+			
+			sound = _resource.getSoundFile("fish.mp3");
+			if (sound)
+			{
+				sound.volume = 0.6;
+				SoundManager.addSound("fish.mp3", sound);
+			}
+			
+			sound = _resource.getSoundFile("flag.mp3");
+			if (sound)
+			{
+				sound.volume = 0.6;
+				SoundManager.addSound("flag.mp3", sound);
+			}
+			
+			sound = _resource.getSoundFile("jump.mp3");
+			if (sound)
+			{
+				sound.volume = 0.6;
+				SoundManager.addSound("jump.mp3", sound);
+			}
+			
+			sound = _resource.getSoundFile("MainBgm.mp3");
+			if (sound)
+			{
+				sound.volume = 0.3;
+				sound.loops = Sound.INFINITE;
+				SoundManager.addSound("MainBgm.mp3", sound);
+				SoundManager.play("MainBgm.mp3");
+			}
+			
+			sound = _resource.getSoundFile("stageCleared.mp3");
+			if (sound)
+			{
+				sound.volume = 0.5;
+				sound.loops = Sound.INFINITE;
+				SoundManager.addSound("stageCleared.mp3", sound);
+			}
+			
+			sound = _resource.getSoundFile("stageFailed.mp3");
+			if (sound)
+			{
+				sound.volume = 0.6;
+				sound.loops = Sound.INFINITE;
+				SoundManager.addSound("stageFailed.mp3", sound);
+			}			
 		}
 		
 		/**

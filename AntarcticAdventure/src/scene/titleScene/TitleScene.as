@@ -20,6 +20,7 @@ package scene.titleScene
 	import trolling.component.graphic.Image;
 	import trolling.core.SceneManager;
 	import trolling.event.TrollingEvent;
+	import trolling.media.Sound;
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
@@ -120,7 +121,15 @@ package scene.titleScene
 			_backGround.height = this.height;
 			
 			addChild(_backGround);
-			SoundManager.play("Opening.mp3");
+			
+			var sound:Sound = _resource.getSoundFile("Opening.mp3");
+			if (sound)
+			{
+				sound.volume = 0.5;
+				sound.loops = Sound.INFINITE;
+				SoundManager.addSound("Opening.mp3", sound);
+				SoundManager.play("Opening.mp3");
+			}
 			_resource.dispose();
 		}
 		

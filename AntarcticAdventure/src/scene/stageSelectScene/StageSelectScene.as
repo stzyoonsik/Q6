@@ -21,6 +21,7 @@ package scene.stageSelectScene
 	import trolling.component.graphic.Image;
 	import trolling.core.SceneManager;
 	import trolling.event.TrollingEvent;
+	import trolling.media.Sound;
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
@@ -102,7 +103,14 @@ package scene.stageSelectScene
 			{
 				_stageIndex = ((this.data as uint)-1)/5;
 				setStageNumber();
-				SoundManager.play("stageSelect.mp3");
+				
+				var sound:Sound = _resource.getSoundFile("stageSelect.mp3");
+				if (sound)
+				{
+					sound.loops = Sound.INFINITE;
+					SoundManager.addSound("stageSelect.mp3", sound);
+					SoundManager.play("stageSelect.mp3");
+				}
 			}
 		}
 		
@@ -259,7 +267,15 @@ package scene.stageSelectScene
 			_backGround.addChild(_prevButton);
 
 			setStageNumber();
-			SoundManager.play("stageSelect.mp3");
+			
+			var sound:Sound = _resource.getSoundFile("stageSelect.mp3");
+			if (sound)
+			{
+				sound.loops = Sound.INFINITE;
+				SoundManager.addSound("stageSelect.mp3", sound);
+				SoundManager.play("stageSelect.mp3");
+			}
+			
 			Loading.current.loadComplete();
 		}
 		
