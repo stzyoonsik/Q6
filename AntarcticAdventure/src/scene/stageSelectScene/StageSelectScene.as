@@ -21,6 +21,7 @@ package scene.stageSelectScene
 	import trolling.component.graphic.Image;
 	import trolling.core.SceneManager;
 	import trolling.event.TrollingEvent;
+	import trolling.media.Sound;
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
@@ -101,8 +102,10 @@ package scene.stageSelectScene
 			else
 			{
 				_stageIndex = ((this.data as uint)-1)/5;
-				setStageNumber();
+				SoundManager.addSound("stageSelect.mp3", _resource.getSoundFile("stageSelect.mp3"));
 				SoundManager.play("stageSelect.mp3");
+				NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
+				setStageNumber();
 			}
 		}
 		
@@ -258,8 +261,14 @@ package scene.stageSelectScene
 			_backGround.addChild(_nextButton);
 			_backGround.addChild(_prevButton);
 
+			_resource.getSoundFile("stageSelect.mp3").loops = Sound.INFINITE;
+			
 			setStageNumber();
+//			SoundManager.play("stageSelect.mp3");
+			
+			SoundManager.addSound("stageSelect.mp3", _resource.getSoundFile("stageSelect.mp3"));
 			SoundManager.play("stageSelect.mp3");
+			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
 			Loading.current.loadComplete();
 		}
 		
@@ -289,7 +298,6 @@ package scene.stageSelectScene
 			}
 			
 			setStar();
-			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
 		}
 		
 		private function setStageColor(stageButton:Button):void
