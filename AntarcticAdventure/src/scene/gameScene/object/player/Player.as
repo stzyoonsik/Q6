@@ -2,6 +2,8 @@ package scene.gameScene.object.player
 {
 	import flash.events.Event;
 	
+	import loading.Resources;
+	
 	import scene.gameScene.MainStage;
 	import scene.gameScene.object.Objects;
 	import scene.gameScene.object.crater.EllipseCrater;
@@ -11,7 +13,6 @@ package scene.gameScene.object.player
 	import scene.gameScene.object.item.Fish;
 	import scene.gameScene.object.item.Flag;
 	import scene.gameScene.util.PlayerState;
-	import loading.Resources;
 	
 	import trolling.event.TrollingEvent;
 	import trolling.media.SoundManager;
@@ -21,6 +22,7 @@ package scene.gameScene.object.player
 	{		
 		private var _penguin:Penguin;		
 		private var _grimja:Grimja;
+		private var _struggle:Struggle;
 				
 		private var _state:String;
 		
@@ -122,9 +124,14 @@ package scene.gameScene.object.player
 			
 			_grimja = new Grimja(_resource);
 			_grimja.addEventListener("collideGrimja", onCollideWithGrimja);
+			
+			_struggle = new Struggle(_resource);
+			_struggle.y = -100;
+			
 
 			addChild(_grimja);
 			addChild(_penguin);
+			
 			
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);	
 		} 		
@@ -497,8 +504,11 @@ package scene.gameScene.object.player
 				_currentLife--;
 				if (_currentLife <= 0)
 				{
-					_currentLife = 0;
-					
+					_currentLife = 0;					
+				}				
+				else
+				{
+					addChild(_struggle);
 				}
 				
 				if (_setCurrentLifeAtUi)
@@ -510,6 +520,8 @@ package scene.gameScene.object.player
 				{
 					die();
 				}
+				
+
 			}
 		}
 		
@@ -538,6 +550,7 @@ package scene.gameScene.object.player
 				
 				_state = PlayerState.RUN;
 				_penguin.transition(PlayerState.RUN);
+				removeChild(_struggle);
 			}			
 		}
 		

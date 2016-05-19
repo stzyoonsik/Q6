@@ -11,14 +11,12 @@ package scene.gameScene.object.player
 	import trolling.component.animation.State;
 	import trolling.component.physics.Collider;
 	import trolling.event.TrollingEvent;
-	import trolling.media.SoundManager;
 	import trolling.utils.PivotType;
 
 	public class Penguin extends Objects
 	{
 		private var _resource:Resources;
 		
-		//private var _state:String;
 		
 		public function Penguin(resource:Resources)
 		{
@@ -27,7 +25,6 @@ package scene.gameScene.object.player
 			
 			_resource = resource;
 			
-			//_state = PlayerState.RUN;
 			
 			pivot = PivotType.CENTER;
 			
@@ -40,8 +37,7 @@ package scene.gameScene.object.player
 			
 			//_penguin.colliderRender = true;
 			addComponent(_collider);
-			addEventListener(TrollingEvent.COLLIDE, onCollide);
-			
+			addEventListener(TrollingEvent.COLLIDE, onCollide);			
 			
 			
 			initAnimator();

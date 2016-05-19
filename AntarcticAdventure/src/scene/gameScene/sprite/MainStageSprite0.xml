@@ -8,8 +8,12 @@
    <SubTexture name="bottomBackgroundRight0" x="0" y="573" width="498" height="185" />
    <SubTexture name="bottomBackgroundRight1" x="0" y="760" width="498" height="185" />
    <SubTexture name="bottomBackgroundRight2" x="500" y="386" width="498" height="185" />
-   <SubTexture name="cloud0" x="144" y="947" width="32" height="32" />
-   <SubTexture name="coke0" x="178" y="947" width="32" height="32" />
+   <SubTexture name="cloud0" x="352" y="947" width="32" height="32" />
+   <SubTexture name="coke0" x="386" y="947" width="32" height="32" />
+   <SubTexture name="controller0" x="0" y="947" width="50" height="50" />
+   <SubTexture name="controller1" x="52" y="947" width="50" height="50" />
+   <SubTexture name="controller2" x="104" y="947" width="50" height="50" />
+   <SubTexture name="controller3" x="156" y="947" width="50" height="50" />
    <SubTexture name="ellipseCrater0" x="630" y="668" width="64" height="64" />
    <SubTexture name="enemy0" x="630" y="734" width="64" height="64" />
    <SubTexture name="enemy1" x="696" y="668" width="64" height="64" />
@@ -18,12 +22,12 @@
    <SubTexture name="hmnim0" x="630" y="800" width="64" height="64" />
    <SubTexture name="home0" x="500" y="668" width="128" height="128" />
    <SubTexture name="jmnim0" x="762" y="668" width="64" height="64" />
-   <SubTexture name="jump" x="0" y="947" width="46" height="46" />
+   <SubTexture name="jump" x="208" y="947" width="46" height="46" />
    <SubTexture name="jynim0" x="566" y="928" width="64" height="64" />
-   <SubTexture name="left" x="48" y="947" width="46" height="46" />
-   <SubTexture name="leftFish0" x="212" y="947" width="32" height="32" />
-   <SubTexture name="leftFish1" x="246" y="947" width="32" height="32" />
-   <SubTexture name="leftFish2" x="280" y="947" width="32" height="32" />
+   <SubTexture name="left" x="256" y="947" width="46" height="46" />
+   <SubTexture name="leftFish0" x="420" y="947" width="32" height="32" />
+   <SubTexture name="leftFish1" x="454" y="947" width="32" height="32" />
+   <SubTexture name="leftFish2" x="960" y="668" width="32" height="32" />
    <SubTexture name="penguinArrived0" x="828" y="668" width="64" height="64" />
    <SubTexture name="penguinArrived1" x="762" y="734" width="64" height="64" />
    <SubTexture name="penguinCrashedLeft0" x="696" y="800" width="64" height="64" />
@@ -40,10 +44,10 @@
    <SubTexture name="penguinStruggle2" x="894" y="800" width="64" height="64" />
    <SubTexture name="penguinStruggle3" x="764" y="932" width="64" height="64" />
    <SubTexture name="rectCrater0" x="500" y="798" width="128" height="128" />
-   <SubTexture name="right" x="96" y="947" width="46" height="46" />
-   <SubTexture name="rightFish0" x="314" y="947" width="32" height="32" />
-   <SubTexture name="rightFish1" x="348" y="947" width="32" height="32" />
-   <SubTexture name="rightFish2" x="382" y="947" width="32" height="32" />
+   <SubTexture name="right" x="304" y="947" width="46" height="46" />
+   <SubTexture name="rightFish0" x="960" y="702" width="32" height="32" />
+   <SubTexture name="rightFish1" x="960" y="736" width="32" height="32" />
+   <SubTexture name="rightFish2" x="960" y="770" width="32" height="32" />
    <SubTexture name="shadow0" x="830" y="866" width="64" height="64" />
    <SubTexture name="topBackground0" x="500" y="573" width="498" height="93" />
    <SubTexture name="topBackgroundMountain0" x="0" y="0" width="950" height="10" />
