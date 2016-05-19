@@ -47,6 +47,7 @@ package ui.button
 			removeEventListener(TrollingEvent.TOUCH_BEGAN, onBegan);
 			removeEventListener(TrollingEvent.TOUCH_OUT, onOut);
 			removeEventListener(TrollingEvent.TOUCH_ENDED, onEnded);
+			removeEventListener(TrollingEvent.TOUCH_HOVER, onHover);
 			
 			super.dispose();
 		}

@@ -61,6 +61,7 @@ package gameData
 				else
 				{
 					data += "\t\"starData\" : [" + id.toString() + "," + star.toString();
+					index++;
 				}
 			}
 			data += "]\n}";
