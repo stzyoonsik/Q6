@@ -132,7 +132,7 @@ package scene.gameScene
 			_xForMoveAtLeast = _stageWidth / 50;
 			
 			_speed = 0;
-			_playerSpeed = _stageWidth / 100;			 
+			_playerSpeed = _stageWidth / 85;			 
 		}
 		
 		private function onProgressLoad(event:LoadingEvent):void
