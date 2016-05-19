@@ -13,17 +13,21 @@ package gameData
 		private const NONE:int = -1;
 		private const MAX_STAR:int = 3;
 		
+		private var _userName:String;
 		private var _starData:Dictionary; // key: int(Stage ID), value: int(Number of Stars)
 		
 		public function PlayData(name:String, path:File)
 		{
 			super(name, path);
 			
+			_userName = null;
 			_starData = null;
 		}
 		
 		public override function dispose():void
 		{
+			_userName = null;
+			
 		 	if (_starData)
 			{
 				for (var id:int in _starData)
@@ -47,24 +51,22 @@ package gameData
 			}
 			
 			var star:int;
-			var count:int = 0;
-			var data:String = "{\n";
+			var index:int = 0;
+			var data:String = "{\n\t\"userName\" : " + _userName;
 			for (var id:int in _starData)
 			{
 				star = _starData[id];
 				
-				if (count != 0)
+				if (index != 0)
 				{
 					data += "," + id.toString() + "," + star.toString();	
 				}
 				else
 				{
-					data += "\t\"starData\" : [" + id.toString() + "," + star.toString();
+					data += "\n\t\"starData\" : [" + id.toString() + "," + star.toString();
 				}
-				
-				count++;
 			}
-			data += "],\n\t\"count\" : " + count.toString() + "\n}";
+			data += "]\n}";
 			
 			var stream:FileStream = new FileStream();
 			var file:File = new File(_path.resolvePath(_name + ".json").url);
