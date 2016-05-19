@@ -26,10 +26,10 @@ package loading
 			this.width = loadScene.width;
 			this.height = loadScene.height;
 			
-			_barGauge = new LoadingBar(this.width / 2, 30);
+			_barGauge = new LoadingBar(this.width / 2, this.height / 18);
 			_barGauge.total = total;
-			_barGauge.x = 250;
-			_barGauge.y = this.height - 60;
+			_barGauge.x = this.width / 3.84;
+			_barGauge.y = this.height - (this.height / 9);
 			addChild(_barGauge);
 			loadScene.addChild(this);
 		}

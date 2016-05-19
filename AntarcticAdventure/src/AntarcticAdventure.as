@@ -46,7 +46,7 @@ package
 		private function onDeactivate(event:Event):void
 		{
 			var notification:NotificationExtension = new NotificationExtension();
-			notification.setNotification("남극탐험", "펭귄이 달리고 싶어합니다!!", 30);
+			notification.setNotification("남극탐험", "펭귄이 달리고 싶어해요!!", 30);
 		}
 		
 		private function onExit(event:Event):void

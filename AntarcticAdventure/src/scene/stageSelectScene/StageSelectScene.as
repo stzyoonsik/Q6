@@ -168,8 +168,8 @@ package scene.stageSelectScene
 			for(var i:int = 1; i <= 5; i++)
 			{
 				var stageButton:Button = new Button(buttonTexture);
-				stageButton.width = 100;
-				stageButton.height = 100;
+				stageButton.width = this.width / 9.6;
+				stageButton.height = this.height / 5.4;
 				stageButton.x = buttonX*i;
 				stageButton.y = buttonY*i;
 				stageButton.pivot = PivotType.CENTER;
@@ -179,9 +179,9 @@ package scene.stageSelectScene
 				
 				var stageNumber:GameObject = new GameObject();
 				var numberImage:Image = new Image();
-				stageNumber.y = -5;
-				stageNumber.width = 20;
-				stageNumber.height = 30;
+				stageNumber.y = -(this.height / 108);
+				stageNumber.width = this.width / 48;
+				stageNumber.height = this.height / 18;
 				stageNumber.addComponent(numberImage);
 				stageNumber.pivot = PivotType.CENTER;
 				stageButton.addChild(stageNumber);
@@ -191,9 +191,9 @@ package scene.stageSelectScene
 				
 				var stageNumber2:GameObject = new GameObject();
 				var numberImage2:Image = new Image();
-				stageNumber2.y = -5;
-				stageNumber2.width = 20;
-				stageNumber2.height = 30;
+				stageNumber2.y = -(this.height / 108);
+				stageNumber2.width = this.width / 48;
+				stageNumber2.height = this.height / 18;
 				stageNumber2.addComponent(numberImage2);
 				stageNumber2.pivot = PivotType.CENTER;
 				stageNumber2.addEventListener(TrollingEvent.TOUCH_BEGAN, onBubble);
@@ -203,18 +203,18 @@ package scene.stageSelectScene
 			}
 			
 			_nextButton = new Button(_resource.getSubTexture("selectSceneSprite0.png", "nextButton"));
-			_nextButton.width = 100;
-			_nextButton.height = 100;
-			_nextButton.x = 860;
-			_nextButton.y = 100;
+			_nextButton.width = this.width / 9.6;
+			_nextButton.height = this.height / 5.4;
+			_nextButton.x = this.width / 1.116;
+			_nextButton.y = this.height / 5.4;
 			_nextButton.pivot = PivotType.CENTER;
 			_nextButton.addEventListener(TrollingEvent.TOUCH_ENDED, onNextClick);
 			
 			_prevButton = new Button(_resource.getSubTexture("selectSceneSprite0.png", "prevButton"));
-			_prevButton.width = 100;
-			_prevButton.height = 100;
-			_prevButton.x = 100;
-			_prevButton.y = 440;
+			_prevButton.width = this.width / 9.6;
+			_prevButton.height = this.height / 5.4;
+			_prevButton.x = this.width / 9.6;
+			_prevButton.y = this.height / 1.227;
 			_prevButton.pivot = PivotType.CENTER;
 			_prevButton.addEventListener(TrollingEvent.TOUCH_ENDED, onPrevClick);
 			
