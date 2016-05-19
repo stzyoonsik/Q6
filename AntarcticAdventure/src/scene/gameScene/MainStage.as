@@ -64,6 +64,7 @@ package scene.gameScene
 		
 		private var _spriteDir:File = File.applicationDirectory.resolvePath("scene/gameScene/sprite");
 		private var _soundDir:File = File.applicationDirectory.resolvePath("scene/gameScene/sound");
+		private var _dataDir:File = File.applicationDirectory.resolvePath("scene/gameScene/data");
 		
 		private var _playerArrive:Boolean;
 		private static var _stageEnded:Boolean = false;
@@ -383,7 +384,7 @@ package scene.gameScene
 		
 		private function loadJSON(fileName:String):void
 		{
-			var urlRequest:URLRequest  = new URLRequest(fileName);
+			var urlRequest:URLRequest  = new URLRequest(_dataDir.resolvePath(fileName).url);
 			
 			var urlLoader:URLLoader = new URLLoader();
 			urlLoader.addEventListener(Event.COMPLETE, onCompleteLoadJSON);
@@ -449,6 +450,7 @@ package scene.gameScene
 			_controller.visible = false;
 			
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			loader.removeEventListener(Event.COMPLETE, onCompleteLoadJSON);
 		}
 		
 		/**

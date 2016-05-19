@@ -48,7 +48,7 @@ package scene.gameScene.ui
 				resources.getSubTexture(UIResource.SPRITE, UIResource.REPLAY));
 			replay.x = -stageButtonX;
 			replay.y = this.height / 3.5;
-			replay.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedReplay);
+			replay.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedReplay); 
 			//
 			
 			var margin:Number = 3;

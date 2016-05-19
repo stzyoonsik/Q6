@@ -49,9 +49,11 @@ package scene.titleScene
 			{
 				event.preventDefault();
 				var dialog:DialogExtension = new DialogExtension(_eventDispatcher);
+				//dialog.showInputDialog("input ID" , onInput);
 				dialog.showAlertDialog("종료하시겠습니까?");
 			}
 		}
+		
 		
 		private function onInit(event:Event):void
 		{
