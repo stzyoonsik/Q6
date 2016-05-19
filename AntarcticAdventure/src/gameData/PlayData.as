@@ -49,13 +49,13 @@ package gameData
 			}
 			
 			var star:int;
-			var count:int = 0;
+			var index:int = 0;
 			var data:String = "{\n";
 			for (var id:int in _starData)
 			{
 				star = _starData[id];
 				
-				if (count != 0)
+				if (index != 0)
 				{
 					data += "," + id.toString() + "," + star.toString();	
 				}
@@ -63,10 +63,8 @@ package gameData
 				{
 					data += "\t\"starData\" : [" + id.toString() + "," + star.toString();
 				}
-				
-				count++;
 			}
-			data += "],\n\t\"count\" : " + count.toString() + "\n}";
+			data += "]\n}";
 			
 			data = AesCrypto.encrypt(data, "jiminhyeyunyoonsik");
 			
