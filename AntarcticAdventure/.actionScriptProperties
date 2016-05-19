@@ -55,7 +55,7 @@
   <buildTargets>
     <buildTarget airDownloadURL="https://market.android.com/details?id=com.adobe.air" androidSettingsVersion="2" buildTargetName="device" isCurrent="true" platformId="com.adobe.flexide.multiplatform.android.platform">
       <multiPlatformSettings enabled="true" hideAneLibSymbols="0" includePlatformLibs="false" platformID="com.adobe.flexide.multiplatform.android.platform" reducedSizePackaging="false" version="1"/>
-      <airSettings airCertificatePath="C:/Users/user/Desktop/Jimin.p12" airTimestamp="true" anePathSet="true" version="1">
+      <airSettings airCertificatePath="C:/Users/user/Desktop/yoonsik.p12" airTimestamp="true" anePathSet="true" version="1">
         <airExcludes/>
         <anePaths>
           <anePathEntry path="NativeExtension/com.distriqt.AndroidSupport.ane"/>

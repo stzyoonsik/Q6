@@ -1,4 +1,4 @@
-package scene.gameScene.util
+package gameData
 {
 	import com.hurlant.crypto.Crypto;
 	import com.hurlant.crypto.symmetric.ICipher;

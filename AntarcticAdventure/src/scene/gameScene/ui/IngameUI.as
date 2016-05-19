@@ -79,10 +79,11 @@ package scene.gameScene.ui
 		
 		public override function dispose():void
 		{
+			NativeApplication.nativeApplication.removeEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
+			
 			_resources = null;
 			_runGame = null;
 			
-			NativeApplication.nativeApplication.removeEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
 			super.dispose();
 		}
 		
@@ -220,6 +221,50 @@ package scene.gameScene.ui
 			}
 			
 			_currentFlag = numFlag;
+		}
+		
+		private function showSettingPopup():void
+		{
+			var title:Title = getChild(TITLE) as Title;
+			var background:GameObject = getChild(BACKGROUND);
+			var settingPopup:SettingPopup = getChild(SETTING_POPUP) as SettingPopup;
+			
+			if (background && settingPopup)
+			{
+				if (title)
+				{
+					removeChild(title);
+				}
+				
+				if (!settingPopup.visible)
+				{
+					background.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedBackground);
+					background.visible = true;
+					
+					addEventListener(Popup.END_SHOW, onEndShowPopup);
+					settingPopup.show();	
+					
+					dispatchEvent(new TrollingEvent("settingPopup", settingPopup.visible));
+				}
+			}
+		}
+		
+		private function closeSettingPopup():void
+		{
+			var background:GameObject = getChild(BACKGROUND);
+			var settingPopup:SettingPopup = getChild(SETTING_POPUP) as SettingPopup;
+			
+			if (background && settingPopup)
+			{
+				settingPopup.close();
+				dispatchEvent(new TrollingEvent("settingPopup", settingPopup.visible));
+				background.visible = false;
+				background.removeEventListener(TrollingEvent.TOUCH_ENDED, onEndedBackground);
+				if (_runGame)
+				{
+					_runGame(true);
+				}
+			}
 		}
 		
 		private function onCompleteLoad(event:LoadingEvent):void
@@ -426,47 +471,19 @@ package scene.gameScene.ui
 		private function onTouchKeyBoard(event:KeyboardEvent):void
 		{
 			var settingPopup:SettingPopup = getChild(SETTING_POPUP) as SettingPopup;
-			var title:Title = getChild(TITLE) as Title;
-			var background:GameObject = getChild(BACKGROUND);
 			trace(event.keyCode);
 //			if(event.keyCode == 8)
 			if(event.keyCode == Keyboard.BACK)
 			{
 				event.preventDefault();
+				
 				if(!settingPopup.visible)
 				{					
-					if (background && settingPopup)
-					{
-						if (title)
-						{
-							removeChild(title);
-						}
-						
-						if (!settingPopup.visible)
-						{
-							background.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedBackground);
-							background.visible = true;
-							
-							addEventListener(Popup.END_SHOW, onEndShowPopup);
-							settingPopup.show();	
-							
-							dispatchEvent(new TrollingEvent("settingPopup", settingPopup.visible));
-						}
-					}
+					showSettingPopup();
 				}
 				else
 				{	
-					if (background && settingPopup)
-					{
-						settingPopup.close();
-						dispatchEvent(new TrollingEvent("settingPopup", settingPopup.visible));
-						background.visible = false;
-						background.removeEventListener(TrollingEvent.TOUCH_ENDED, onEndedBackground);
-						if (_runGame)
-						{
-							_runGame(true);
-						}
-					}
+					closeSettingPopup();
 				}
 			}
 		}
@@ -511,46 +528,12 @@ package scene.gameScene.ui
 		
 		private function onEndedSettingButton(event:TrollingEvent):void
 		{
-			var title:Title = getChild(TITLE) as Title;
-			var background:GameObject = getChild(BACKGROUND);
-			var settingPopup:SettingPopup = getChild(SETTING_POPUP) as SettingPopup;
-			
-			if (background && settingPopup)
-			{
-				if (title)
-				{
-					removeChild(title);
-				}
-				
-				if (!settingPopup.visible)
-				{
-					background.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedBackground);
-					background.visible = true;
-					
-					addEventListener(Popup.END_SHOW, onEndShowPopup);
-					settingPopup.show();	
-					
-					dispatchEvent(new TrollingEvent("settingPopup", settingPopup.visible));
-				}
-			}
+			showSettingPopup();
 		}
 		
 		private function onEndedBackground(event:TrollingEvent):void
 		{
-			var background:GameObject = getChild(BACKGROUND);
-			var settingPopup:SettingPopup = getChild(SETTING_POPUP) as SettingPopup;
-			
-			if (background && settingPopup)
-			{
-				settingPopup.close();
-				dispatchEvent(new TrollingEvent("settingPopup", settingPopup.visible));
-				background.visible = false;
-				background.removeEventListener(TrollingEvent.TOUCH_ENDED, onEndedBackground);
-				if (_runGame)
-				{
-					_runGame(true);
-				}
-			}
+			closeSettingPopup();
 		}
 		
 		private function onEndedControl(event:TrollingEvent):void

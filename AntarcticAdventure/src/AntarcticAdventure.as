@@ -1,10 +1,11 @@
 package
-{	
+{
 	import com.mesmotronic.ane.AndroidFullScreen;
 	
 	import flash.desktop.NativeApplication;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
+	import flash.display.StageDisplayState;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
@@ -25,6 +26,7 @@ package
 			// support autoOrients
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.displayState = StageDisplayState.NORMAL;
 			
 			AndroidFullScreen.stage = stage;
 			AndroidFullScreen.fullScreen();
