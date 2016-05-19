@@ -57,10 +57,10 @@ package scene.gameScene.object.home
 				_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "jynim0"));
 			}
 			
-			_nationFlag.width = 16;
-			_nationFlag.height = 12;
-			_nationFlag.x = 9;
-			_nationFlag.y = -15;
+			_nationFlag.width = _stageWidth / 60;
+			_nationFlag.height = _stageHeight / 45;
+			_nationFlag.x = _stageWidth / 106;
+			_nationFlag.y = -_stageHeight / 36;
 			_nationFlag.addComponent(_image);
 			
 			addChild(_nationFlag);
@@ -80,9 +80,9 @@ package scene.gameScene.object.home
 					_isArrivedAtHome = true;
 				}
 				
-				if(_nationFlag.y > -20)
+				if(_nationFlag.y > -_stageHeight / 27)
 				{
-					_nationFlag.y -= 0.05;					
+					_nationFlag.y -= _stageHeight * 0.0001;					
 				}
 				
 			}
