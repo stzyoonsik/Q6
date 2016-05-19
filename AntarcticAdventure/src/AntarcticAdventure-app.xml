@@ -297,7 +297,7 @@
 			    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>-->
 			    <!--<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>-->
 			    
-			     <uses-permission android:name="android.permission.VIBRATE" />
+			    <uses-permission android:name="android.permission.VIBRATE" />
 			    
 			    <application android:enabled="true">
 					<activity android:excludeFromRecents="false">

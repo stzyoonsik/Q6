@@ -444,13 +444,12 @@ package scene.gameScene.ui
 						
 						if (!settingPopup.visible)
 						{
-							if (_runGame)
-							{
-								_runGame(false);						
-							}
 							background.addEventListener(TrollingEvent.TOUCH_ENDED, onEndedBackground);
 							background.visible = true;
+							
+							addEventListener(Popup.END_SHOW, onEndShowPopup);
 							settingPopup.show();	
+							
 							dispatchEvent(new TrollingEvent("settingPopup", settingPopup.visible));
 						}
 					}

@@ -31,8 +31,12 @@ package
 			AndroidFullScreen.stage = stage;
 			AndroidFullScreen.fullScreenWidth();
 			
+			AndroidFullScreen.stage = stage;
+			AndroidFullScreen.fullScreen();
+			
 			Trolling.multitouchEnabled = true;
 			var trolling:Trolling = new Trolling(AndroidFullScreen.stage, new Rectangle(0, 0, 960, 540));
+			var trolling:Trolling = new Trolling(stage, new Rectangle(0, 0, 960, 540), new Rectangle(0, 0, AndroidFullScreen.fullScreenWidth, AndroidFullScreen.fullScreenHeight));
 			trolling.statsVisible = true;
 			SceneManager.addScene(TitleScene, "Title");
 			SceneManager.addScene(StageSelectScene, "stageSelect");
