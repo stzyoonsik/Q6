@@ -1,4 +1,4 @@
-package scene.gameScene
+package scene.gameScene.ui
 {
 	import loading.Resources;
 	
@@ -7,6 +7,7 @@ package scene.gameScene
 	import trolling.utils.PivotType;
 	
 	import ui.button.Button;
+	import scene.gameScene.MainStage;
 
 	public class Controller extends GameObject
 	{

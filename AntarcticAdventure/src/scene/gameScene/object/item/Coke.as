@@ -4,7 +4,7 @@ package scene.gameScene.object.item
 	import flash.events.Event;
 	
 	import scene.gameScene.MainStage;
-	import scene.gameScene.ObjectTag;
+	import scene.gameScene.util.ObjectTag;
 	import scene.gameScene.object.Objects;
 	import loading.Resources;
 	import loading.Resources;

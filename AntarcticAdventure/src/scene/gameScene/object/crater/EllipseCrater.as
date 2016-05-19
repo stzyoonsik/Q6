@@ -1,7 +1,7 @@
 package scene.gameScene.object.crater
 {
 	import scene.gameScene.MainStage;
-	import scene.gameScene.ObjectTag;
+	import scene.gameScene.util.ObjectTag;
 	import scene.gameScene.object.Objects;
 	import scene.gameScene.object.enemy.Enemy;
 	import scene.gameScene.object.item.Fish;

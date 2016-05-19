@@ -3,7 +3,7 @@ package scene.gameScene.object.player
 	import loading.Resources;
 	
 	import scene.gameScene.MainStage;
-	import scene.gameScene.ObjectTag;
+	import scene.gameScene.util.ObjectTag;
 	import scene.gameScene.object.Objects;
 	
 	import trolling.component.graphic.Image;

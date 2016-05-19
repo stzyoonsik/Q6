@@ -22,7 +22,7 @@ package scene.gameScene
 	import scene.gameScene.object.item.Flag;
 	import scene.gameScene.object.player.Player;
 	import scene.gameScene.ui.IngameUI;
-	import scene.gameScene.util.AesCrypto;
+	import gameData.AesCrypto;
 	import scene.gameScene.util.ObjectName;
 	import scene.gameScene.util.PlayerState;
 	
@@ -31,6 +31,7 @@ package scene.gameScene
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
+	import scene.gameScene.ui.Controller;
 
 	public class MainStage extends Scene
 	{

@@ -1,7 +1,6 @@
 package scene.gameScene.util
 {
-	public final class PlayerState
-	{
+	public final class PlayerState	{
 		
 		/** 달리기 */
 		public static const RUN:String = "run"; 
@@ -32,11 +31,5 @@ package scene.gameScene.util
 		
 		/** 도착 후*/		
 		public static const ARRIVED:String = "arrived";
-		
-		//		/** 프로펠러 달리기 */
-		//		public static const RUN_PROPELLER:String = "run_propeller"; 
-		//		
-		//		/** 프로펠러 점프 */
-		//		public static const JUMP_PROPELLER:String = "jump_propeller"; 
 	}
 }

@@ -1,4 +1,4 @@
-package scene.gameScene
+package scene.gameScene.util
 {
 	public final class ObjectTag
 	{
