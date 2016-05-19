@@ -297,32 +297,24 @@ package scene.stageSelectScene
 			var stageId:int = int(stageButton.name);
 			if (stageId == 1)
 			{
-				stageButton.red = 1;
-				stageButton.green = 1;
-				stageButton.blue = 1;
+				stageButton.blendColor(1, 1, 1);
 				
 				return;
 			}
 			
 			if (!_playData)
 			{
-				stageButton.red = 0.5;
-				stageButton.green = 0.5;
-				stageButton.blue = 0.5;
+				stageButton.blendColor(0.5, 0.5, 0.5);
 			}
 			else
 			{
 				if (_playData.getData(stageId - 1) == -1) // 이전 스테이지 클리어 기록이 없음
 				{
-					stageButton.red = 0.5;
-					stageButton.green = 0.5;
-					stageButton.blue = 0.5;
+					stageButton.blendColor(0.5, 0.5, 0.5);
 				}
 				else
 				{
-					stageButton.red = 1;
-					stageButton.green = 1;
-					stageButton.blue = 1;
+					stageButton.blendColor(1, 1, 1);
 				}
 			}
 		}

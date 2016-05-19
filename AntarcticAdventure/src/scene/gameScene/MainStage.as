@@ -450,6 +450,7 @@ package scene.gameScene
 			_controller.visible = false;
 			
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			loader.removeEventListener(Event.COMPLETE, onCompleteLoadJSON);
 		}
 		
 		/**
