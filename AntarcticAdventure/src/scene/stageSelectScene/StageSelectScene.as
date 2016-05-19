@@ -102,10 +102,17 @@ package scene.stageSelectScene
 			else
 			{
 				_stageIndex = ((this.data as uint)-1)/5;
-				SoundManager.addSound("stageSelect.mp3", _resource.getSoundFile("stageSelect.mp3"));
-				SoundManager.play("stageSelect.mp3");
-				NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
 				setStageNumber();
+				
+				NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
+				
+				var sound:Sound = _resource.getSoundFile("stageSelect.mp3");
+				if (sound)
+				{
+					sound.loops = Sound.INFINITE;
+					SoundManager.addSound("stageSelect.mp3", sound);
+					SoundManager.play("stageSelect.mp3");
+				}
 			}
 		}
 		
@@ -264,11 +271,17 @@ package scene.stageSelectScene
 			_resource.getSoundFile("stageSelect.mp3").loops = Sound.INFINITE;
 			
 			setStageNumber();
-//			SoundManager.play("stageSelect.mp3");
-			
-			SoundManager.addSound("stageSelect.mp3", _resource.getSoundFile("stageSelect.mp3"));
-			SoundManager.play("stageSelect.mp3");
+
 			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
+				
+			var sound:Sound = _resource.getSoundFile("stageSelect.mp3");
+			if (sound)
+			{
+				sound.loops = Sound.INFINITE;
+				SoundManager.addSound("stageSelect.mp3", sound);
+				SoundManager.play("stageSelect.mp3");
+			}
+
 			Loading.current.loadComplete();
 		}
 		
