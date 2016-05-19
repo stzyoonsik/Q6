@@ -1,11 +1,15 @@
 package scene.titleScene
 {
+	import flash.desktop.NativeApplication;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.events.Event;
+	import flash.events.IEventDispatcher;
+	import flash.events.KeyboardEvent;
 	import flash.filesystem.File;
 	import flash.geom.ColorTransform;
 	import flash.geom.Rectangle;
+	import flash.ui.Keyboard;
 	
 	import loading.Loading;
 	import loading.LoadingEvent;
@@ -29,10 +33,24 @@ package scene.titleScene
 		private var _backGroundAnimator:Animator;
 		private var _imageDir:File = File.applicationDirectory.resolvePath("scene/titleScene");
 		private var _soundDir:File = File.applicationDirectory.resolvePath("scene/titleScene");
+		private var _eventDispatcher:IEventDispatcher;
 		
 		public function TitleScene()
 		{
 			this.addEventListener(TrollingEvent.START_SCENE, onInit);
+			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
+		}
+		
+		private function onTouchKeyBoard(event:KeyboardEvent):void
+		{
+			trace(event.keyCode);
+			//			if(event.keyCode == 8)
+			if(event.keyCode == Keyboard.BACK)
+			{
+				event.preventDefault();
+				var dialog:DialogExtension = new DialogExtension(_eventDispatcher);
+				dialog.showAlertDialog("종료하시겠습니까?");
+			}
 		}
 		
 		private function onInit(event:Event):void
@@ -112,6 +130,7 @@ package scene.titleScene
 		
 		private function onTouch(event:TrollingEvent):void
 		{
+			NativeApplication.nativeApplication.removeEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
 			SceneManager.switchScene("stageSelect");
 		}
 	}

@@ -259,7 +259,7 @@ package scene.gameScene.ui
 		private function onEndedMenu(event:TrollingEvent):void
 		{
 			SceneManager.outScene(MainStage.currentStage);
-			SceneManager.deleteScene("Game");
+//			SceneManager.deleteScene("Game");
 		}
 	}
 }

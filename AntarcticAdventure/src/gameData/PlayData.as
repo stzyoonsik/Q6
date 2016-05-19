@@ -6,6 +6,8 @@ package gameData
 	import flash.filesystem.FileStream;
 	import flash.net.URLLoader;
 	import flash.utils.Dictionary;
+	
+	import scene.gameScene.util.AesCrypto;
 
 	public class PlayData extends Data
 	{
@@ -66,6 +68,8 @@ package gameData
 			}
 			data += "],\n\t\"count\" : " + count.toString() + "\n}";
 			
+			data = AesCrypto.encrypt(data, "jiminhyeyunyoonsik");
+			
 			var stream:FileStream = new FileStream();
 			var file:File = new File(_path.resolvePath(_name + ".json").url);
 			stream.open(file, FileMode.WRITE);
@@ -87,9 +91,9 @@ package gameData
 				return;
 			}
 			
-			var data:Object = JSON.parse(loader.data);
+			var data:Object = JSON.parse(AesCrypto.decrypt(loader.data, "jiminhyeyunyoonsik"));
 			
-			for (var i:int = 0; i < data.starData.length + 1; i + 2)
+			for (var i:int = 0; i < data.starData.length; i += 2)
 			{
 				addData(data.starData[i], data.starData[i + 1]); 
 			}
