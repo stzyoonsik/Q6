@@ -39,6 +39,7 @@
       <libraryPathEntry kind="5" linkType="2" path="NativeExtension/com.distriqt.AndroidSupport.ane"/>
       <libraryPathEntry kind="5" linkType="2" path="NativeExtension/NotificationExtension.ane"/>
       <libraryPathEntry kind="5" linkType="2" path="NativeExtension/DialogExtension.ane"/>
+      <libraryPathEntry kind="5" linkType="2" path="NativeExtension/AndroidFullScreen.ane"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
@@ -60,6 +61,7 @@
           <anePathEntry path="NativeExtension/com.distriqt.AndroidSupport.ane"/>
           <anePathEntry path="NativeExtension/NotificationExtension.ane"/>
           <anePathEntry path="NativeExtension/DialogExtension.ane"/>
+          <anePathEntry path="NativeExtension/AndroidFullScreen.ane"/>
         </anePaths>
         <newLaunchParams/>
         <modifiedLaunchParams/>
