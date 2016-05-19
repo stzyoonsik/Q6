@@ -260,7 +260,6 @@ package scene.stageSelectScene
 
 			setStageNumber();
 			SoundManager.play("stageSelect.mp3");
-			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
 			Loading.current.loadComplete();
 		}
 		
@@ -290,6 +289,7 @@ package scene.stageSelectScene
 			}
 			
 			setStar();
+			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
 		}
 		
 		private function setStageColor(stageButton:Button):void
