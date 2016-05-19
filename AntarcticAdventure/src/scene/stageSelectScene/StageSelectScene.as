@@ -104,7 +104,6 @@ package scene.stageSelectScene
 				setStageNumber();
 				SoundManager.play("stageSelect.mp3");
 			}
-			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
 		}
 		
 		private function onProgressLoad(event:LoadingEvent):void
@@ -139,7 +138,6 @@ package scene.stageSelectScene
 		
 		private function onCompleteLoad(event:LoadingEvent):void
 		{
-			Loading.current.loadComplete();
 			Resources(event.currentTarget).removeEventListener(LoadingEvent.COMPLETE, onCompleteLoad);
 			Resources(event.currentTarget).removeEventListener(LoadingEvent.FAILED, onFailedLoad);
 			Resources(event.currentTarget).removeEventListener(LoadingEvent.PROGRESS, onProgressLoad);
@@ -262,6 +260,8 @@ package scene.stageSelectScene
 
 			setStageNumber();
 			SoundManager.play("stageSelect.mp3");
+			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
+			Loading.current.loadComplete();
 		}
 		
 		private function setStageNumber():void
@@ -391,9 +391,6 @@ package scene.stageSelectScene
 		
 		private function onButtonClick(event:TrollingEvent):void
 		{
-			NativeApplication.nativeApplication.removeEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
-			SceneManager.addScene(MainStage, "Game");
-			SceneManager.goScene("Game", int(event.currentTarget.name));
 			var stageButton:Button = event.currentTarget as Button;
 			if (!stageButton)
 			{
@@ -419,9 +416,9 @@ package scene.stageSelectScene
 				
 			if (isAccessible)
 			{
-				NativeApplication.nativeApplication.removeEventListener(KeyboardEvent.KEY_DOWN, onClickButton);
+				NativeApplication.nativeApplication.removeEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
 				SceneManager.addScene(MainStage, "Game");
-				SceneManager.goScene("Game", (_stageIndex*5) + stageId);
+				SceneManager.goScene("Game", stageId);
 			}
 		}
 		

@@ -5,7 +5,8 @@ package gameData
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.net.URLLoader;
-	import crypto.AesCrypto;
+	
+	import scene.gameScene.util.AesCrypto;
 
 	public class SettingData extends Data
 	{
