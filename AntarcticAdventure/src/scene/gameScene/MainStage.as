@@ -726,7 +726,6 @@ package scene.gameScene
 		 * @param event
 		 * 
 		 */
-		private function onEndedSettingPopup(event:TrollingEvent):void
 		private function onEndedSettingButton(event:TrollingEvent):void
 		{
 			trace("셋팅팝업 : " + event.data);
@@ -777,11 +776,6 @@ package scene.gameScene
 		 * @param event
 		 * 
 		 */
-		private function onEndedControl(event:TrollingEvent):void
-		{
-			_controlMode = int(event.data);
-		}
-		
 		private function onMove(event:TrollingEvent):void
 		{
 			if(_controlMode == SettingData.CONTROL_SCREEN)
