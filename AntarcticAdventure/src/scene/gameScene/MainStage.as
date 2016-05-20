@@ -6,6 +6,7 @@ package scene.gameScene
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
+	import gameData.AesCrypto;
 	import gameData.SettingData;
 	
 	import loading.Loading;
@@ -14,6 +15,7 @@ package scene.gameScene
 	
 	import scene.gameScene.background.Background;
 	import scene.gameScene.background.Cloud;
+	import scene.gameScene.background.Snow;
 	import scene.gameScene.object.crater.EllipseCrater;
 	import scene.gameScene.object.crater.RectangleCrater;
 	import scene.gameScene.object.enemy.Enemy;
@@ -21,8 +23,8 @@ package scene.gameScene
 	import scene.gameScene.object.item.Coke;
 	import scene.gameScene.object.item.Flag;
 	import scene.gameScene.object.player.Player;
+	import scene.gameScene.ui.Controller;
 	import scene.gameScene.ui.IngameUI;
-	import gameData.AesCrypto;
 	import scene.gameScene.util.ObjectName;
 	import scene.gameScene.util.PlayerState;
 	
@@ -31,7 +33,6 @@ package scene.gameScene
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
-	import scene.gameScene.ui.Controller;
 
 	public class MainStage extends Scene
 	{
@@ -42,6 +43,8 @@ package scene.gameScene
 		private var _player:Player;
 		private var _enemy:Enemy;		
 		private var _background:Background;
+		private var _snow:Snow;
+		private var _snowVector:Vector.<GameObject> = new Vector.<GameObject>();
 		private var _ui:IngameUI;
 		private var _coverFace:GameObject = new GameObject();
 		
@@ -494,6 +497,15 @@ package scene.gameScene
 			
 			_background = new Background(_resource, _backgroundColor);
 			addChildAt(_background, 0);
+			
+			for(i = 0; i < 50; ++i)
+			{
+				_snow = new Snow(_resource);
+				_snowVector.push(_snow);
+				addChild(_snow);
+			}
+			
+			
 				
 			_coverFace.width = _stageWidth;
 			_coverFace.height = _stageHeight;
