@@ -78,7 +78,7 @@ package scene.gameScene.object.item
 				this.scaleY += setScale(0.03);
 				this.scaleX = this.scaleY;
 				
-				this._addY += y / (_stageHeight * 3);
+				this._addY += y / (_stageHeight * 3.5);
 				this.y += (MainStage.speed + this._addY);
 				
 				switch(_direction)

@@ -109,13 +109,12 @@ package scene.gameScene.object.crater
 				removeEventListener("fall", onFall);
 			}			
 			
-			//trace(_addY);
 			if(MainStage.speed != 0)
 			{
 				this.scaleY += setScale(0.07);
 				this.scaleX = this.scaleY;
 				
-				this._addY += y / (_stageHeight * 3);
+				this._addY += y / (_stageHeight * 3.5);
 				this.y += (MainStage.speed + this._addY);
 				
 				switch(_direction)
