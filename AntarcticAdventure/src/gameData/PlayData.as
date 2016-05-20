@@ -6,15 +6,19 @@ package gameData
 	import flash.filesystem.FileStream;
 	import flash.net.URLLoader;
 	import flash.utils.Dictionary;
-	
 
+	/**
+	 * 스테이지 클리어 정보입니다. (별점) 
+	 * @author user
+	 * 
+	 */
 	public class PlayData extends Data
 	{
 		private const TAG:String = "[PlayData]";
 		private const NONE:int = -1;
 		private const MAX_STAR:int = 3;
 		
-		private var _starData:Dictionary; // key: int(Stage ID), value: int(Number of Stars)
+		private var _starData:Dictionary;
 		
 		public function PlayData(name:String, path:File)
 		{
@@ -37,6 +41,10 @@ package gameData
 			super.dispose();
 		}
 		
+		/**
+		 * PlayData를 AES-128로 암호화하여 JSON 파일로 출력합니다.   
+		 * 
+		 */
 		public override function write():void
 		{
 			if (!_name || !_path || !_starData)
@@ -97,6 +105,12 @@ package gameData
 			}
 		}
 		
+		/**
+		 * 스테이지 클리어 정보를 추가합니다. 
+		 * @param stageId 클리어한 스테이지의 ID입니다.
+		 * @param numStar 해당 스테이지에서 획득한 별의 개수입니다.
+		 * 
+		 */
 		public function addData(stageId:int, numStar:int):void
 		{
 			if (stageId < 0 || numStar < 0 || numStar > MAX_STAR)
@@ -113,6 +127,11 @@ package gameData
 			_starData[stageId] = numStar;
 		}
 		
+		/**
+		 * 스테이지 클리어 정보를 제거합니다.
+		 * @param stageId 제거하고자 하는 정보에 해당하는 스테이지의 ID입니다.
+		 * 
+		 */
 		public function removeData(stageId:int):void
 		{
 			if (stageId < 0 || !_starData)
@@ -132,6 +151,12 @@ package gameData
 			}
 		}
 		
+		/**
+		 * 지정한 스테이지의 클리어 정보(획득한 별의 개수)를 반환합니다. 
+		 * @param stageId 스테이지 ID입니다.
+		 * @return 해당 스테이지에서 획득한 별의 개수입니다.
+		 * 
+		 */
 		public function getData(stageId:int):int
 		{
 			if (stageId < 0 || !_starData)
@@ -153,11 +178,21 @@ package gameData
 			return NONE;
 		}
 
+		/**
+		 * 스테이지 클리어 데이터입니다. key: int(Stage ID), value: int(Number of Stars) 
+		 * @return 
+		 * 
+		 */
 		public function get starData():Dictionary
 		{
 			return _starData;
 		}
 
+		/**
+		 * 스테이지 클리어 데이터입니다. key: int(Stage ID), value: int(Number of Stars)
+		 * @param value
+		 * 
+		 */
 		public function set starData(value:Dictionary):void
 		{
 			_starData = value;

@@ -21,6 +21,11 @@ package scene.gameScene.ui
 		private const MENU:int = 1;
 		private const NEXT:int = 2;
 		
+		/**
+		 * 스테이지 성공 시 표시되는 팝업입니다. 
+		 * @author user
+		 * 
+		 */
 		public function ClearedPopup(canvas:Texture)
 		{
 			super(canvas);
@@ -61,6 +66,7 @@ package scene.gameScene.ui
 			
 			// NEXT
 			var next:Button;
+			// 마지막 스테이지일 경우 버튼을 비활성화 처리
 			if (MainStage.currentStage < StageSelectScene.LAST_STAGE_ID)
 			{
 				next = new Button(
@@ -86,6 +92,13 @@ package scene.gameScene.ui
 			spriteSheet.removeSubTexture(UIResource.NEXT_GRAY);
 		}
 		
+		/**
+		 * Player가 획득한 깃발 정보를 토대로 별점을 계산하고 결과를 Popup에 표시합니다. 
+		 * @param totalFlag 해당 스테이지의 총 깃발 수입니다.
+		 * @param obtainedFlag Player가 획득한 깃발 수입니다.
+		 * @param resources 별과 숫자 Texture가 저장된 Resources입니다.
+		 * 이전에 클리어한 정보가 없거나 이전보다 높은 별점을 획득했을 경우 PlayData를 추가합니다.
+		 */
 		public function setResult(totalFlag:int, obtainedFlag:int, resources:Resources):void
 		{
 			var ratio:Number = obtainedFlag / totalFlag * 100; 
@@ -170,16 +183,31 @@ package scene.gameScene.ui
 			}
 		}
 		
+		/**
+		 * 해당 스테이지를 다시 시작합니다. 
+		 * @param event TrollingEvent.TOUCH_ENDED
+		 * 
+		 */
 		private function onEndedReplay(event:TrollingEvent):void
 		{
 			SceneManager.restartScene(MainStage, "Game", MainStage.currentStage);
 		}
 		
+		/**
+		 * 스테이지 선택 씬으로 돌아갑니다. 
+		 * @param event TrollingEvent.TOUCH_ENDED
+		 * 
+		 */
 		private function onEndedMenu(event:TrollingEvent):void
 		{
 			SceneManager.outScene(MainStage.currentStage);
 		}
 		
+		/**
+		 * 다음 스테이지를 시작합니다. 
+		 * @param event TrollingEvent.TOUCH_ENDED
+		 * 
+		 */
 		private function onEndedNext(event:TrollingEvent):void
 		{
 			SceneManager.restartScene(MainStage, "Game", MainStage.currentStage + 1); 

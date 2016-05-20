@@ -6,10 +6,14 @@ package ui.button
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 
+	/**
+	 * 버튼 클래스입니다. 터치 시 크기가 작아졌다 다시 커지도록 연출되었습니다. 
+	 * @author user
+	 * 
+	 */
 	public class Button extends GameObject
 	{
 		private const TAG:String = "[Button]";
-		private const DEFAULT_SCALE_DOWN_RATIO:Number = 0.9;
 		
 		private var _originScaleX:Number;
 		private var _originScaleY:Number;
@@ -29,7 +33,7 @@ package ui.button
 			}
 			addComponent(new Image(texture));
 			
-			_scaleDownRatio = DEFAULT_SCALE_DOWN_RATIO;
+			_scaleDownRatio = 0.9;
 			_originScaleX = 1.0;
 			_originScaleY = 1.0;
 			_downScaleX = _originScaleX * _scaleDownRatio;
@@ -56,11 +60,21 @@ package ui.button
 			super.dispose();
 		}
 		
+		/**
+		 * 터치 시 작아지는 비율입니다. 0에서 1 사이 값이며 기본값은 0.9입니다. 
+		 * @return 
+		 * 
+		 */
 		public function get scaleDownRatio():Number
 		{
 			return _scaleDownRatio;
 		}
 		
+		/**
+		 * 터치 시 작아지는 비율입니다. 0에서 1 사이 값이며 기본값은 0.9입니다.
+		 * @param value
+		 * 
+		 */
 		public function set scaleDownRatio(value:Number):void
 		{
 			_scaleDownRatio = value;

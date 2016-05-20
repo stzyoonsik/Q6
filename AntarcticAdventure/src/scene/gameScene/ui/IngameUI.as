@@ -61,6 +61,15 @@ package scene.gameScene.ui
 			_runGame = null;
 		}
 		
+		/**
+		 * IngameUI를 초기화합니다. 
+		 * @param stageId 스테이지의 ID입니다.
+		 * @param totalDistance 해당 스테이지의 총 오브젝트(장애물, 아이템) 수입니다.
+		 * @param totalLife Player의 maxLife입니다.
+		 * @param totalFlag 해당 스테이지에 등장하는 깃발의 총 개수입니다.
+		 * @param pauseGame MainStage의 pause 함수입니다.
+		 * 
+		 */
 		public function initialize(stageId:int, totalDistance:Number, totalLife:Number, totalFlag:int, pauseGame:Function):void
 		{
 			_stageId = stageId;
@@ -97,6 +106,11 @@ package scene.gameScene.ui
 			super.dispose();
 		}
 		
+		/**
+		 * 팝업을 표시합니다. 
+		 * @param type IngameUI.CLEARED: 스테이지 클리어 팝업 / IngameUI.FAILED: 스테이지 실패 팝업 
+		 * 
+		 */
 		public function showPopup(type:String):void
 		{
 			if (!type)
@@ -142,6 +156,11 @@ package scene.gameScene.ui
 			}
 		}
 		
+		/**
+		 * 남은 오브젝트 개수(남은 거리)를 UI에 표시합니다.
+		 * @param distance 남은 오브젝트 개수입니다.
+		 * 
+		 */
 		public function setCurrentDistance(distance:Number):void
 		{
 			var restGauge:CursorGauge = getChild(REST) as CursorGauge;
@@ -152,6 +171,11 @@ package scene.gameScene.ui
 			}
 		}
 		
+		/**
+		 * Player의 현재 Life를 UI에 표시합니다. 
+		 * @param numLife 현재 Life 수입니다.
+		 * 
+		 */
 		public function setCurrentLife(numLife:int):void
 		{
 			var life:GameObject = getChild(LIFE);
@@ -193,6 +217,11 @@ package scene.gameScene.ui
 			_currentLife = numLife;
 		}
 		
+		/**
+		 * Player가 획득한 깃발의 개수를 UI에 표시합니다. 
+		 * @param numFlag Player가 획득한 깃발의 개수입니다.
+		 * 
+		 */
 		public function setCurrentFlag(numFlag:int):void
 		{
 			var flag:GameObject = getChild(FLAG);
@@ -233,6 +262,10 @@ package scene.gameScene.ui
 			_currentFlag = numFlag;
 		}
 		
+		/**
+		 * SettingPopup을 표시합니다. 팝업이 표시되면 게임이 일시정지됩니다.
+		 * IngameUI.ENDED_SETTING_BUTTON 이벤트를 dispatch합니다.
+		 */
 		private function showSettingPopup():void
 		{
 			var title:Title = getChild(TITLE) as Title;
@@ -258,6 +291,10 @@ package scene.gameScene.ui
 			}
 		}
 		
+		/**
+		 * SettingPopup을 닫습니다. 팝업이 닫히면 게임이 재개됩니다. 
+		 * IngameUI.ENDED_SETTING_BUTTON 이벤트를 dispatch합니다.
+		 */
 		private function closeSettingPopup():void
 		{
 			var background:GameObject = getChild(BACKGROUND);
@@ -480,6 +517,11 @@ package scene.gameScene.ui
 			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
 		}
 		
+		/**
+		 * Back 버튼을 누르면 SettingPopup을 열거나 닫습니다.  
+		 * @param event KeyboardEvent.KEY_DOWN
+		 * 
+		 */
 		private function onTouchKeyBoard(event:KeyboardEvent):void
 		{
 			var settingPopup:SettingPopup = getChild(SETTING_POPUP) as SettingPopup;
@@ -507,6 +549,11 @@ package scene.gameScene.ui
 			Resources(event.currentTarget).removeEventListener(LoadingEvent.FAILED, onFailedLoad);
 		}
 		
+		/**
+		 * 스테이지에 실패했을 경우 화면이 서서히 어두워지다 스테이지 실패 팝업이 표시됩니다. 
+		 * @param event
+		 * 
+		 */
 		private function onEnterFrame(event:TrollingEvent):void
 		{
 			var background:GameObject = getChild(BACKGROUND);
@@ -528,6 +575,11 @@ package scene.gameScene.ui
 			}
 		}
 		
+		/**
+		 * 팝업이 완전히 표시되면 게임을 일시정지합니다. 
+		 * @param event Popup.END_SHOW
+		 * 
+		 */
 		private function onEndShowPopup(event:TrollingEvent):void
 		{
 			removeEventListener(Popup.END_SHOW, onEndShowPopup);
@@ -538,34 +590,64 @@ package scene.gameScene.ui
 			}
 		}
 		
+		/**
+		 * SettingButton을 터치하면 SettingPopup을 호출합니다. 
+		 * @param event TrollingEvent.TOUCH_ENDED
+		 * 
+		 */
 		private function onEndedSettingButton(event:TrollingEvent):void
 		{
 			showSettingPopup();
 		}
 		
+		/**
+		 * SettingPopup이 표시된 상태에서 배경을 터치하면 SettingPopup을 닫습니다. 
+		 * @param event TrollingEvent.TOUCH_ENDED
+		 * 
+		 */
 		private function onEndedBackground(event:TrollingEvent):void
 		{
 			closeSettingPopup();
 		}
 		
+		/**
+		 * 읽어온 SettingData에 따라 MainStage의 vibration을 초기화합니다. 
+		 * @param event SettingPopup.INIT_VIBRATION_MODE
+		 * SettingPopup.INIT_VIBRATION_MODE 이벤트를 dispatch합니다.
+		 */
 		private function onInitVibrationMode(event:TrollingEvent):void
 		{
-			dispatchEvent(new TrollingEvent(SettingPopup.INIT_VIBRATION_MODE, event.data));
+			dispatchEvent(new TrollingEvent(event.type, event.data));
 		}
 		
+		/**
+		 * 읽어온 SettingData에 따라 MainStage의 controlMode를 초기화합니다.
+		 * @param event SettingPopup.INIT_CONTROL_MODE
+		 * SettingPopup.INIT_CONTROL_MODE 이벤트를 dispatch합니다.
+		 */
 		private function onInitControlMode(event:TrollingEvent):void
 		{
-			dispatchEvent(new TrollingEvent(SettingPopup.INIT_CONTROL_MODE, event.data));
+			dispatchEvent(new TrollingEvent(event.type, event.data));
 		}
 		
+		/**
+		 * SettingPopup의 체크박스 선택 여부에 따라 MainStage의 vibration을 제어합니다.
+		 * @param event SettingPopup.VIBRATION_MODE
+		 * SettingPopup.VIBRATION_MODE 이벤트를 dispatch합니다.
+		 */
 		private function onEndedVibration(event:TrollingEvent):void
 		{
-			dispatchEvent(new TrollingEvent(SettingPopup.VIBRATION_MODE, event.data));
+			dispatchEvent(new TrollingEvent(event.type, event.data));
 		}
 		
+		/**
+		 * SettingPopup의 체크박스 선택 여부에 따라 MainStage의 controlMode를 제어합니다.
+		 * @param event SettingPopup.CONTROL_MODE
+		 * SettingPopup.CONTROL_MODE 이벤트를 dispatch합니다.
+		 */
 		private function onEndedControl(event:TrollingEvent):void
 		{
-			dispatchEvent(new TrollingEvent(SettingPopup.CONTROL_MODE, event.data));
+			dispatchEvent(new TrollingEvent(event.type, event.data));
 		}
 	}
 }

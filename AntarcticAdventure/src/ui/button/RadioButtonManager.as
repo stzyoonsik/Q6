@@ -20,6 +20,11 @@ package ui.button
 			_selectedId = NONE;
 		}
 		
+		/**
+		 * RadioButton을 추가합니다. 최초로 추가된 버튼은 자동 선택 처리됩니다. 
+		 * @param button 추가하고자 하는 RadioButton입니다.
+		 * 
+		 */
 		public function addButton(button:RadioButton):void
 		{
 			if (!button)
@@ -43,6 +48,11 @@ package ui.button
 			}
 		}
 		
+		/**
+		 * 등록된 RadioButton을 제거합니다. 현재 선택 상태인 버튼을 제거할 경우 첫 번째 인덱스의 버튼이 자동 선택됩니다. 
+		 * @param button 제거하고자 하는 RadioButton입니다.
+		 * 
+		 */
 		public function removeButton(button:RadioButton):void
 		{
 			if (!button || !_buttons)
@@ -61,7 +71,7 @@ package ui.button
 				{
 					_selectedId--;
 				}
-				else if (button.id == _selectedId) // 제거하려는 버튼이 선택된 버튼이었을 경우 선택 버튼 자동 조정
+				else if (button.id == _selectedId)
 				{
 					if (_buttons[0])
 					{
@@ -85,6 +95,11 @@ package ui.button
 			onSelected(id);
 		}
 
+		/**
+		 * 기존에 선택 상태였던 버튼을 선택 해제 처리합니다. 
+		 * @param id 선택된 RadioButton의 ID입니다.
+		 * 선택된 RadioButton이 호출하는 함수입니다.
+		 */
 		private function onSelected(id:int):void
 		{
 			if (id < 0)

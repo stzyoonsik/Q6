@@ -41,8 +41,6 @@ package scene.gameScene.ui
 			_right.width = _stageWidth * 0.1;
 			_right.height = _right.width;	
 			_right.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchRight);
-			
-			
 				
 			_jump = new Button(resource.getSubTexture("MainStageSprite0.png", "jump"));
 			_jump.pivot = PivotType.CENTER;
@@ -74,7 +72,5 @@ package scene.gameScene.ui
 			trace("점프");
 			dispatchEvent(new TrollingEvent("jump"));
 		}
-		
-		
 	}
 }

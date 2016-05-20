@@ -8,11 +8,25 @@ package ui.gauge
 	import trolling.rendering.Texture;
 	import trolling.utils.Color;
 
+	/**
+	 * 가득 찬 상태에서 줄어드는 형태의 BarGauge입니다. (ex. HP 바) 
+	 * @author user
+	 * 
+	 */
 	public class BarGauge extends Gauge
 	{
 		private const DEFAULT_BAR_SCALE:Number = 0.9;
 		private const BAR:int = 1;
 		
+		/**
+		 * BarGauge를 생성합니다. 
+		 * @param width Gauge의 너비입니다.
+		 * @param height Gauge의 높이입니다.
+		 * @param barScale Gauge의 크기에 대한 Bar 크기의 비율입니다. 0과 1 사이의 값이며 기본값은 0.9입니다.
+		 * @param baseColor 바탕 색상입니다. 기본값은 Silver입니다.
+		 * @param barColor Bar의 색상입니다. 기본값은 Lime입니다.
+		 * 
+		 */
 		public function BarGauge(width:Number, height:Number, barScale:Number = DEFAULT_BAR_SCALE,
 								 baseColor:uint = Color.SILVER, barColor:uint = Color.LIME)
 		{
@@ -46,6 +60,11 @@ package ui.gauge
 			addChild(bar);
 		}
 		
+		/**
+		 * Bar의 크기를 update합니다. 
+		 * @param current Gauge로 나타내고자 하는 항목의 현재값입니다.
+		 * 
+		 */
 		public override function update(current:Number):void
 		{
 			var bar:GameObject = getChild(BAR);

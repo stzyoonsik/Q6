@@ -21,21 +21,41 @@ package ui.gauge
 			// empty
 		}
 		
+		/**
+		 * Gauge로 나타내고자 하는 항목의 최대값입니다. 
+		 * @return 
+		 * 
+		 */
 		public function get total():Number
 		{
 			return _total;
 		}
 		
+		/**
+		 * Gauge로 나타내고자 하는 항목의 최대값입니다.
+		 * @param value
+		 * 
+		 */
 		public function set total(value:Number):void
 		{
 			_total = value;
 		}
 		
+		/**
+		 * Gauge로 나타내고자 하는 항목의 현재값입니다. 
+		 * @return 
+		 * 
+		 */
 		public function get current():Number
 		{
 			return _current;
 		}
 		
+		/**
+		 * Gauge로 나타내고자 하는 항목의 현재값입니다. 
+		 * @param value
+		 * 
+		 */
 		public function set current(value:Number):void
 		{
 			_current = value;
