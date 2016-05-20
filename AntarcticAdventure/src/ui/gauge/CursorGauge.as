@@ -14,7 +14,8 @@ package ui.gauge
 		private const BASE:int = 0;
 		private const CURSOR:int = 1;
 		
-		public function CursorGauge(width:Number, height:Number, cursorScale:Number = DEFAULT_CURSOR_SCALE, baseColor:uint = Color.SILVER, cursorColor:uint = Color.BLACK)
+		public function CursorGauge(width:Number, height:Number, cursorScale:Number = DEFAULT_CURSOR_SCALE,
+									baseColor:uint = Color.SILVER, cursorColor:uint = Color.BLACK)
 		{
 			if (width <= 0)
 			{

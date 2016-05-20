@@ -1,8 +1,11 @@
 package
 {
+	import com.mesmotronic.ane.AndroidFullScreen;
+	
 	import flash.desktop.NativeApplication;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
+	import flash.display.StageDisplayState;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
@@ -23,9 +26,13 @@ package
 			// support autoOrients
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.displayState = StageDisplayState.NORMAL;
+			
+			AndroidFullScreen.stage = stage;
+			AndroidFullScreen.fullScreen();
 			
 			Trolling.multitouchEnabled = true;
-			var trolling:Trolling = new Trolling(stage, new Rectangle(0, 0, 960, 540));
+			var trolling:Trolling = new Trolling(stage, new Rectangle(0, 0, 960, 540), new Rectangle(0, 0, AndroidFullScreen.fullScreenWidth, AndroidFullScreen.fullScreenHeight));
 			trolling.statsVisible = true;
 			SceneManager.addScene(TitleScene, "Title");
 			SceneManager.addScene(StageSelectScene, "stageSelect");
@@ -45,6 +52,8 @@ package
 		private function onExit(event:Event):void
 		{
 			NativeApplication.nativeApplication.removeEventListener(Event.EXITING, onExit);
+			NativeApplication.nativeApplication.removeEventListener(Event.DEACTIVATE, onDeactivate);
+			
 			SceneManager.dispose();
 		}
 	}

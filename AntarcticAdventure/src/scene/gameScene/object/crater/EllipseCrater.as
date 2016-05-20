@@ -1,7 +1,7 @@
 package scene.gameScene.object.crater
 {
 	import scene.gameScene.MainStage;
-	import scene.gameScene.ObjectTag;
+	import scene.gameScene.util.ObjectTag;
 	import scene.gameScene.object.Objects;
 	import scene.gameScene.object.enemy.Enemy;
 	import scene.gameScene.object.item.Fish;
@@ -74,9 +74,8 @@ package scene.gameScene.object.crater
 				this.scaleY += setScale(0.03);
 				this.scaleX = this.scaleY;
 				
-				this._addY += y / 2400;
+				this._addY += y / (_stageHeight * 3.5);
 				this.y += (MainStage.speed + this._addY);
-				
 				switch(_direction)
 				{
 					//가운데

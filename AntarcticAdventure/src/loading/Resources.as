@@ -11,7 +11,6 @@ package loading
 	import flash.utils.Dictionary;
 	
 	import trolling.media.Sound;
-	import trolling.media.SoundManager;
 	import trolling.rendering.Texture;
 	
 	public class Resources extends EventDispatcher
@@ -161,7 +160,7 @@ package loading
 			Sound(event.currentTarget).removeEventListener(Event.COMPLETE, onSoundLoaded);
 			Sound(event.currentTarget).removeEventListener(IOErrorEvent.IO_ERROR, onSoundLoadFailed);
 			
-			SoundManager.addSound(soundFileName, _soundDic[soundFileName]);
+//			SoundManager.addSound(soundFileName, _soundDic[soundFileName]);
 			
 			_loadedCount++;
 			checkLoadComplete(soundFileName);

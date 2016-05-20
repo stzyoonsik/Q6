@@ -21,6 +21,7 @@ package scene.stageSelectScene
 	import trolling.component.graphic.Image;
 	import trolling.core.SceneManager;
 	import trolling.event.TrollingEvent;
+	import trolling.media.Sound;
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
@@ -83,6 +84,7 @@ package scene.stageSelectScene
 		{
 			if(this.data == null)
 			{
+				// read PlayData
 				_playData = new PlayData("playData", File.applicationStorageDirectory.resolvePath("data"));
 				_playData.read();
 				
@@ -102,7 +104,16 @@ package scene.stageSelectScene
 			{
 				_stageIndex = ((this.data as uint)-1)/5;
 				setStageNumber();
-				SoundManager.play("stageSelect.mp3");
+				
+				NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
+				
+				var sound:Sound = _resource.getSoundFile("stageSelect.mp3");
+				if (sound)
+				{
+					sound.loops = Sound.INFINITE;
+					SoundManager.addSound("stageSelect.mp3", sound);
+					SoundManager.play("stageSelect.mp3");
+				}
 			}
 		}
 		
@@ -113,7 +124,7 @@ package scene.stageSelectScene
 		
 		private function onTouchKeyBoard(event:KeyboardEvent):void
 		{
-			trace(event.keyCode);
+//			trace(event.keyCode);
 //			if(event.keyCode == 8)
 			if(event.keyCode == Keyboard.BACK)
 			{
@@ -158,8 +169,8 @@ package scene.stageSelectScene
 			for(var i:int = 1; i <= 5; i++)
 			{
 				var stageButton:Button = new Button(buttonTexture);
-				stageButton.width = 100;
-				stageButton.height = 100;
+				stageButton.width = this.width / 9.6;
+				stageButton.height = this.height / 5.4;
 				stageButton.x = buttonX*i;
 				stageButton.y = buttonY*i;
 				stageButton.pivot = PivotType.CENTER;
@@ -169,9 +180,9 @@ package scene.stageSelectScene
 				
 				var stageNumber:GameObject = new GameObject();
 				var numberImage:Image = new Image();
-				stageNumber.y = -5;
-				stageNumber.width = 20;
-				stageNumber.height = 30;
+				stageNumber.y = -(this.height / 108);
+				stageNumber.width = this.width / 48;
+				stageNumber.height = this.height / 18;
 				stageNumber.addComponent(numberImage);
 				stageNumber.pivot = PivotType.CENTER;
 				stageButton.addChild(stageNumber);
@@ -181,9 +192,9 @@ package scene.stageSelectScene
 				
 				var stageNumber2:GameObject = new GameObject();
 				var numberImage2:Image = new Image();
-				stageNumber2.y = -5;
-				stageNumber2.width = 20;
-				stageNumber2.height = 30;
+				stageNumber2.y = -(this.height / 108);
+				stageNumber2.width = this.width / 48;
+				stageNumber2.height = this.height / 18;
 				stageNumber2.addComponent(numberImage2);
 				stageNumber2.pivot = PivotType.CENTER;
 				stageNumber2.addEventListener(TrollingEvent.TOUCH_BEGAN, onBubble);
@@ -193,18 +204,18 @@ package scene.stageSelectScene
 			}
 			
 			_nextButton = new Button(_resource.getSubTexture("selectSceneSprite0.png", "nextButton"));
-			_nextButton.width = 100;
-			_nextButton.height = 100;
-			_nextButton.x = 860;
-			_nextButton.y = 100;
+			_nextButton.width = this.width / 9.6;
+			_nextButton.height = this.height / 5.4;
+			_nextButton.x = this.width / 1.116;
+			_nextButton.y = this.height / 5.4;
 			_nextButton.pivot = PivotType.CENTER;
 			_nextButton.addEventListener(TrollingEvent.TOUCH_ENDED, onNextClick);
 			
 			_prevButton = new Button(_resource.getSubTexture("selectSceneSprite0.png", "prevButton"));
-			_prevButton.width = 100;
-			_prevButton.height = 100;
-			_prevButton.x = 100;
-			_prevButton.y = 440;
+			_prevButton.width = this.width / 9.6;
+			_prevButton.height = this.height / 5.4;
+			_prevButton.x = this.width / 9.6;
+			_prevButton.y = this.height / 1.227;
 			_prevButton.pivot = PivotType.CENTER;
 			_prevButton.addEventListener(TrollingEvent.TOUCH_ENDED, onPrevClick);
 			
@@ -246,6 +257,7 @@ package scene.stageSelectScene
 				_buttonVector[i].addChild(root);
 				_starVector.push(root);
 			}
+			
 			_exitPopup = new ExitPopup(_resource.getSubTexture("ExitPopupSheet.png", "popup"));
 			_exitPopup.x = this.width / 2;
 			_exitPopup.y = this.height / 2;
@@ -258,9 +270,20 @@ package scene.stageSelectScene
 			_backGround.addChild(_nextButton);
 			_backGround.addChild(_prevButton);
 
+			_resource.getSoundFile("stageSelect.mp3").loops = Sound.INFINITE;
+			
 			setStageNumber();
-			SoundManager.play("stageSelect.mp3");
+
 			NativeApplication.nativeApplication.addEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
+				
+			var sound:Sound = _resource.getSoundFile("stageSelect.mp3");
+			if (sound)
+			{
+				sound.loops = Sound.INFINITE;
+				SoundManager.addSound("stageSelect.mp3", sound);
+				SoundManager.play("stageSelect.mp3");
+			}
+
 			Loading.current.loadComplete();
 		}
 		
@@ -276,9 +299,9 @@ package scene.stageSelectScene
 				_numberVector[i*2].components[ComponentType.IMAGE].texture = _resource.getSubTexture("selectSceneSprite0.png", countString.charAt(0)+"_number");
 				if(countString.length >= 2)
 				{
-					_numberVector[i*2].x = -10;
+					_numberVector[i*2].x = -this.width / 96;;
 					_numberVector[(i*2)+1].components[ComponentType.IMAGE].texture = _resource.getSubTexture("selectSceneSprite0.png", countString.charAt(1)+"_number");
-					_numberVector[(i*2)+1].x = 10;
+					_numberVector[(i*2)+1].x = this.width / 96;
 				}
 				else
 				{
@@ -289,44 +312,61 @@ package scene.stageSelectScene
 				setStageColor(_buttonVector[i]);
 			}
 			
+			// _stageIndex에 따라 _prevButton, _nextButton visible 여부 제어
+			if (_stageIndex == 0)
+			{
+				_prevButton.visible = false;
+				_nextButton.visible = true;
+			}
+			else if ((_stageIndex + 1) * 5 == LAST_STAGE_ID)
+			{
+				_prevButton.visible = true;
+				_nextButton.visible = false;
+			}
+			else
+			{
+				_prevButton.visible = true;
+				_nextButton.visible = true;
+			}
+			
 			setStar();
 		}
 		
+		/**
+		 * PlayData에 기준하여 접근 제한할 stageButton의 색상을 조정합니다.
+		 * @param stageButton 색상을 조정할 stageButton입니다.
+		 * 
+		 */
 		private function setStageColor(stageButton:Button):void
 		{
 			var stageId:int = int(stageButton.name);
 			if (stageId == 1)
 			{
-				stageButton.red = 1;
-				stageButton.green = 1;
-				stageButton.blue = 1;
-				
+				stageButton.blendColor(1, 1, 1);
 				return;
 			}
 			
 			if (!_playData)
 			{
-				stageButton.red = 0.5;
-				stageButton.green = 0.5;
-				stageButton.blue = 0.5;
+				stageButton.blendColor(0.5, 0.5, 0.5);
 			}
 			else
 			{
 				if (_playData.getData(stageId - 1) == -1) // 이전 스테이지 클리어 기록이 없음
 				{
-					stageButton.red = 0.5;
-					stageButton.green = 0.5;
-					stageButton.blue = 0.5;
+					stageButton.blendColor(0.5, 0.5, 0.5);
 				}
 				else
 				{
-					stageButton.red = 1;
-					stageButton.green = 1;
-					stageButton.blue = 1;
+					stageButton.blendColor(1, 1, 1);
 				}
 			}
 		}
 		
+		/**
+		 * PlayData에 기준하여 각 stageButton에 별점을 표시합니다. 
+		 * 
+		 */
 		private function setStar():void
 		{
 			if (!_playData)
@@ -397,6 +437,7 @@ package scene.stageSelectScene
 				return;
 			}
 			
+			// 첫 번째 스테이지이거나 이전 스테이지의 클리어 기록이 있는 스테이지일 경우에만 진입 가능
 			var stageId:int = int(stageButton.name);
 			var isAccessible:Boolean = true;
 			if (stageId > 1)

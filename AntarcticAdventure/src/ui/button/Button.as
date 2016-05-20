@@ -6,17 +6,23 @@ package ui.button
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 
+	/**
+	 * 버튼 클래스입니다. 터치 시 크기가 작아졌다 다시 커지도록 연출되었습니다. 
+	 * @author user
+	 * 
+	 */
 	public class Button extends GameObject
 	{
 		private const TAG:String = "[Button]";
-		private const DEFAULT_SCALE_DOWN_RATIO:Number = 0.9;
 		
-		private var _scaleDownRatio:Number;
 		private var _originScaleX:Number;
 		private var _originScaleY:Number;
-		
 		private var _isOriginScaleXSet:Boolean;
 		private var _isOriginScaleYSet:Boolean;
+		
+		private var _downScaleX:Number;
+		private var _downScaleY:Number;
+		private var _scaleDownRatio:Number;
 		
 		public function Button(texture:Texture)
 		{
@@ -27,9 +33,11 @@ package ui.button
 			}
 			addComponent(new Image(texture));
 			
-			_scaleDownRatio = DEFAULT_SCALE_DOWN_RATIO;
+			_scaleDownRatio = 0.9;
 			_originScaleX = 1.0;
 			_originScaleY = 1.0;
+			_downScaleX = _originScaleX * _scaleDownRatio;
+			_downScaleY = _originScaleY * _scaleDownRatio;
 			
 			_isOriginScaleXSet = false;
 			_isOriginScaleYSet = false;
@@ -47,18 +55,51 @@ package ui.button
 			removeEventListener(TrollingEvent.TOUCH_BEGAN, onBegan);
 			removeEventListener(TrollingEvent.TOUCH_OUT, onOut);
 			removeEventListener(TrollingEvent.TOUCH_ENDED, onEnded);
+			removeEventListener(TrollingEvent.TOUCH_HOVER, onHover);
 			
 			super.dispose();
 		}
 		
+		/**
+		 * 터치 시 작아지는 비율입니다. 0에서 1 사이 값이며 기본값은 0.9입니다. 
+		 * @return 
+		 * 
+		 */
 		public function get scaleDownRatio():Number
 		{
 			return _scaleDownRatio;
 		}
 		
+		/**
+		 * 터치 시 작아지는 비율입니다. 0에서 1 사이 값이며 기본값은 0.9입니다.
+		 * @param value
+		 * 
+		 */
 		public function set scaleDownRatio(value:Number):void
 		{
 			_scaleDownRatio = value;
+		}
+		
+		protected function onHover(event:TrollingEvent):void
+		{
+			if (!_isOriginScaleXSet)
+			{
+				_originScaleX = this.scaleX;
+				_downScaleX = _originScaleX * _scaleDownRatio;
+				
+				_isOriginScaleXSet = true;
+			}
+			
+			if (!_isOriginScaleYSet)
+			{
+				_originScaleY = this.scaleY;
+				_downScaleY = _originScaleY * _scaleDownRatio;
+				
+				_isOriginScaleYSet = true;
+			}
+			
+			this.scaleX = _downScaleX;
+			this.scaleY = _downScaleY;
 		}
 		
 		protected function onBegan(event:TrollingEvent):void
@@ -66,17 +107,21 @@ package ui.button
 			if (!_isOriginScaleXSet)
 			{
 				_originScaleX = this.scaleX;
+				_downScaleX = _originScaleX * _scaleDownRatio;
+				
 				_isOriginScaleXSet = true;
 			}
 			
 			if (!_isOriginScaleYSet)
 			{
 				_originScaleY = this.scaleY;
+				_downScaleY = _originScaleY * _scaleDownRatio;
+				
 				_isOriginScaleYSet = true;
 			}
 			
-			this.scaleX *= _scaleDownRatio;
-			this.scaleY *= _scaleDownRatio;
+			this.scaleX = _downScaleX;
+			this.scaleY = _downScaleY;
 		}
 		
 		protected function onOut(event:TrollingEvent):void
@@ -89,12 +134,6 @@ package ui.button
 		{
 			this.scaleX = _originScaleX;
 			this.scaleY = _originScaleY;
-		}
-		
-		protected function onHover(event:TrollingEvent):void
-		{
-			this.scaleX = _scaleDownRatio;
-			this.scaleY = _scaleDownRatio;
 		}
 	}
 }

@@ -12,6 +12,11 @@ package scene.gameScene.ui
 	import ui.Popup;
 	import ui.button.Button;
 
+	/**
+	 * 스테이지 실패 시 표시되는 팝업입니다. 
+	 * @author user
+	 * 
+	 */
 	public class FailedPopup extends Popup
 	{
 		private const REPLAY:int = 0;
@@ -60,16 +65,24 @@ package scene.gameScene.ui
 			spriteSheet.removeSubTexture(UIResource.MENU);
 		}
 		
+		/**
+		 * 해당 스테이지를 다시 시작합니다. 
+		 * @param event TrollingEvent.TOUCH_ENDED
+		 * 
+		 */
 		private function onEndedReplay(event:TrollingEvent):void
 		{
-			trace("다시하긔");
 			SceneManager.restartScene(MainStage, "Game", MainStage.currentStage);
 		}
 		
+		/**
+		 * 스테이지 선택 씬으로 돌아갑니다. 
+		 * @param event TrollingEvent.TOUCH_ENDED
+		 * 
+		 */
 		private function onEndedMenu(event:TrollingEvent):void
 		{
-			SceneManager.switchScene("stageSelect", MainStage.currentStage);
-			SceneManager.deleteScene("Game");
+			SceneManager.outScene(MainStage.currentStage);
 		}
 	}
 }

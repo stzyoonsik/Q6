@@ -1,13 +1,16 @@
-package gameData
+/**/package gameData
 {
 	import flash.events.Event;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.net.URLLoader;
-	
-	import scene.gameScene.util.AesCrypto;
 
+	/**
+	 * 인게임 환경설정 정보입니다. (배경음악, 효과음, 진동, 조작방법)
+	 * @author user
+	 * 
+	 */
 	public class SettingData extends Data
 	{
 		public static const CONTROL_SCREEN:int = 0;
@@ -17,6 +20,7 @@ package gameData
 		
 		private var _bgm:Boolean;
 		private var _sound:Boolean;
+		private var _vibration:Boolean;
 		private var _control:int;
 		
 		private var _onReadyToPreset:Function;
@@ -27,9 +31,14 @@ package gameData
 			
 			_bgm = true;
 			_sound = true;
+			_vibration = true;
 			_control = CONTROL_SCREEN;
 		}
 		
+		/**
+		 * SettingData를 AES-128로 암호화하여 JSON 파일로 출력합니다.   
+		 * 
+		 */
 		public override function write():void
 		{
 			if (!_name || !_path)
@@ -39,9 +48,10 @@ package gameData
 				return;
 			}
 			
-			var data:String =	"{\n\t\"bgm\" : "	+	_bgm.toString()		+	",\n"	+
-								"\t\"sound\" : "	+	_sound.toString()	+	",\n"	+
-								"\t\"control\" : "	+	_control.toString()	+	"\n}";
+			var data:String =	"{\n\t\"bgm\" : "	+	_bgm.toString()			+	",\n"	+
+								"\t\"sound\" : "	+	_sound.toString()		+	",\n"	+
+								"\t\"vibration\" : "+	_vibration.toString()	+	",\n"	+
+								"\t\"control\" : "	+	_control.toString()		+	"\n}";
 			
 			data = AesCrypto.encrypt(data, "jiminhyeyunyoonsik");
 			
@@ -70,6 +80,7 @@ package gameData
 			
 			_bgm = data.bgm;
 			_sound = data.sound;
+			_vibration = data.vibration;
 			_control = data.control;
 			
 			if (_onReadyToPreset)
@@ -96,6 +107,16 @@ package gameData
 		public function set sound(value:Boolean):void
 		{
 			_sound = value;
+		}
+		
+		public function get vibration():Boolean
+		{
+			return _vibration;
+		}
+		
+		public function set vibration(value:Boolean):void
+		{
+			_vibration = value;
 		}
 
 		public function get control():int

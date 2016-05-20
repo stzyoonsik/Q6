@@ -70,7 +70,9 @@ package scene.gameScene.background
 		
 		private function initColor(color:int):void
 		{
-			if(color == 0)
+			if(color == -1)
+				_topBackground.blendColor(0.5, 0.5, 0.5);
+			else if(color == 0)
 				_topBackground.blendColor(0, 1, 1);
 			else
 				_topBackground.blendColor(1, 0.5, 0.25);

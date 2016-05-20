@@ -4,7 +4,7 @@ package scene.gameScene.object.item
 	import flash.events.Event;
 	
 	import scene.gameScene.MainStage;
-	import scene.gameScene.ObjectTag;
+	import scene.gameScene.util.ObjectTag;
 	import scene.gameScene.object.Objects;
 	import loading.Resources;
 	import loading.Resources;
@@ -53,8 +53,10 @@ package scene.gameScene.object.item
 		{
 			if(_direction == 0)
 				this.x = _stageWidth * 0.475;
-			else
+			else if(_direction == 1)
 				this.x = _stageWidth * 0.525;
+			else
+				this.x = _stageWidth * 0.5;
 			
 			this.y = _stageHeight * 0.4;
 		}
@@ -74,9 +76,8 @@ package scene.gameScene.object.item
 				this.scaleY += setScale(0.03);
 				this.scaleX = this.scaleY;
 				
-				this._addY += y / 2400;
+				this._addY += y / (_stageHeight * 3.5);
 				this.y += (MainStage.speed + this._addY);
-				
 				switch(_direction)
 				{
 					//왼쪽

@@ -1,7 +1,7 @@
 package scene.gameScene.object.enemy  
 {
 	import scene.gameScene.MainStage;
-	import scene.gameScene.ObjectTag;
+	import scene.gameScene.util.ObjectTag;
 	import scene.gameScene.object.Objects;
 	import loading.Resources;
 	

@@ -1,6 +1,10 @@
 package scene.gameScene.object.player 
 {
+	import com.adobe.nativeExtensions.Vibration;
+	
 	import flash.events.Event;
+	
+	import loading.Resources;
 	
 	import scene.gameScene.MainStage;
 	import scene.gameScene.object.Objects;
@@ -11,7 +15,6 @@ package scene.gameScene.object.player
 	import scene.gameScene.object.item.Fish;
 	import scene.gameScene.object.item.Flag;
 	import scene.gameScene.util.PlayerState;
-	import loading.Resources;
 	
 	import trolling.event.TrollingEvent;
 	import trolling.media.SoundManager;
@@ -19,8 +22,12 @@ package scene.gameScene.object.player
 	
 	public class Player extends Objects
 	{		
+		private const VIBRATION_DURATION:Number = 400;
+		private var _vibrator:Vibration;
+		
 		private var _penguin:Penguin;		
 		private var _grimja:Grimja;
+		private var _struggle:Struggle;
 				
 		private var _state:String;
 		
@@ -122,9 +129,15 @@ package scene.gameScene.object.player
 			
 			_grimja = new Grimja(_resource);
 			_grimja.addEventListener("collideGrimja", onCollideWithGrimja);
+			
+			_struggle = new Struggle(_resource);
+			_struggle.y = -100;
+			
 
 			addChild(_grimja);
 			addChild(_penguin);
+			
+			_vibrator = new Vibration();
 			
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);	
 		} 		
@@ -201,6 +214,12 @@ package scene.gameScene.object.player
 					{
 						_state = PlayerState.CRASHED_RIGHT;
 					}
+					
+					// 진동 활성화 상태일 경우 진동
+					if (Vibration.isSupported && MainStage.vibration)
+					{
+						_vibrator.vibrate(VIBRATION_DURATION);
+					}
 				}				
 			}
 				
@@ -228,6 +247,12 @@ package scene.gameScene.object.player
 						
 						event.data.parent.dispatchEvent(new Event("fall"));
 					}
+					
+					// 진동 활성화 상태일 경우 진동
+					if (Vibration.isSupported && MainStage.vibration)
+					{
+						_vibrator.vibrate(VIBRATION_DURATION);
+					}
 				}
 			} 
 				
@@ -241,6 +266,12 @@ package scene.gameScene.object.player
 				else
 				{
 					_state = PlayerState.CRASHED_RIGHT;
+				}
+				
+				// 진동 활성화 상태일 경우 진동
+				if (Vibration.isSupported && MainStage.vibration)
+				{
+					_vibrator.vibrate(VIBRATION_DURATION);
 				}
 			}	
 		}
@@ -288,6 +319,7 @@ package scene.gameScene.object.player
 		 */
 		private function arrived():void
 		{
+			// BGM 변경
 			if (!_arrived)
 			{
 				SoundManager.stopAll();
@@ -411,6 +443,7 @@ package scene.gameScene.object.player
 				_crashFlag = true;
 				
 				SoundManager.play("crashed0.mp3");
+				
 				// Life 감소 처리
 				_currentLife--;
 				if (_currentLife <= 0)
@@ -497,8 +530,11 @@ package scene.gameScene.object.player
 				_currentLife--;
 				if (_currentLife <= 0)
 				{
-					_currentLife = 0;
-					
+					_currentLife = 0;					
+				}				
+				else
+				{
+					addChild(_struggle);
 				}
 				
 				if (_setCurrentLifeAtUi)
@@ -510,6 +546,8 @@ package scene.gameScene.object.player
 				{
 					die();
 				}
+				
+
 			}
 		}
 		
@@ -538,6 +576,7 @@ package scene.gameScene.object.player
 				
 				_state = PlayerState.RUN;
 				_penguin.transition(PlayerState.RUN);
+				removeChild(_struggle);
 			}			
 		}
 		
@@ -605,6 +644,7 @@ package scene.gameScene.object.player
 			_state = PlayerState.DEAD;
 			this.active = false;
 			MainStage.stageEnded = true;
+			
 			SoundManager.stopAll();
 			SoundManager.play("stageFailed.mp3");
 			

@@ -20,6 +20,7 @@ package scene.titleScene
 	import trolling.component.graphic.Image;
 	import trolling.core.SceneManager;
 	import trolling.event.TrollingEvent;
+	import trolling.media.Sound;
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
@@ -49,9 +50,11 @@ package scene.titleScene
 			{
 				event.preventDefault();
 				var dialog:DialogExtension = new DialogExtension(_eventDispatcher);
+				//dialog.showInputDialog("input ID" , onInput);
 				dialog.showAlertDialog("종료하시겠습니까?");
 			}
 		}
+		
 		
 		private function onInit(event:Event):void
 		{
@@ -89,7 +92,6 @@ package scene.titleScene
 			_backGround.y = this.height / 2;
 			_backGround.addComponent(new Image(_resource.getImageFile("title.png")));
 			
-			// add
 			var bitmapData:BitmapData = new BitmapData(10, 10);
 			var ct:ColorTransform = new ColorTransform();
 			ct.alphaMultiplier = 0; 
@@ -118,7 +120,15 @@ package scene.titleScene
 			_backGround.height = this.height;
 			
 			addChild(_backGround);
-			SoundManager.play("Opening.mp3");
+			
+			var sound:Sound = _resource.getSoundFile("Opening.mp3");
+			if (sound)
+			{
+				sound.volume = 0.5;
+				sound.loops = Sound.INFINITE;
+				SoundManager.addSound("Opening.mp3", sound);
+				SoundManager.play("Opening.mp3");
+			}
 			_resource.dispose();
 		}
 		

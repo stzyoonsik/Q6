@@ -3,7 +3,7 @@ package scene.gameScene.object.crater
 	import flash.events.Event;
 	
 	import scene.gameScene.MainStage;
-	import scene.gameScene.ObjectTag;
+	import scene.gameScene.util.ObjectTag;
 	import scene.gameScene.object.Objects;
 	import loading.Resources;
 	
@@ -109,15 +109,13 @@ package scene.gameScene.object.crater
 				removeEventListener("fall", onFall);
 			}			
 			
-			//trace(_addY);
 			if(MainStage.speed != 0)
 			{
 				this.scaleY += setScale(0.07);
 				this.scaleX = this.scaleY;
 				
-				this._addY += y / 2400;
+				this._addY += y / (_stageHeight * 3.5);
 				this.y += (MainStage.speed + this._addY);
-				
 				switch(_direction)
 				{
 					//왼쪽
