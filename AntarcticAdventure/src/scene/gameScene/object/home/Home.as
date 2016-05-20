@@ -44,11 +44,11 @@ package scene.gameScene.object.home
 		{
 			_nationFlag.pivot = PivotType.CENTER;
 			
-			if(ratio < 0.5)
+			if(ratio <= 0.5)
 			{
 				_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "hmnim0"));
 			}
-			else if(ratio < 0.8)
+			else if(ratio <= 0.8)
 			{
 				_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "jmnim0"));
 			}

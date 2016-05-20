@@ -54,12 +54,10 @@ package scene.gameScene.object.item
 		{
 			if(_direction == 0)
 				this.x = _stageWidth * 0.475;
-				
-			else if(_direction == -1)
-				this.x = _stageWidth * 0.5;
-				
 			else
-				this.x = _stageWidth * 0.525
+				this.x = _stageWidth * 0.525;
+			
+			this.y = _stageHeight * 0.4;
 			
 			
 			this.y = _stageHeight * 0.4;
@@ -80,7 +78,7 @@ package scene.gameScene.object.item
 				this.scaleY += setScale(0.03);
 				this.scaleX = this.scaleY;
 				
-				this._addY += y / 2400;
+				this._addY += y / (_stageHeight * 3);
 				this.y += (MainStage.speed + this._addY);
 				
 				switch(_direction)

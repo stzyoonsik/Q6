@@ -105,14 +105,11 @@ package scene.gameScene
 		
 		public override function dispose():void
 		{
-			// to do
 			_ui.removeEventListener(IngameUI.ENDED_SETTING_BUTTON, onEndedSettingButton);
 			_ui.removeEventListener(SettingPopup.VIBRATION_MODE, onEndedControl);
 			_ui.removeEventListener(SettingPopup.INIT_VIBRATION_MODE, onInitControlMode);
 			_ui.removeEventListener(SettingPopup.CONTROL_MODE, onEndedControl);
 			_ui.removeEventListener(SettingPopup.INIT_CONTROL_MODE, onInitControlMode);
-			
-			
 			
 			super.dispose();
 		}
@@ -189,71 +186,123 @@ package scene.gameScene
 			loadJSON("stage"+_currentStage+".json");
 			
 			var sound:Sound = _resource.getSoundFile("crashed0.mp3");
-			if (sound)
-			{
-				sound.volume = 0.6;
-				SoundManager.addSound("crashed0.mp3", sound);
-			}
+			if (sound){ sound.volume = 0.6; SoundManager.addSound("crashed0.mp3", sound); }
 			
 			sound = _resource.getSoundFile("crashed1.mp3");
-			if (sound)
-			{
-				sound.volume = 0.6;
-				SoundManager.addSound("crashed1.mp3", sound);
-			}
+			if (sound){	sound.volume = 0.6;	SoundManager.addSound("crashed1.mp3", sound); }
 			
 			sound = _resource.getSoundFile("fall.mp3");
-			if (sound)
-			{
-				sound.volume = 0.6;
-				SoundManager.addSound("fall.mp3", sound);
-			}
+			if (sound){ sound.volume = 0.6; SoundManager.addSound("fall.mp3", sound); }
 			
 			sound = _resource.getSoundFile("fish.mp3");
-			if (sound)
-			{
-				sound.volume = 0.6;
-				SoundManager.addSound("fish.mp3", sound);
-			}
+			if (sound){ sound.volume = 0.6;	SoundManager.addSound("fish.mp3", sound); }
 			
 			sound = _resource.getSoundFile("flag.mp3");
-			if (sound)
-			{
-				sound.volume = 0.6;
-				SoundManager.addSound("flag.mp3", sound);
-			}
+			if (sound){	sound.volume = 0.6;	SoundManager.addSound("flag.mp3", sound); }
 			
 			sound = _resource.getSoundFile("jump.mp3");
-			if (sound)
-			{
-				sound.volume = 0.6;
-				SoundManager.addSound("jump.mp3", sound);
-			}
+			if (sound){	sound.volume = 0.6;	SoundManager.addSound("jump.mp3", sound); }
 			
 			sound = _resource.getSoundFile("MainBgm.mp3");
-			if (sound)
-			{
-				sound.volume = 0.3;
-				sound.loops = Sound.INFINITE;
-				SoundManager.addSound("MainBgm.mp3", sound);
-				SoundManager.play("MainBgm.mp3");
-			}
+			if (sound){	sound.volume = 0.3;	sound.loops = Sound.INFINITE; SoundManager.addSound("MainBgm.mp3", sound); SoundManager.play("MainBgm.mp3"); }
 			
 			sound = _resource.getSoundFile("stageCleared.mp3");
-			if (sound)
-			{
-				sound.volume = 0.5;
-				sound.loops = Sound.INFINITE;
-				SoundManager.addSound("stageCleared.mp3", sound);
-			}
+			if (sound){	sound.volume = 0.5;	sound.loops = Sound.INFINITE; SoundManager.addSound("stageCleared.mp3", sound);	}
 			
 			sound = _resource.getSoundFile("stageFailed.mp3");
-			if (sound)
+			if (sound){	sound.volume = 0.6;	sound.loops = Sound.INFINITE; SoundManager.addSound("stageFailed.mp3", sound); }			
+		}
+		
+		private function loadJSON(fileName:String):void
+		{
+			var urlRequest:URLRequest  = new URLRequest(_dataDir.resolvePath(fileName).url);
+			
+			var urlLoader:URLLoader = new URLLoader();
+			urlLoader.addEventListener(Event.COMPLETE, onCompleteLoadJSON);
+			
+			try
 			{
-				sound.volume = 0.6;
-				sound.loops = Sound.INFINITE;
-				SoundManager.addSound("stageFailed.mp3", sound);
-			}			
+				urlLoader.load(urlRequest);
+			} 
+			catch (error:Error)
+			{
+				trace("Cannot load : " + error.message);
+			}
+		}
+		
+		private function onCompleteLoadJSON(event:Event):void
+		{
+			var loader:URLLoader = URLLoader(event.target);
+			var decryptData:String = AesCrypto.decrypt(loader.data, "jiminhyeyunyoonsik");
+			var data:Object = JSON.parse(decryptData);
+			
+			_backgroundColor = data.backgroundColor;			
+			
+			for(var i:int = 0; i < data.curve.length; ++i)
+			{
+				_curveDirectionVector.push(data.curve[i]);
+			}
+			
+			for(i = 0; i < data.object.length; ++i)
+			{
+				_objectArray.push(data.object[i]);
+				if (data.object[i] == ObjectName.FLAG_LEFT || data.object[i] == ObjectName.FLAG_RIGHT)
+				{
+					_totalNumFlag++;
+				}
+			}
+			
+			_ui.initialize(_currentStage, _objectArray.length, PLAYER_MAX_LIFE, _totalNumFlag, pause);
+			_ui.addEventListener(IngameUI.ENDED_SETTING_BUTTON, onEndedSettingButton);
+			_ui.addEventListener(SettingPopup.INIT_VIBRATION_MODE, onInitVibrationMode);
+			_ui.addEventListener(SettingPopup.INIT_CONTROL_MODE, onInitControlMode);
+			_ui.addEventListener(SettingPopup.VIBRATION_MODE, onEndedVibration);
+			_ui.addEventListener(SettingPopup.CONTROL_MODE, onEndedControl);
+			
+			_player.maxLife = PLAYER_MAX_LIFE;
+			_player.setCurrentLifeAtUi = setCurrentLife;
+			_player.setCurrentFlagAtUi = setCurrentFlag;
+			_player.onCleared = onCleared;
+			_player.onFailed = onFailed;
+			
+			
+			//30%의 확률로 눈 내림
+			if(Math.random() > 0.7)
+			{
+				_snowVector = new Vector.<GameObject>();
+				_backgroundColor = -1;
+				_background = new Background(_resource, _backgroundColor);
+				addChildAt(_background, 0);
+				
+				for(i = 0; i < MAX_SNOW_COUNT; ++i)
+				{
+					_snow = new Snow(_resource);
+					_snowVector.push(_snow);
+					addChild(_snow);
+				}				
+			}
+			else
+			{
+				_background = new Background(_resource, _backgroundColor);
+				addChildAt(_background, 0);
+			}
+			
+			_coverFace.width = _stageWidth;
+			_coverFace.height = _stageHeight;
+			_coverFace.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchHover);		
+			_coverFace.addEventListener(TrollingEvent.TOUCH_ENDED, onTouchEnded);
+			addChild(_coverFace);
+			
+			_coverFace.addChild(_ui);
+			
+			_controller = new Controller(_resource);
+			_coverFace.addChild(_controller);
+			_controller.addEventListener("move", onMove);
+			_controller.addEventListener("jump", onJump);
+			_controller.visible = false;
+			
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			loader.removeEventListener(Event.COMPLETE, onCompleteLoadJSON);
 		}
 		
 		/**
@@ -477,99 +526,7 @@ package scene.gameScene
 			event.currentTarget.removeEventListener(PlayerState.ARRIVE, onArrive);
 		}
 		
-		private function loadJSON(fileName:String):void
-		{
-			var urlRequest:URLRequest  = new URLRequest(_dataDir.resolvePath(fileName).url);
-			
-			var urlLoader:URLLoader = new URLLoader();
-			urlLoader.addEventListener(Event.COMPLETE, onCompleteLoadJSON);
-			
-			try
-			{
-				urlLoader.load(urlRequest);
-			} 
-			catch (error:Error)
-			{
-				trace("Cannot load : " + error.message);
-			}
-		}
 		
-		private function onCompleteLoadJSON(event:Event):void
-		{
-			var loader:URLLoader = URLLoader(event.target);
-			var decryptData:String = AesCrypto.decrypt(loader.data, "jiminhyeyunyoonsik");
-			var data:Object = JSON.parse(decryptData);
-			
-			_backgroundColor = data.backgroundColor;			
-			
-			for(var i:int = 0; i < data.curve.length; ++i)
-			{
-				_curveDirectionVector.push(data.curve[i]);
-			}
-			
-			for(i = 0; i < data.object.length; ++i)
-			{
-				_objectArray.push(data.object[i]);
-				if (data.object[i] == ObjectName.FLAG_LEFT || data.object[i] == ObjectName.FLAG_RIGHT)
-				{
-					_totalNumFlag++;
-				}
-			}
-			
-			_ui.initialize(_currentStage, _objectArray.length, PLAYER_MAX_LIFE, _totalNumFlag, pause);
-			_ui.addEventListener(IngameUI.ENDED_SETTING_BUTTON, onEndedSettingButton);
-			_ui.addEventListener(SettingPopup.INIT_VIBRATION_MODE, onInitVibrationMode);
-			_ui.addEventListener(SettingPopup.INIT_CONTROL_MODE, onInitControlMode);
-			_ui.addEventListener(SettingPopup.VIBRATION_MODE, onEndedVibration);
-			_ui.addEventListener(SettingPopup.CONTROL_MODE, onEndedControl);
-			
-			_player.maxLife = PLAYER_MAX_LIFE;
-			_player.setCurrentLifeAtUi = setCurrentLife;
-			_player.setCurrentFlagAtUi = setCurrentFlag;
-			_player.onCleared = onCleared;
-			_player.onFailed = onFailed;
-			
-			
-			//30%의 확률로 눈 내림
-			if(Math.random() > 0.7)
-			{
-				_snowVector = new Vector.<GameObject>();
-				_backgroundColor = -1;
-				_background = new Background(_resource, _backgroundColor);
-				addChildAt(_background, 0);
-				
-				for(i = 0; i < MAX_SNOW_COUNT; ++i)
-				{
-					_snow = new Snow(_resource);
-					_snowVector.push(_snow);
-					addChild(_snow);
-				}				
-			}
-			else
-			{
-				_background = new Background(_resource, _backgroundColor);
-				addChildAt(_background, 0);
-			}
-			
-			
-				
-			_coverFace.width = _stageWidth;
-			_coverFace.height = _stageHeight;
-			_coverFace.addEventListener(TrollingEvent.TOUCH_HOVER, onTouchHover);		
-			_coverFace.addEventListener(TrollingEvent.TOUCH_ENDED, onTouchEnded);
-			addChild(_coverFace);
-			
-			_coverFace.addChild(_ui);
-			
-			_controller = new Controller(_resource);
-			_coverFace.addChild(_controller);
-			_controller.addEventListener("move", onMove);
-			_controller.addEventListener("jump", onJump);
-			_controller.visible = false;
-			
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			loader.removeEventListener(Event.COMPLETE, onCompleteLoadJSON);
-		}
 		
 		/**
 		 * 오브젝트를 생성하는 메소드 
@@ -581,70 +538,43 @@ package scene.gameScene
 			{
 				//도착
 				case ObjectName.HOME:
-					var home:Home = new Home(_resource, Number(_player.currentFlag/_totalNumFlag));
-					addChildAt(home, 1);
-					home.addEventListener(PlayerState.ARRIVE, onArrive);
-					break;
+					var home:Home = new Home(_resource, Number(_player.currentFlag/_totalNumFlag)); addChildAt(home, 1); home.addEventListener(PlayerState.ARRIVE, onArrive); break;
 				//아무것도 생성 안함
-				case ObjectName.EMPTY:
+				case ObjectName.EMPTY: 
 					break;
 				//타원 크레이터 가운데
-				case ObjectName.ELLIPSE_NORMAL:
-					var ellipseCrater:EllipseCrater = new EllipseCrater(_resource, -1);
-					addChildAt(ellipseCrater, 1);
-					break;
+				case ObjectName.ELLIPSE_NORMAL: 
+					var ellipseCrater:EllipseCrater = new EllipseCrater(_resource, -1);	addChildAt(ellipseCrater, 1); break;
 				//타원 크레이터 왼쪽
 				case ObjectName.ELLIPSE_LEFT:
-					ellipseCrater = new EllipseCrater(_resource, 0);
-					addChildAt(ellipseCrater, 1);
-					break;
+					ellipseCrater = new EllipseCrater(_resource, 0); addChildAt(ellipseCrater, 1); break;
 				//타원 크레이터 오른쪽
 				case ObjectName.ELLIPSE_RIGHT:
-					ellipseCrater = new EllipseCrater(_resource, 1);
-					addChildAt(ellipseCrater, 1);
-					break;
+					ellipseCrater = new EllipseCrater(_resource, 1); addChildAt(ellipseCrater, 1); break;
 				//타원 크레이터 왼쪽, 오른쪽
 				case ObjectName.ELLIPSE_LEFT_RIGHT:
-					ellipseCrater = new EllipseCrater(_resource, 0);
-					addChildAt(ellipseCrater, 1);
-					ellipseCrater = new EllipseCrater(_resource, 1);
-					addChildAt(ellipseCrater, 1);
-					break;
+					ellipseCrater = new EllipseCrater(_resource, 0); addChildAt(ellipseCrater, 1); ellipseCrater = new EllipseCrater(_resource, 1); addChildAt(ellipseCrater, 1); break;
 				//네모 크레이터 왼쪽
 				case ObjectName.RECT_LEFT:
-					var rectangleCrater:RectangleCrater = new RectangleCrater(_resource, 0);
-					addChildAt(rectangleCrater, 1);
-					break;
+					var rectangleCrater:RectangleCrater = new RectangleCrater(_resource, 0); addChildAt(rectangleCrater, 1); break;
 				//네모 크레이터 오른쪽
 				case ObjectName.RECT_RIGHT:
-					rectangleCrater = new RectangleCrater(_resource, 1);
-					addChildAt(rectangleCrater, 1);
-					break;
+					rectangleCrater = new RectangleCrater(_resource, 1); addChildAt(rectangleCrater, 1); break;
 				//깃발 왼쪽
 				case ObjectName.FLAG_LEFT:
-					var flag:Flag = new Flag(_resource, 0);
-					addChildAt(flag, 1);
-					break;
+					var flag:Flag = new Flag(_resource, 0);	addChildAt(flag, 1); break;
 				//깃발 오른쪽
 				case ObjectName.FLAG_RIGHT:
-					flag = new Flag(_resource, 1);
-					addChildAt(flag, 1);
-					break;
+					flag = new Flag(_resource, 1); addChildAt(flag, 1);	break;
 				//콜라 가운데
 				case ObjectName.COKE_NORMAL:
-					var coke:Coke = new Coke(_resource, -1);
-					addChildAt(coke, 1);
-					break;
+					var coke:Coke = new Coke(_resource, -1); addChildAt(coke, 1); break;
 				//콜라 왼쪽
 				case ObjectName.COKE_LEFT:
-					coke = new Coke(_resource, 0);
-					addChildAt(coke, 1);
-					break;
+					coke = new Coke(_resource, 0); addChildAt(coke, 1);	break;
 				//콜라 오른쪽
 				case ObjectName.COKE_RIGHT:
-					coke = new Coke(_resource, 1);
-					addChildAt(coke, 1);
-					break;
+					coke = new Coke(_resource, 1); addChildAt(coke, 1);	break;
 				default:
 					break;
 				
@@ -725,7 +655,6 @@ package scene.gameScene
 		 * @param event
 		 * 
 		 */
-		private function onEndedSettingPopup(event:TrollingEvent):void
 		private function onEndedSettingButton(event:TrollingEvent):void
 		{
 			trace("셋팅팝업 : " + event.data);
@@ -770,17 +699,8 @@ package scene.gameScene
 			{
 				_controller.visible = true;	
 			}
-		}
+		}		
 		
-		/**
-		 * 버튼 조작 모드에서 좌,우를 터치할때 발생하는 콜백 메소드 
-		 * @param event
-		 * 
-		 */
-		private function onEndedControl(event:TrollingEvent):void
-		{
-			_controlMode = int(event.data);
-		}
 		
 		private function onMove(event:TrollingEvent):void
 		{

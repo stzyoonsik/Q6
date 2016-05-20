@@ -74,7 +74,7 @@ package scene.gameScene.object.crater
 				this.scaleY += setScale(0.03);
 				this.scaleX = this.scaleY;
 				
-				this._addY += y / 2400;
+				this._addY += y / (_stageHeight * 3);
 				this.y += (MainStage.speed + this._addY);
 				
 				switch(_direction)

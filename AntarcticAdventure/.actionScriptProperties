@@ -40,6 +40,7 @@
       <libraryPathEntry kind="5" linkType="2" path="NativeExtension/NotificationExtension.ane"/>
       <libraryPathEntry kind="5" linkType="2" path="NativeExtension/DialogExtension.ane"/>
       <libraryPathEntry kind="5" linkType="2" path="NativeExtension/AndroidFullScreen.ane"/>
+      <libraryPathEntry kind="5" linkType="2" path="NativeExtension/com.adobe.extensions.Vibration.ane"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
@@ -54,21 +55,21 @@
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
   <buildTargets>
     <buildTarget airDownloadURL="https://market.android.com/details?id=com.adobe.air" androidSettingsVersion="2" buildTargetName="device" isCurrent="true" platformId="com.adobe.flexide.multiplatform.android.platform">
+      <multiPlatformSettings enabled="true" hideAneLibSymbols="0" includePlatformLibs="false" platformID="com.adobe.flexide.multiplatform.android.platform" reducedSizePackaging="false" version="1"/>
       <airSettings airCertificatePath="C:/Users/user/Desktop/yoonsik.p12" airTimestamp="true" anePathSet="true" version="1">
         <airExcludes/>
         <anePaths>
-          <anePathEntry path="NativeExtension/com.adobe.extensions.Vibration.ane"/>
           <anePathEntry path="NativeExtension/com.distriqt.AndroidSupport.ane"/>
           <anePathEntry path="NativeExtension/NotificationExtension.ane"/>
           <anePathEntry path="NativeExtension/DialogExtension.ane"/>
           <anePathEntry path="NativeExtension/AndroidFullScreen.ane"/>
+          <anePathEntry path="NativeExtension/com.adobe.extensions.Vibration.ane"/>
         </anePaths>
         <newLaunchParams/>
         <modifiedLaunchParams/>
         <newPackagingParams/>
         <modifiedPackagingParams/>
       </airSettings>
-      <multiPlatformSettings enabled="true" hideAneLibSymbols="0" includePlatformLibs="false" platformID="com.adobe.flexide.multiplatform.android.platform" reducedSizePackaging="false" version="1"/>
       <actionScriptSettings version="1"/>
     </buildTarget>
     <buildTarget buildTargetName="default" isCurrent="true" platformId="default">
