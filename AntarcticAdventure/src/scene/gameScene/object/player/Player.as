@@ -215,6 +215,7 @@ package scene.gameScene.object.player
 						_state = PlayerState.CRASHED_RIGHT;
 					}
 					
+					// 진동 활성화 상태일 경우 진동
 					if (Vibration.isSupported && MainStage.vibration)
 					{
 						_vibrator.vibrate(VIBRATION_DURATION);
@@ -247,6 +248,7 @@ package scene.gameScene.object.player
 						event.data.parent.dispatchEvent(new Event("fall"));
 					}
 					
+					// 진동 활성화 상태일 경우 진동
 					if (Vibration.isSupported && MainStage.vibration)
 					{
 						_vibrator.vibrate(VIBRATION_DURATION);
@@ -266,6 +268,7 @@ package scene.gameScene.object.player
 					_state = PlayerState.CRASHED_RIGHT;
 				}
 				
+				// 진동 활성화 상태일 경우 진동
 				if (Vibration.isSupported && MainStage.vibration)
 				{
 					_vibrator.vibrate(VIBRATION_DURATION);
@@ -316,6 +319,7 @@ package scene.gameScene.object.player
 		 */
 		private function arrived():void
 		{
+			// BGM 변경
 			if (!_arrived)
 			{
 				SoundManager.stopAll();
@@ -439,6 +443,7 @@ package scene.gameScene.object.player
 				_crashFlag = true;
 				
 				SoundManager.play("crashed0.mp3");
+				
 				// Life 감소 처리
 				_currentLife--;
 				if (_currentLife <= 0)
@@ -639,6 +644,7 @@ package scene.gameScene.object.player
 			_state = PlayerState.DEAD;
 			this.active = false;
 			MainStage.stageEnded = true;
+			
 			SoundManager.stopAll();
 			SoundManager.play("stageFailed.mp3");
 			

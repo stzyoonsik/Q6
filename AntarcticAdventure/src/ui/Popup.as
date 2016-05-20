@@ -6,9 +6,15 @@ package ui
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 
+	/**
+	 * Popup 틀래스입니다. 호출 시 점점 커지며 나타나도록 연출되었습니다. 
+	 * @author user
+	 * 
+	 */
 	public class Popup extends GameObject
 	{
 		public static const END_SHOW:String = "endShow";
+		
 		private const TAG:String = "[Popup]";
 		
 		private var _delay:uint;
@@ -18,6 +24,11 @@ package ui
 		private var _originScaleY:Number;
 		private var _originAlpha:Number;
 		
+		/**
+		 * Popup을 생성합니다. 기본적으로 visible = false 상태입니다. 
+		 * @param canvas Popup으로 표시될 Texture입니다.
+		 * 
+		 */
 		public function Popup(canvas:Texture)
 		{
 			if (!canvas)
@@ -38,6 +49,10 @@ package ui
 			_originAlpha = this.alpha;
 		}
 		
+		/**
+		 * Popup을 표시합니다. 
+		 * 
+		 */
 		public function show():void
 		{
 			_originScaleX = this.scaleX;
@@ -52,17 +67,31 @@ package ui
 			this.visible = true;
 		}
 		
+		/**
+		 * Popup을 닫습니다. 
+		 * 
+		 */
 		public function close():void
 		{
 			this.visible = false;
 		}
 		
-		public function get delay():Number
+		/**
+		 * Popup이 표시되는 데에 걸리는 프레임 수입니다.
+		 * @return 
+		 * 
+		 */
+		public function get delay():uint
 		{
 			return _delay;
 		}
 		
-		public function set delay(value:Number):void
+		/**
+		 * Popup이 표시되는 데에 걸리는 프레임 수입니다. 값이 클수록 부드럽고 느리게 나타납니다.
+		 * @param value Popup의 delay입니다. 최솟값은 1이며 기본값은 5입니다.
+		 * 
+		 */
+		public function set delay(value:uint):void
 		{
 			if (value < 1)
 			{
@@ -71,6 +100,11 @@ package ui
 			_delay = value;
 		}
 		
+		/**
+		 * Popup에 show를 호출할 경우 프레임 수를 카운트하여 Popup의 크기를 조정합니다. 
+		 * @param event TrollingEvent.ENTER_FRAME
+		 * Popup의 parent는 Popup.END_SHOW 이벤트를 수신하여 Popup의 표시가 끝나는 시점을 파악할 수 있습니다.
+		 */
 		private function onEnterFrame(event:TrollingEvent):void
 		{
 			if (!this.visible)

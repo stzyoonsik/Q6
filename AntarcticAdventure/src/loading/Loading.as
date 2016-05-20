@@ -4,8 +4,6 @@ package loading
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
 	import trolling.rendering.Texture;
-	
-	import ui.gauge.BarGauge;
 
 	public class Loading extends GameObject
 	{

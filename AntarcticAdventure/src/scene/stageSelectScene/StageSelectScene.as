@@ -84,6 +84,7 @@ package scene.stageSelectScene
 		{
 			if(this.data == null)
 			{
+				// read PlayData
 				_playData = new PlayData("playData", File.applicationStorageDirectory.resolvePath("data"));
 				_playData.read();
 				
@@ -256,6 +257,7 @@ package scene.stageSelectScene
 				_buttonVector[i].addChild(root);
 				_starVector.push(root);
 			}
+			
 			_exitPopup = new ExitPopup(_resource.getSubTexture("ExitPopupSheet.png", "popup"));
 			_exitPopup.x = this.width / 2;
 			_exitPopup.y = this.height / 2;
@@ -310,16 +312,37 @@ package scene.stageSelectScene
 				setStageColor(_buttonVector[i]);
 			}
 			
+			// _stageIndex에 따라 _prevButton, _nextButton visible 여부 제어
+			if (_stageIndex == 0)
+			{
+				_prevButton.visible = false;
+				_nextButton.visible = true;
+			}
+			else if ((_stageIndex + 1) * 5 == LAST_STAGE_ID)
+			{
+				_prevButton.visible = true;
+				_nextButton.visible = false;
+			}
+			else
+			{
+				_prevButton.visible = true;
+				_nextButton.visible = true;
+			}
+			
 			setStar();
 		}
 		
+		/**
+		 * PlayData에 기준하여 접근 제한할 stageButton의 색상을 조정합니다.
+		 * @param stageButton 색상을 조정할 stageButton입니다.
+		 * 
+		 */
 		private function setStageColor(stageButton:Button):void
 		{
 			var stageId:int = int(stageButton.name);
 			if (stageId == 1)
 			{
 				stageButton.blendColor(1, 1, 1);
-				
 				return;
 			}
 			
@@ -340,6 +363,10 @@ package scene.stageSelectScene
 			}
 		}
 		
+		/**
+		 * PlayData에 기준하여 각 stageButton에 별점을 표시합니다. 
+		 * 
+		 */
 		private function setStar():void
 		{
 			if (!_playData)
@@ -410,6 +437,7 @@ package scene.stageSelectScene
 				return;
 			}
 			
+			// 첫 번째 스테이지이거나 이전 스테이지의 클리어 기록이 있는 스테이지일 경우에만 진입 가능
 			var stageId:int = int(stageButton.name);
 			var isAccessible:Boolean = true;
 			if (stageId > 1)

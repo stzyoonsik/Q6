@@ -2,6 +2,11 @@ package scene.gameScene.ui
 {
 	import flash.filesystem.File;
 
+	/**
+	 * IngameUI에 사용되는 리소스 관련 이름을 정리한 클래스입니다. 
+	 * @author user
+	 * 
+	 */
 	public final class UIResource
 	{
 		public static const DIRECTORY:String = File.applicationDirectory.resolvePath("scene/gameScene/sprite").url;

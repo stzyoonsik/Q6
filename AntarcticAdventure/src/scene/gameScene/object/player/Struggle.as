@@ -4,7 +4,6 @@ package scene.gameScene.object.player
 	
 	import scene.gameScene.MainStage;
 	import scene.gameScene.object.Objects;
-	import scene.gameScene.util.PlayerState;
 	
 	import trolling.component.animation.Animator;
 	import trolling.component.animation.State;

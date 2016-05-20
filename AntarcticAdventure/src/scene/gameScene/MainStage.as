@@ -106,14 +106,19 @@ package scene.gameScene
 		public override function dispose():void
 		{
 			_ui.removeEventListener(IngameUI.ENDED_SETTING_BUTTON, onEndedSettingButton);
-			_ui.removeEventListener(SettingPopup.VIBRATION_MODE, onEndedControl);
-			_ui.removeEventListener(SettingPopup.INIT_VIBRATION_MODE, onInitControlMode);
-			_ui.removeEventListener(SettingPopup.CONTROL_MODE, onEndedControl);
+			_ui.removeEventListener(SettingPopup.INIT_VIBRATION_MODE, onInitVibrationMode);
 			_ui.removeEventListener(SettingPopup.INIT_CONTROL_MODE, onInitControlMode);
+			_ui.removeEventListener(SettingPopup.VIBRATION_MODE, onEndedVibration);
+			_ui.removeEventListener(SettingPopup.CONTROL_MODE, onEndedControl);
 			
 			super.dispose();
 		}
 		
+		/**
+		 * MainStage의 활성화 여부를 제어합니다. 
+		 * @param value true: 활성화 / false: 비활성화
+		 * 
+		 */
 		public function pause(value:Boolean):void
 		{
 			this.active = value;
@@ -121,8 +126,6 @@ package scene.gameScene
 		
 		private function oninit(event:Event):void
 		{
-			this.name = "MainStage";
-			
 			_currentStage = this.data as int;
 			_stageEnded = false;
 			
@@ -185,6 +188,7 @@ package scene.gameScene
 			//readTXT("stage.txt");
 			loadJSON("stage"+_currentStage+".json");
 			
+			// Sound 등록 및 기타 설정
 			var sound:Sound = _resource.getSoundFile("crashed0.mp3");
 			if (sound){ sound.volume = 0.6; SoundManager.addSound("crashed0.mp3", sound); }
 			
@@ -685,7 +689,6 @@ package scene.gameScene
 			_vibration = event.data;
 		}
 		
-		
 		private function onEndedVibration(event:TrollingEvent):void
 		{
 			_vibration = event.data;
@@ -702,6 +705,11 @@ package scene.gameScene
 		}		
 		
 		
+		/**
+		 * 버튼 조작 모드에서 좌,우를 터치할때 발생하는 콜백 메소드 
+		 * @param event
+		 * 
+		 */
 		private function onMove(event:TrollingEvent):void
 		{
 			if(_controlMode == SettingData.CONTROL_SCREEN)

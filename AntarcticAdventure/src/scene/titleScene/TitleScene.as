@@ -92,7 +92,6 @@ package scene.titleScene
 			_backGround.y = this.height / 2;
 			_backGround.addComponent(new Image(_resource.getImageFile("title.png")));
 			
-			// add
 			var bitmapData:BitmapData = new BitmapData(10, 10);
 			var ct:ColorTransform = new ColorTransform();
 			ct.alphaMultiplier = 0; 
