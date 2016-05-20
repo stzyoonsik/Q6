@@ -11,7 +11,6 @@ package loading
 	import flash.utils.Dictionary;
 	
 	import trolling.media.Sound;
-	import trolling.media.SoundManager;
 	import trolling.rendering.Texture;
 	
 	public class Resources extends EventDispatcher

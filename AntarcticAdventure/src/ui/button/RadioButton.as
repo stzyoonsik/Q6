@@ -3,6 +3,11 @@ package ui.button
 	import trolling.event.TrollingEvent;
 	import trolling.rendering.Texture;
 
+	/**
+	 * 복수의 버튼이 하나의 선택값을 가지는 라디오 버튼 클래스입니다. RadioButtonManager에 등록하여 사용합니다. 
+	 * @author user
+	 * 
+	 */
 	public class RadioButton extends SelectButton
 	{
 		private var _id:int;
@@ -46,6 +51,11 @@ package ui.button
 			_id = value;
 		}
 
+		/**
+		 * 선택되었을 경우 호출하는 RadioButtonManager의 함수입니다.
+		 * @param value
+		 *
+		 */
 		public function set onSelected(value:Function):void
 		{
 			_onSelected = value;

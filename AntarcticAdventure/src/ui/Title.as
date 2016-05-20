@@ -6,6 +6,11 @@ package ui
 	import trolling.rendering.Texture;
 	import trolling.utils.PivotType;
 
+	/**
+	 * fade 연출이 가능한 Title 클래스입니다. 
+	 * @author user
+	 * 
+	 */
 	public class Title extends GameObject
 	{
 		private const TAG:String = "[Title]";
@@ -18,6 +23,13 @@ package ui
 		
 		private var _mainTitleHeight:Number;
 		
+		/**
+		 * Title을 생성합니다. 지정한 resource들이 화면 가운데에 한 행으로 표시됩니다. 
+		 * @param stageWidth 화면 너비입니다.
+		 * @param stageHeight 화면 높이입니다.
+		 * @param resources Title로 표시하고자 하는 Texture Vector입니다.
+		 * 
+		 */
 		public function Title(stageWidth:Number, stageHeight:Number, resources:Vector.<Texture>)
 		{
 			if (!resources)
@@ -71,6 +83,13 @@ package ui
 			super.dispose();
 		}
 		
+		/**
+		 * 서브 타이틀을 추가합니다. 서브 타이을은 메인 타이틀의 아래쪽에 표시됩니다. 메인 타이틀의 y값이 재조정됩니다.
+		 * @param stageWidth 화면 너비입니다.
+		 * @param stageHeight 화면 높이입니다.
+		 * @param resources Title로 표시하고자 하는 Texture Vector입니다.
+		 * 
+		 */
 		public function addSubTitle(stageWidth:int, stageHeight:int, resources:Vector.<Texture>):void
 		{
 			if (!resources)
@@ -113,11 +132,21 @@ package ui
 			}
 		}
 		
+		/**
+		 * fade 여부입니다.
+		 * @return 
+		 * 
+		 */
 		public function get isFade():Boolean
 		{
 			return _isFade;
 		}
 		
+		/**
+		 * fade 여부입니다.
+		 * @param value
+		 * 
+		 */
 		public function set isFade(value:Boolean):void
 		{
 			if (value)
@@ -138,17 +167,32 @@ package ui
 			_isFade = value;
 		}
 		
+		/**
+		 * fade 효과의 interval(프레임 수)입니다. 정해진 interval 동안 Title의 alpha값이 0에 가까워집니다. interval의 기본값은 30입니다.
+		 * @return 
+		 * 
+		 */
 		public function get fadeInterval():uint
 		{
 			return _fadeInterval;
 		}
 
+		/**
+		 * fade 효과의 interval(프레임 수)입니다. 정해진 interval 동안 Title의 alpha값이 0에 가까워집니다. interval의 기본값은 30입니다.
+		 * @param value
+		 * 
+		 */
 		public function set fadeInterval(value:uint):void
 		{
 			_fadeInterval = value;
 			_frameCounter = _fadeInterval;
 		}
 		
+		/**
+		 * isFade가 true일 경우 매 프레임 Title의 alpha값을 조정합니다. alpha값이 0이 되면 dispose됩니다. 
+		 * @param event TrollingEvent.ENTER_FRAME
+		 * 
+		 */
 		private function onEnterFrame(event:TrollingEvent):void
 		{
 			if (!_isFade)

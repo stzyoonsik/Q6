@@ -25,6 +25,11 @@ package scene.gameScene.ui
 	import ui.button.RadioButtonManager;
 	import ui.button.SelectButton;
 
+	/**
+	 * 설정 팝업입니다. 
+	 * @author user
+	 * 
+	 */
 	public class SettingPopup extends Popup
 	{
 		public static const INIT_VIBRATION_MODE:String = "initVibrationMode";
@@ -193,6 +198,10 @@ package scene.gameScene.ui
 			spriteSheet.removeSubTexture(UIResource.BUTTON_ORANGE);
 		}
 		
+		/**
+		 * 저장된 SettingData가 있을 경우 해당 설정값으로 preset합니다. 
+		 * 
+		 */
 		private function preset():void
 		{
 			if (!_settingData.bgm)
@@ -226,6 +235,11 @@ package scene.gameScene.ui
 			}
 		}
 		
+		/**
+		 * 체크박스 선택 여부에 따라 BGM을 제어합니다. 
+		 * @param event TrollingEvent.TOUCH_ENDED
+		 * 
+		 */
 		private function onEndedBgm(event:TrollingEvent):void
 		{
 			// BGM on/off
@@ -248,6 +262,11 @@ package scene.gameScene.ui
 			}
 		}
 		
+		/**
+		 * 체크박스 선택 여부에 따라 효과음을 제어합니다. 
+		 * @param event TrollingEvent.TOUCH_ENDED
+		 * 
+		 */
 		private function onEndedSound(event:TrollingEvent):void
 		{
 			// Sound on/off
@@ -268,6 +287,11 @@ package scene.gameScene.ui
 			}
 		}
 		
+		/**
+		 * 체크박스 선택 여부에 따라 진동을 제어합니다. 
+		 * @param event TrollingEvent.TOUCH_ENDED
+		 * SettingPopup.VIBRATION_MODE 이벤트를 dispatch합니다.
+		 */
 		private function onEndedVibration(event:TrollingEvent):void
 		{
 			// Vibration on/off
@@ -275,25 +299,45 @@ package scene.gameScene.ui
 			dispatchEvent(new TrollingEvent(VIBRATION_MODE, _settingData.vibration));
 		}
 		
+		/**
+		 * 컨트롤 모드를 Screen으로 변경합니다. 
+		 * @param event TrollingEvent.TOUCH_ENDED
+		 * SettingPopup.CONTROL_MODE 이벤트를 dispatch합니다. 
+		 */
 		private function onEndedScreen(event:TrollingEvent):void
 		{
-			// switch control type	
+			// switch control mode	
 			_settingData.control = SettingData.CONTROL_SCREEN;
 			dispatchEvent(new TrollingEvent(CONTROL_MODE, _settingData.control));
 		}
 		
+		/**
+		 * 컨트롤 모드를 Button으로 변경합니다. 
+		 * @param event TrollingEvent.TOUCH_ENDED
+		 * SettingPopup.CONTROL_MODE 이벤트를 dispatch합니다. 
+		 */
 		private function onEndedButton(event:TrollingEvent):void
 		{
-			// switch control type
+			// switch control mode
 			_settingData.control = SettingData.CONTROL_BUTTON;
 			dispatchEvent(new TrollingEvent(CONTROL_MODE, _settingData.control));
 		}
 		
+		/**
+		 * 해당 스테이지를 다시 시작합니다. 
+		 * @param event TrollingEvent.TOUCH_ENDED
+		 * 
+		 */
 		private function onEndedReplay(event:TrollingEvent):void
 		{
 			SceneManager.restartScene(MainStage, "Game", MainStage.currentStage);
 		}
 		
+		/**
+		 * 스테이지 선택 씬으로 돌아갑니다. 
+		 * @param event TrollingEvent.TOUCH_ENDED
+		 * 
+		 */
 		private function onEndedMenu(event:TrollingEvent):void
 		{
 			SceneManager.outScene(MainStage.currentStage);

@@ -5,6 +5,11 @@ package ui.button
 	import trolling.event.TrollingEvent;
 	import trolling.rendering.Texture;
 
+	/**
+	 * 선택 상태를 나타낼 수 있는 버튼인 SelectButton 클래스입니다.  
+	 * @author user
+	 * 
+	 */
 	public class SelectButton extends Button
 	{
 		private const TAG:String = "[SelectButton]";
@@ -14,6 +19,12 @@ package ui.button
 		protected var _isSelected:Boolean;
 		private var _textures:Vector.<Texture>;
 		
+		/**
+		 * SelectButton을 생성합니다. 
+		 * @param defaultTexture 기본 상태에 표시할 Texture입니다.
+		 * @param selectedTexture 선택 상태에 표시할 Texture입니다.
+		 * 
+		 */
 		public function SelectButton(defaultTexture:Texture, selectedTexture:Texture)
 		{
 			super(defaultTexture);

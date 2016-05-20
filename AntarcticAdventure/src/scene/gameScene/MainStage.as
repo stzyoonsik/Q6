@@ -101,18 +101,20 @@ package scene.gameScene
 		
 		public override function dispose():void
 		{
-			// to do
 			_ui.removeEventListener(IngameUI.ENDED_SETTING_BUTTON, onEndedSettingButton);
-			_ui.removeEventListener(SettingPopup.VIBRATION_MODE, onEndedControl);
-			_ui.removeEventListener(SettingPopup.INIT_VIBRATION_MODE, onInitControlMode);
-			_ui.removeEventListener(SettingPopup.CONTROL_MODE, onEndedControl);
+			_ui.removeEventListener(SettingPopup.INIT_VIBRATION_MODE, onInitVibrationMode);
 			_ui.removeEventListener(SettingPopup.INIT_CONTROL_MODE, onInitControlMode);
-			
-			
+			_ui.removeEventListener(SettingPopup.VIBRATION_MODE, onEndedVibration);
+			_ui.removeEventListener(SettingPopup.CONTROL_MODE, onEndedControl);
 			
 			super.dispose();
 		}
 		
+		/**
+		 * MainStage의 활성화 여부를 제어합니다. 
+		 * @param value true: 활성화 / false: 비활성화
+		 * 
+		 */
 		public function pause(value:Boolean):void
 		{
 			this.active = value;
@@ -120,8 +122,6 @@ package scene.gameScene
 		
 		private function oninit(event:Event):void
 		{
-			this.name = "MainStage";
-			
 			_currentStage = this.data as int;
 			_stageEnded = false;
 			
@@ -184,6 +184,7 @@ package scene.gameScene
 			//readTXT("stage.txt");
 			loadJSON("stage"+_currentStage+".json");
 			
+			// Sound 등록 및 기타 설정
 			var sound:Sound = _resource.getSoundFile("crashed0.mp3");
 			if (sound)
 			{
@@ -616,6 +617,11 @@ package scene.gameScene
 			}
 		}
 		
+		/**
+		 * UI상의 Life 개수를 업데이트합니다.  
+		 * @param numLife 현재 Life의 수입니다.
+		 * Player가 장애물과 충돌했을 때 호출합니다.
+		 */
 		private function setCurrentLife(numLife:int):void
 		{
 			if (_ui)
@@ -624,6 +630,11 @@ package scene.gameScene
 			}
 		}
 		
+		/**
+		 * UI상의 획득 깃발 개수를 업데이트합니다. 
+		 * @param numFlag 현재까지 획득한 깃발의 수입니다.
+		 * Player가 깃발과 충돌했을 때 호출합니다.
+		 */
 		private function setCurrentFlag(numFlag:int):void
 		{
 			if (_ui)
@@ -632,6 +643,10 @@ package scene.gameScene
 			}
 		}
 		
+		/**
+		 * Player가 게임 도중에 Life를 모두 소진했을 경우 스테이지 실패 팝업을 표시합니다. 
+		 * Player가 Life가 0이 되었을 경우 호출합니다.
+		 */
 		private function onFailed():void
 		{
 			if (_ui)
@@ -644,6 +659,10 @@ package scene.gameScene
 			}
 		}
 		
+		/**
+		 * Player가 Home에 도착했을 경우 스테이지 성공 팝업을 표시합니다. 
+		 * Player가 ARRIVED 상태일 때 호출합니다.
+		 */
 		private function onCleared():void
 		{
 			if (_ui)
@@ -681,7 +700,6 @@ package scene.gameScene
 		{
 			_vibration = event.data;
 		}
-		
 		
 		private function onEndedVibration(event:TrollingEvent):void
 		{
