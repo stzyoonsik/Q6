@@ -44,7 +44,8 @@ package scene.gameScene
 		private var _enemy:Enemy;		
 		private var _background:Background;
 		private var _snow:Snow;
-		private var _snowVector:Vector.<GameObject> = new Vector.<GameObject>();
+		private var _snowVector:Vector.<GameObject>;
+		private const MAX_SNOW_COUNT:int = 200;
 		private var _ui:IngameUI;
 		private var _coverFace:GameObject = new GameObject();
 		
@@ -362,7 +363,8 @@ package scene.gameScene
 			if(_intervalBetweenObject > 100)
 			{
 				//구름 생성
-				var cloud:Cloud = new Cloud(_resource);
+				if(_backgroundColor == -1){ var cloud:Cloud = new Cloud(_resource, -1); }
+				else{ cloud = new Cloud(_resource, 0); }				
 				addChildAt(cloud, 1);
 				
 				if(_objectArray && _objectArray.length != 0)
@@ -370,6 +372,15 @@ package scene.gameScene
 					if(_objectArray.length % 10 == 0 && _curveDirectionVector.length != 0)
 					{
 						_background.changeCurve(_curveDirectionVector[0]);
+						if(_snowVector)
+						{
+							for(var i:int = 0; i < _snowVector.length; ++i)
+							{
+								_snowVector[i].dispatchEvent(new TrollingEvent("changeCurve", _curveDirectionVector[0]));
+							}
+						}
+						
+						
 						_curveDirectionVector.shift();
 					}
 					makeObject();
@@ -495,14 +506,26 @@ package scene.gameScene
 			_player.onCleared = onCleared;
 			_player.onFailed = onFailed;
 			
-			_background = new Background(_resource, _backgroundColor);
-			addChildAt(_background, 0);
 			
-			for(i = 0; i < 50; ++i)
+			//30%의 확률로 눈 내림
+			if(Math.random() > 0.7)
 			{
-				_snow = new Snow(_resource);
-				_snowVector.push(_snow);
-				addChild(_snow);
+				_snowVector = new Vector.<GameObject>();
+				_backgroundColor = -1;
+				_background = new Background(_resource, _backgroundColor);
+				addChildAt(_background, 0);
+				
+				for(i = 0; i < MAX_SNOW_COUNT; ++i)
+				{
+					_snow = new Snow(_resource);
+					_snowVector.push(_snow);
+					addChild(_snow);
+				}				
+			}
+			else
+			{
+				_background = new Background(_resource, _backgroundColor);
+				addChildAt(_background, 0);
 			}
 			
 			

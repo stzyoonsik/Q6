@@ -18,7 +18,7 @@ package scene.gameScene.background
 		
 		private var _isLeft:Boolean;		
 		
-		public function Cloud(resource:loading.Resources)
+		public function Cloud(resource:Resources, color:int)
 		{
 			_stageWidth = MainStage.stageWidth;
 			_stageHeight = MainStage.stageHeight;
@@ -27,6 +27,8 @@ package scene.gameScene.background
 			
 			var image:Image = new Image(resource.getSubTexture("MainStageSprite0.png", "cloud0"));	
 			addComponent(image);
+			
+			initColor(color);
 			
 			var point:Point = initRandomPosition();
 			this.x = point.x;
@@ -60,6 +62,19 @@ package scene.gameScene.background
 				this.x += MainStage.speed / 5;
 				this.y -= MainStage.speed / 5;
 			}
+		}
+		
+		/**
+		 * 눈이 오면 구름도 먹구름이 되도록 하는 메소드 
+		 * @param color -1 = 눈
+		 * 
+		 */
+		private function initColor(color:int):void
+		{
+			if(color == -1)
+			{
+				blendColor(0.7, 0.7, 0.7);
+			}			
 		}
 		
 		/**

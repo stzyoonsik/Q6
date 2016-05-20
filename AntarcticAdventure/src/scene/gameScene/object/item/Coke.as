@@ -53,8 +53,10 @@ package scene.gameScene.object.item
 		{
 			if(_direction == 0)
 				this.x = _stageWidth * 0.475;
-			else
+			else if(_direction == 1)
 				this.x = _stageWidth * 0.525;
+			else
+				this.x = _stageWidth * 0.5;
 			
 			this.y = _stageHeight * 0.4;
 		}

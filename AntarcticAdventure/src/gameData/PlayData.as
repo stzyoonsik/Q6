@@ -54,13 +54,14 @@ package gameData
 			{
 				star = _starData[id];
 				
-				if (index != 0)
+				if (index != 0) 
 				{
 					data += "," + id.toString() + "," + star.toString();	
 				}
 				else
 				{
 					data += "\t\"starData\" : [" + id.toString() + "," + star.toString();
+					index++;
 				}
 			}
 			data += "]\n}";
