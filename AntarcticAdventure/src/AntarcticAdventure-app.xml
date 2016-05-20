@@ -330,5 +330,6 @@
         <extensionID>com.distriqt.AndroidSupport</extensionID>
         <extensionID>com.push.PushExtension</extensionID>
     <extensionID>com.dialog.DialogExtension</extensionID>
+    <extensionID>com.mesmotronic.ane.fullscreen</extensionID>
     </extensions>
 </application>
