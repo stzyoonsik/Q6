@@ -6,6 +6,7 @@ package scene.gameScene
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
+	import gameData.AesCrypto;
 	import gameData.SettingData;
 	
 	import loading.Loading;
@@ -21,8 +22,9 @@ package scene.gameScene
 	import scene.gameScene.object.item.Coke;
 	import scene.gameScene.object.item.Flag;
 	import scene.gameScene.object.player.Player;
+	import scene.gameScene.ui.Controller;
 	import scene.gameScene.ui.IngameUI;
-	import gameData.AesCrypto;
+	import scene.gameScene.ui.SettingPopup;
 	import scene.gameScene.util.ObjectName;
 	import scene.gameScene.util.PlayerState;
 	
@@ -31,7 +33,6 @@ package scene.gameScene
 	import trolling.media.SoundManager;
 	import trolling.object.GameObject;
 	import trolling.object.Scene;
-	import scene.gameScene.ui.Controller;
 
 	public class MainStage extends Scene
 	{
@@ -78,6 +79,8 @@ package scene.gameScene
 		private var _controlMode:int;
 		private var _controller:Controller;
 		
+		private static var _vibration:Boolean;
+		
 		public static function get currentStage():int { return _currentStage; }
 		public static function set stageEnded(value:Boolean):void { _stageEnded = value; }
 		
@@ -88,10 +91,26 @@ package scene.gameScene
 		
 		public static function set speed(value:Number):void	{ _speed = value; }		
 		public static function get speed():Number {	return _speed; }
+		
+		public static function get vibration():Boolean { return _vibration; }
 	
 		public function MainStage()
 		{
 			addEventListener(TrollingEvent.START_SCENE, oninit);
+		}
+		
+		public override function dispose():void
+		{
+			// to do
+			_ui.removeEventListener(IngameUI.ENDED_SETTING_BUTTON, onEndedSettingButton);
+			_ui.removeEventListener(SettingPopup.VIBRATION_MODE, onEndedControl);
+			_ui.removeEventListener(SettingPopup.INIT_VIBRATION_MODE, onInitControlMode);
+			_ui.removeEventListener(SettingPopup.CONTROL_MODE, onEndedControl);
+			_ui.removeEventListener(SettingPopup.INIT_CONTROL_MODE, onInitControlMode);
+			
+			
+			
+			super.dispose();
 		}
 		
 		public function pause(value:Boolean):void
@@ -101,6 +120,8 @@ package scene.gameScene
 		
 		private function oninit(event:Event):void
 		{
+			this.name = "MainStage";
+			
 			_currentStage = this.data as int;
 			_stageEnded = false;
 			
@@ -271,7 +292,7 @@ package scene.gameScene
 		 */
 		private function onTouchHover(event:TrollingEvent):void
 		{
-			if(_controlMode == 1)
+			if(_controlMode == SettingData.CONTROL_BUTTON)
 				return;
 			
 			if(_player.state == PlayerState.ARRIVE ||
@@ -482,9 +503,11 @@ package scene.gameScene
 			}
 			
 			_ui.initialize(_currentStage, _objectArray.length, PLAYER_MAX_LIFE, _totalNumFlag, pause);
-			_ui.addEventListener("control", onEndedControl);
-			_ui.addEventListener("settingPopup", onEndedSettingPopup);
-			_ui.addEventListener("initControlMode", onInitControlMode);
+			_ui.addEventListener(IngameUI.ENDED_SETTING_BUTTON, onEndedSettingButton);
+			_ui.addEventListener(SettingPopup.INIT_VIBRATION_MODE, onInitVibrationMode);
+			_ui.addEventListener(SettingPopup.INIT_CONTROL_MODE, onInitControlMode);
+			_ui.addEventListener(SettingPopup.VIBRATION_MODE, onEndedVibration);
+			_ui.addEventListener(SettingPopup.CONTROL_MODE, onEndedControl);
 			
 			_player.maxLife = PLAYER_MAX_LIFE;
 			_player.setCurrentLifeAtUi = setCurrentLife;
@@ -613,7 +636,7 @@ package scene.gameScene
 		{
 			if (_ui)
 			{
-				if(_controlMode == 1)
+				if(_controlMode == SettingData.CONTROL_BUTTON)
 				{
 					_controller.visible = false;					
 				}
@@ -625,7 +648,7 @@ package scene.gameScene
 		{
 			if (_ui)
 			{
-				if(_controlMode == 1)
+				if(_controlMode == SettingData.CONTROL_BUTTON)
 				{
 					_controller.visible = false;					
 				}
@@ -634,22 +657,16 @@ package scene.gameScene
 			}
 		}
 		
-		private function onEndedControl(event:TrollingEvent):void
-		{
-			_controlMode = int(event.data);
-		}
-		
-		private function onEndedSettingPopup(event:TrollingEvent):void
+		private function onEndedSettingButton(event:TrollingEvent):void
 		{
 			trace("셋팅팝업 : " + event.data);
 			if(event.data == true)
 			{
 				_controller.visible = false;				
 			}
-			
 			else
 			{
-				if(_controlMode == 0)
+				if(_controlMode == SettingData.CONTROL_SCREEN)
 				{
 					_controller.visible = false;					
 				}
@@ -657,23 +674,38 @@ package scene.gameScene
 				{
 					_controller.visible = true;					
 				}
-				
 			}
+		}
+		
+		private function onInitVibrationMode(event:TrollingEvent):void
+		{
+			_vibration = event.data;
+		}
+		
+		
+		private function onEndedVibration(event:TrollingEvent):void
+		{
+			_vibration = event.data;
 		}
 		
 		private function onInitControlMode(event:TrollingEvent):void
 		{
 			trace("_controlMode = " + _controlMode);
 			_controlMode = int(event.data);
-			if(_controlMode == 1)
+			if(_controlMode == SettingData.CONTROL_BUTTON)
 			{
 				_controller.visible = true;	
 			}
 		}
 		
+		private function onEndedControl(event:TrollingEvent):void
+		{
+			_controlMode = int(event.data);
+		}
+		
 		private function onMove(event:TrollingEvent):void
 		{
-			if(_controlMode == 0)
+			if(_controlMode == SettingData.CONTROL_SCREEN)
 				return;
 			
 			//trace("movemovemove");
@@ -714,7 +746,7 @@ package scene.gameScene
 		
 		private function onJump(event:TrollingEvent):void			
 		{
-			if(_controlMode == 0)
+			if(_controlMode == SettingData.CONTROL_SCREEN)
 				return;
 			
 			if(_player.state == PlayerState.RUN)

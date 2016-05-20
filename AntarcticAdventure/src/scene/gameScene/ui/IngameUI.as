@@ -24,6 +24,7 @@ package scene.gameScene.ui
 	
 	public class IngameUI extends GameObject
 	{
+		public static const ENDED_SETTING_BUTTON:String = "endedSettingButton";
 		public static const CLEARED:String = "cleared";
 		public static const FAILED:String = "failed";
 		
@@ -80,6 +81,15 @@ package scene.gameScene.ui
 		public override function dispose():void
 		{
 			NativeApplication.nativeApplication.removeEventListener(KeyboardEvent.KEY_DOWN, onTouchKeyBoard);
+			
+			var child:GameObject = getChild(SETTING_POPUP);
+			if (child) 
+			{
+				child.removeEventListener(SettingPopup.INIT_VIBRATION_MODE, onInitVibrationMode);
+				child.removeEventListener(SettingPopup.INIT_CONTROL_MODE, onInitControlMode);
+				child.removeEventListener(SettingPopup.VIBRATION_MODE, onEndedVibration);
+				child.removeEventListener(SettingPopup.CONTROL_MODE, onEndedControl);
+			}
 			
 			_resources = null;
 			_runGame = null;
@@ -243,8 +253,7 @@ package scene.gameScene.ui
 					
 					addEventListener(Popup.END_SHOW, onEndShowPopup);
 					settingPopup.show();	
-					
-					dispatchEvent(new TrollingEvent("settingPopup", settingPopup.visible));
+					dispatchEvent(new TrollingEvent(ENDED_SETTING_BUTTON, settingPopup.visible));
 				}
 			}
 		}
@@ -257,9 +266,11 @@ package scene.gameScene.ui
 			if (background && settingPopup)
 			{
 				settingPopup.close();
-				dispatchEvent(new TrollingEvent("settingPopup", settingPopup.visible));
+				dispatchEvent(new TrollingEvent(ENDED_SETTING_BUTTON, settingPopup.visible));
+				
 				background.visible = false;
 				background.removeEventListener(TrollingEvent.TOUCH_ENDED, onEndedBackground);
+				
 				if (_runGame)
 				{
 					_runGame(true);
@@ -396,10 +407,11 @@ package scene.gameScene.ui
 			settingPopup.y = MainStage.stageHeight / 2;
 			settingPopup.width *= 1.2;
 			settingPopup.height *= 1.2;
+			settingPopup.addEventListener(SettingPopup.INIT_VIBRATION_MODE, onInitVibrationMode);
+			settingPopup.addEventListener(SettingPopup.INIT_CONTROL_MODE, onInitControlMode);
+			settingPopup.addEventListener(SettingPopup.VIBRATION_MODE, onEndedVibration);
+			settingPopup.addEventListener(SettingPopup.CONTROL_MODE, onEndedControl);
 			settingPopup.initialize(_resources);
-			settingPopup.addEventListener("control", onEndedControl);
-			settingPopup.addEventListener("initControlMode", onInitControlMode);
-			
 			//
 			
 			// CLEARED_POPUP
@@ -471,9 +483,9 @@ package scene.gameScene.ui
 		private function onTouchKeyBoard(event:KeyboardEvent):void
 		{
 			var settingPopup:SettingPopup = getChild(SETTING_POPUP) as SettingPopup;
+			
 			trace(event.keyCode);
-//			if(event.keyCode == 8)
-			if(event.keyCode == Keyboard.BACK)
+			if(event.keyCode == Keyboard.BACK) // if(event.keyCode == 8)
 			{
 				event.preventDefault();
 				
@@ -536,14 +548,24 @@ package scene.gameScene.ui
 			closeSettingPopup();
 		}
 		
-		private function onEndedControl(event:TrollingEvent):void
+		private function onInitVibrationMode(event:TrollingEvent):void
 		{
-			dispatchEvent(new TrollingEvent("control", event.data));
+			dispatchEvent(new TrollingEvent(SettingPopup.INIT_VIBRATION_MODE, event.data));
 		}
 		
 		private function onInitControlMode(event:TrollingEvent):void
 		{
-			dispatchEvent(new TrollingEvent("initControlMode", event.data));
+			dispatchEvent(new TrollingEvent(SettingPopup.INIT_CONTROL_MODE, event.data));
+		}
+		
+		private function onEndedVibration(event:TrollingEvent):void
+		{
+			dispatchEvent(new TrollingEvent(SettingPopup.VIBRATION_MODE, event.data));
+		}
+		
+		private function onEndedControl(event:TrollingEvent):void
+		{
+			dispatchEvent(new TrollingEvent(SettingPopup.CONTROL_MODE, event.data));
 		}
 	}
 }

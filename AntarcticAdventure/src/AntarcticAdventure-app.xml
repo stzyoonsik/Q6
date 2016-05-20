@@ -297,7 +297,7 @@
 			    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>-->
 			    <!--<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>-->
 			    
-			    <uses-permission android:name="android.permission.VIBRATE" />
+			    <uses-permission android:name="android.permission.VIBRATE"/>
 			    
 			    <application android:enabled="true">
 					<activity android:excludeFromRecents="false">
@@ -325,12 +325,13 @@
 		]]></InfoAdditions>
         <requestedDisplayResolution>high</requestedDisplayResolution>
     </iPhone>
-
-
-<extensions>
+   
+	<extensions>
         <extensionID>com.mesmotronic.ane.fullscreen</extensionID>
+        <extensionID>com.adobe.Vibration</extensionID>
         <extensionID>com.distriqt.AndroidSupport</extensionID>
         <extensionID>com.dialog.DialogExtension</extensionID>
         <extensionID>com.push.PushExtension</extensionID>
     </extensions>
+    
 </application>
