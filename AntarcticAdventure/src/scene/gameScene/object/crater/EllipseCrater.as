@@ -76,7 +76,6 @@ package scene.gameScene.object.crater
 				
 				this._addY += y / (_stageHeight * 3.5);
 				this.y += (MainStage.speed + this._addY);
-				
 				switch(_direction)
 				{
 					//가운데
