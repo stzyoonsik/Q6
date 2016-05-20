@@ -628,6 +628,11 @@ package scene.gameScene
 			}
 		}
 		
+		/**
+		 * ui의 현재 체력을 바꿔주는 메소드 
+		 * @param numLife 체력
+		 * 
+		 */
 		private function setCurrentLife(numLife:int):void
 		{
 			if (_ui)
@@ -636,6 +641,11 @@ package scene.gameScene
 			}
 		}
 		
+		/**
+		 * ui의 현재 깃발 개수를 바꿔주는 메소드
+		 * @param numFlag 현재 획득한 깃발
+		 * 
+		 */
 		private function setCurrentFlag(numFlag:int):void
 		{
 			if (_ui)
@@ -644,6 +654,10 @@ package scene.gameScene
 			}
 		}
 		
+		/**
+		 * 플레이어의 체력이 0이하가 되었을때 디스패치 받는 메소드 
+		 * 
+		 */
 		private function onFailed():void
 		{
 			if (_ui)
@@ -656,6 +670,10 @@ package scene.gameScene
 			}
 		}
 		
+		/**
+		 * 성공적으로 완주했을때 디스패치 받는 메소드 
+		 * 
+		 */
 		private function onCleared():void
 		{
 			if (_ui)
@@ -669,11 +687,21 @@ package scene.gameScene
 			}
 		}
 		
+		/**
+		 * 세팅에서 조작 방식을 선택했을때 디스패치 받는 메소드 
+		 * @param event
+		 * 
+		 */
 		private function onEndedControl(event:TrollingEvent):void
 		{
 			_controlMode = int(event.data);
 		}
 		
+		/**
+		 * 세팅 팝업창이 켜져있을때 조작버튼을 감춰주는 메소드  
+		 * @param event
+		 * 
+		 */
 		private function onEndedSettingPopup(event:TrollingEvent):void
 		{
 			trace("셋팅팝업 : " + event.data);
@@ -696,6 +724,11 @@ package scene.gameScene
 			}
 		}
 		
+		/**
+		 * 세팅된 값에 따라 컨트롤 모드를 바꿔주는 디스패치 메소드 
+		 * @param event
+		 * 
+		 */
 		private function onInitControlMode(event:TrollingEvent):void
 		{
 			trace("_controlMode = " + _controlMode);
@@ -706,6 +739,11 @@ package scene.gameScene
 			}
 		}
 		
+		/**
+		 * 버튼 조작 모드에서 좌,우를 터치할때 발생하는 콜백 메소드 
+		 * @param event
+		 * 
+		 */
 		private function onMove(event:TrollingEvent):void
 		{
 			if(_controlMode == 0)
@@ -747,6 +785,11 @@ package scene.gameScene
 			
 		}
 		
+		/**
+		 * 버튼 조작 모드에서 점프를 터치할때 발생하는 콜백 메소드 
+		 * @param event
+		 * 
+		 */
 		private function onJump(event:TrollingEvent):void			
 		{
 			if(_controlMode == 0)
