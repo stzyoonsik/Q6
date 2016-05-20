@@ -52,6 +52,8 @@ package
 		private function onExit(event:Event):void
 		{
 			NativeApplication.nativeApplication.removeEventListener(Event.EXITING, onExit);
+			NativeApplication.nativeApplication.removeEventListener(Event.DEACTIVATE, onDeactivate);
+			
 			SceneManager.dispose();
 		}
 	}

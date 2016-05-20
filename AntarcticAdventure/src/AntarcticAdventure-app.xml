@@ -28,7 +28,7 @@
 	Values can also be 1-part or 2-part. It is not necessary to have a 3-part value.
 	An updated version of application must have a versionNumber value higher than the previous version. Required for namespace >= 2.5 .
     For iOS Apps, this represents build number. -->
-	<versionNumber>0.0.0</versionNumber>
+	<versionNumber>1.0.0</versionNumber>
 		         
 	<!-- A string value (such as "v1", "2.5", or "Alpha 1") that represents the version of the application, as it should be shown to users. 
      For iOS Apps, this represents application version number and format should be (<0-999>.<0-999>.<0-999>).
@@ -297,7 +297,7 @@
 			    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>-->
 			    <!--<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>-->
 			    
-			    <uses-permission android:name="android.permission.VIBRATE" />
+			    <uses-permission android:name="android.permission.VIBRATE"/>
 			    
 			    <application android:enabled="true">
 					<activity android:excludeFromRecents="false">
@@ -325,11 +325,13 @@
 		]]></InfoAdditions>
         <requestedDisplayResolution>high</requestedDisplayResolution>
     </iPhone>
-
-<extensions>
+   
+	<extensions>
+        <extensionID>com.mesmotronic.ane.fullscreen</extensionID>
+        <extensionID>com.adobe.Vibration</extensionID>
         <extensionID>com.distriqt.AndroidSupport</extensionID>
+        <extensionID>com.dialog.DialogExtension</extensionID>
         <extensionID>com.push.PushExtension</extensionID>
-    <extensionID>com.dialog.DialogExtension</extensionID>
-    <extensionID>com.mesmotronic.ane.fullscreen</extensionID>
     </extensions>
+    
 </application>

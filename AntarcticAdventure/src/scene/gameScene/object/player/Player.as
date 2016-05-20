@@ -1,5 +1,7 @@
 package scene.gameScene.object.player 
 {
+	import com.adobe.nativeExtensions.Vibration;
+	
 	import flash.events.Event;
 	
 	import loading.Resources;
@@ -20,6 +22,9 @@ package scene.gameScene.object.player
 	
 	public class Player extends Objects
 	{		
+		private const VIBRATION_DURATION:Number = 400;
+		private var _vibrator:Vibration;
+		
 		private var _penguin:Penguin;		
 		private var _grimja:Grimja;
 		private var _struggle:Struggle;
@@ -132,6 +137,7 @@ package scene.gameScene.object.player
 			addChild(_grimja);
 			addChild(_penguin);
 			
+			_vibrator = new Vibration();
 			
 			addEventListener(TrollingEvent.ENTER_FRAME, onEnterFrame);	
 		} 		
@@ -208,6 +214,11 @@ package scene.gameScene.object.player
 					{
 						_state = PlayerState.CRASHED_RIGHT;
 					}
+					
+					if (Vibration.isSupported && MainStage.vibration)
+					{
+						_vibrator.vibrate(VIBRATION_DURATION);
+					}
 				}				
 			}
 				
@@ -235,6 +246,11 @@ package scene.gameScene.object.player
 						
 						event.data.parent.dispatchEvent(new Event("fall"));
 					}
+					
+					if (Vibration.isSupported && MainStage.vibration)
+					{
+						_vibrator.vibrate(VIBRATION_DURATION);
+					}
 				}
 			} 
 				
@@ -248,6 +264,11 @@ package scene.gameScene.object.player
 				else
 				{
 					_state = PlayerState.CRASHED_RIGHT;
+				}
+				
+				if (Vibration.isSupported && MainStage.vibration)
+				{
+					_vibrator.vibrate(VIBRATION_DURATION);
 				}
 			}	
 		}
