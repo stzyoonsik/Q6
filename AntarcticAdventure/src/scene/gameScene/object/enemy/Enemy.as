@@ -27,7 +27,7 @@ package scene.gameScene.object.enemy
 			_image = new Image(_resource.getSubTexture("MainStageSprite0.png", "enemy0"));
 			addComponent(_image);
 			
-			this.pivot = PivotType.CENTER;			
+			this.pivot = PivotType.CENTER;		
 			
 			this.x = 0;
 			this.y = -this.height * 0.03;			
